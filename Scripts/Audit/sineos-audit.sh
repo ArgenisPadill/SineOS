@@ -1,5 +1,3 @@
-
-cat > ~/Workspace/SineOS/Scripts/Audit/sineos-audit.sh <<'EOF'
 #!/usr/bin/env bash
 
 # ============================================================
@@ -589,6 +587,94 @@ fi
 } | tee -a "$REPORT_FILE"
 
 # ============================================================
+# 13.1 - POSTGRESQL SINEOS
+# ============================================================
+
+{
+section "13.1 - POSTGRESQL SINEOS"
+
+POSTGRES_CONTAINER="sineos-postgres"
+
+if command_exists podman && podman container exists "$POSTGRES_CONTAINER"; then
+
+    subsection "Contenedor"
+
+    run_cmd podman ps \
+        --filter "name=${POSTGRES_CONTAINER}" \
+        --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+
+    subsection "Configuración"
+
+    run_cmd podman inspect "$POSTGRES_CONTAINER" \
+        --format '
+Name={{.Name}}
+Image={{.Config.Image}}
+User={{.Config.User}}
+WorkingDir={{.Config.WorkingDir}}
+'
+
+    subsection "Healthcheck"
+
+    run_cmd podman inspect "$POSTGRES_CONTAINER" \
+        --format 'Status={{.State.Status}} Health={{.State.Health.Status}}'
+
+    subsection "Mounts"
+
+    run_cmd podman inspect "$POSTGRES_CONTAINER" \
+        --format '{{range .Mounts}}{{println .Type .Source "->" .Destination}}{{end}}'
+
+    subsection "Usuario PostgreSQL"
+
+    run_cmd podman exec "$POSTGRES_CONTAINER" \
+        id postgres
+
+    subsection "Versión PostgreSQL"
+
+    run_cmd podman exec "$POSTGRES_CONTAINER" \
+        psql -U sineos -d sineos -c 'SELECT version();'
+
+    subsection "Bases de datos"
+
+    run_cmd podman exec "$POSTGRES_CONTAINER" \
+        psql -U sineos -d sineos -c '\l'
+
+    subsection "Tablas"
+
+    run_cmd podman exec "$POSTGRES_CONTAINER" \
+        psql -U sineos -d sineos -c '\dt'
+
+    subsection "Persistencia en host"
+
+    POSTGRES_DATA="${HOME}/Workspace/SineOS/Containers/volumes/postgres/data"
+
+    if [[ -d "$POSTGRES_DATA" ]]; then
+
+        echo "Directorio: $POSTGRES_DATA"
+
+        echo
+        echo "--- Permisos ---"
+        stat -c '%A %a %U:%G %u:%g %n' \
+            "$POSTGRES_DATA" 2>&1 || true
+
+        echo
+        echo "--- Propietarios / ruta ---"
+        namei -l "$POSTGRES_DATA" 2>&1 || true
+
+        echo
+        echo "--- Espacio ---"
+        du -sh "$POSTGRES_DATA" 2>&1 || true
+
+    else
+        warn "No existe ${POSTGRES_DATA}"
+    fi
+
+else
+    warn "No existe el contenedor ${POSTGRES_CONTAINER}."
+fi
+
+} | tee -a "$REPORT_FILE"
+
+# ============================================================
 # 14 - XFCE
 # ============================================================
 
@@ -782,5 +868,3 @@ echo "================================================================"
 cd - >/dev/null 2>&1 || true
 
 exit 0
-
-EOF
