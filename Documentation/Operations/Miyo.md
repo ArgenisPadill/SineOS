@@ -167,105 +167,76 @@ Esto diferencia la búsqueda semántica de una búsqueda tradicional basada úni
 
 ## 8. Miyo CLI
 
-Durante la instalación se detectó un problema con el CLI proporcionado mediante la AppImage.
+Miyo Desktop incluye un CLI para consultar el índice semántico desde terminal y para permitir su integración con otras herramientas.
 
-El enlace esperado para ejecutar el CLI no funcionaba correctamente.
-
-La solución utilizada consistió en extraer el CLI real de la AppImage y mantener una copia funcional en:
+En Linux, Miyo administra el acceso al CLI mediante:
 
 ```text
 ~/.miyo/bin/miyo
 ```
 
-La ejecución directa desde esta ubicación fue validada correctamente.
+Esta ruta es un enlace simbólico administrado por Miyo Desktop hacia el ejecutable incluido en el montaje activo de la AppImage.
+
+El CLI fue validado mediante:
+
+```bash
+~/.miyo/bin/miyo --help
+~/.miyo/bin/miyo files
+~/.miyo/bin/miyo search "consulta"
+```
 
 ---
 
-## 9. Incidente del CLI
+## 9. Servicio local
 
-### Síntoma
-
-El CLI asociado a la instalación AppImage no podía utilizarse correctamente mediante el enlace esperado.
-
-Esto impedía que herramientas externas utilizaran Miyo de manera confiable.
-
-### Diagnóstico
-
-La aplicación gráfica funcionaba, pero el mecanismo utilizado para exponer el CLI desde la AppImage producía un enlace no funcional.
-
-El problema no correspondía al índice semántico ni al Knowledge Vault.
-
-Se encontraba en la forma de acceso al ejecutable CLI.
-
-### Solución
-
-Se extrajo el CLI real contenido en la AppImage.
-
-Posteriormente se copió el ejecutable funcional a:
+El CLI funciona como cliente del servicio local administrado por Miyo Desktop.
 
 ```text
-~/.miyo/bin/miyo
-```
-
-La ejecución directa del binario permitió realizar búsquedas semánticas correctamente.
-
-### Resultado
-
-```text
-Miyo AppImage
+Miyo Desktop
       ↓
-CLI extraído
+Servicio local
+127.0.0.1:8742
       ↓
-~/.miyo/bin/miyo
+Miyo CLI
       ↓
-búsqueda semántica
+Índice semántico
       ↓
 Knowledge Vault
 ```
 
-Estado:
+Durante la validación se comprobó que el servicio escucha en `127.0.0.1:8742`.
+
+El CLI necesita que Miyo Desktop y su servicio estén ejecutándose para consultar el índice. Si el servicio no está disponible puede aparecer:
 
 ```text
-RESUELTO
+Cannot connect to Miyo service at http://127.0.0.1:8742
 ```
+
+Este mensaje indica que el servicio local no está disponible; no implica por sí mismo corrupción del Vault ni del índice.
 
 ---
 
-## 10. Deuda técnica del CLI
+## 10. Gestión del CLI
 
-La solución actual tiene una consecuencia importante.
-
-El archivo:
+Miyo Desktop administra automáticamente:
 
 ```text
 ~/.miyo/bin/miyo
 ```
 
-es una copia extraída del CLI.
-
-Por lo tanto, actualizar:
+El enlace puede apuntar a una ruta temporal similar a:
 
 ```text
-~/.local/opt/miyo/Miyo.AppImage
+/tmp/.mount_Miyo.XXXXXX/resources/bin/service/miyo/miyo
 ```
 
-no garantiza que la copia del CLI se actualice automáticamente.
+Esto forma parte del funcionamiento de la AppImage mientras Miyo Desktop está ejecutándose.
 
-Después de una actualización de Miyo debe comprobarse la compatibilidad entre:
+No debe sustituirse permanentemente este enlace por una copia manual del ejecutable.
 
-```text
-Miyo.AppImage
-```
+Después de una actualización debe comprobarse que la AppImage inicia, el servicio local está disponible, el CLI responde y el índice continúa accesible.
 
-y:
-
-```text
-~/.miyo/bin/miyo
-```
-
-Puede ser necesario volver a extraer el CLI.
-
-Esta tarea todavía no está automatizada.
+La gestión del enlace del CLI corresponde a Miyo Desktop.
 
 ---
 
@@ -430,21 +401,23 @@ La prioridad de backup corresponde al Vault, no al índice derivado.
 
 ---
 
-## 18. Prueba temporal de Miyo
+## 18. Limpieza y validación del índice
 
-Durante las pruebas iniciales se utilizó una nota temporal:
+Las notas temporales utilizadas durante las pruebas iniciales y las estructuras académicas creadas exclusivamente para validar los templates fueron eliminadas del Knowledge Vault.
 
-```text
-Prueba Miyo.md.md
+Después de la limpieza se verificó el índice mediante:
+
+```bash
+~/.miyo/bin/miyo files
 ```
 
-Su propósito es validar recuperación semántica.
+Resultado validado:
 
-Esta nota no forma parte de la estructura permanente del Knowledge Vault.
+```text
+Showing 25 of 25 file(s)
+```
 
-Debe conservarse únicamente hasta completar la batería semántica prevista.
-
-Después deberá eliminarse y comprobarse que el watcher o mecanismo de indexación refleje correctamente la eliminación.
+Los documentos de prueba eliminados ya no aparecen en el índice. Esto confirma que el watcher de Miyo reflejó correctamente las eliminaciones realizadas en el Vault.
 
 ---
 
@@ -515,20 +488,26 @@ El Knowledge Vault puede contener información privada y debe tratarse como info
 
 ### La aplicación funciona pero el CLI no
 
-Comprobar primero:
+Comprobar primero que Miyo Desktop esté ejecutándose y que exista el servicio local:
 
-```text
-~/.miyo/bin/miyo
+```bash
+ss -ltnp | grep ':8742'
+~/.miyo/bin/miyo --help
+~/.miyo/bin/miyo files
 ```
 
-La instalación actual utiliza el CLI extraído de la AppImage.
+Si `~/.miyo/bin/miyo` es un enlace simbólico hacia `/tmp/.mount_Miyo.*`, esto es compatible con el funcionamiento observado de la AppImage mientras Miyo Desktop está activo.
+
+### El CLI no puede conectarse
+
+Si aparece `Cannot connect to Miyo service at http://127.0.0.1:8742`, comprobar que Miyo Desktop esté ejecutándose y que el servicio escuche en `127.0.0.1:8742`.
 
 ### Una búsqueda no encuentra una nota reciente
 
 Comprobar:
 
 1. que la nota esté dentro del scope;
-2. que Miyo esté ejecutándose;
+2. que Miyo Desktop esté ejecutándose;
 3. que el índice haya procesado el cambio;
 4. que la consulta tenga relación semántica suficiente con el contenido.
 
@@ -550,36 +529,29 @@ Probar cada capa independientemente evita atribuir al índice un problema perten
 
 ### Miyo se actualizó y el CLI dejó de funcionar
 
-Recordar que:
+Comprobar que la nueva AppImage inicia, que el servicio local está disponible, que `~/.miyo/bin/miyo` existe, que el CLI responde y que el índice continúa accesible.
 
-```text
-~/.miyo/bin/miyo
-```
-
-es una copia extraída.
-
-Comprobar si debe extraerse nuevamente el CLI correspondiente a la nueva AppImage.
+No extraer ni mantener manualmente una copia independiente del CLI como procedimiento normal.
 
 ---
 
 ## 23. Estado actual
 
-Estado de la implementación:
-
 | Componente | Estado |
 |---|---|
 | Miyo AppImage | Operativo |
-| Knowledge Vault | Operativo |
+| Knowledge Vault | Operativo y limpio |
 | Scope del Vault | Configurado |
 | Indexación semántica | Validada |
+| Watcher de cambios | Validado |
+| Eliminación del índice | Validada |
+| Servicio local | Operativo en 127.0.0.1:8742 |
 | Miyo CLI | Operativo |
-| Workaround CLI | Aplicado |
+| Gestión del CLI | Administrada por Miyo Desktop |
 | Copilot/OpenCode | Integrado |
 | DeepSeek + Miyo | Validado |
 | Gemini + Vault | Validado |
-| Actualización automática del CLI | Pendiente |
 | Batería semántica multinota | Pendiente |
-| Eliminación de nota temporal | Pendiente |
 
 ---
 
@@ -588,15 +560,13 @@ Estado de la implementación:
 Pendientes relacionados directamente con Miyo:
 
 ```text
-[ ] Definir mecanismo de actualización de Miyo
-[ ] Sincronizar automáticamente AppImage y CLI
 [ ] Documentar procedimiento reproducible de reinstalación
 [ ] Definir autostart si resulta necesario
 [ ] Ejecutar benchmark semántico multinota
-[ ] Eliminar Prueba Miyo.md.md después del benchmark
-[ ] Verificar eliminación del documento en el índice
 [ ] Incorporar pruebas de recuperación al mantenimiento de SineOS
 ```
+
+La sincronización manual entre AppImage y CLI no se considera una deuda técnica, ya que Miyo Desktop administra el enlace utilizado para acceder al CLI.
 
 ---
 
@@ -640,12 +610,8 @@ Copilot / OpenCode
 LLM
 ```
 
-El incidente inicial del CLI fue resuelto mediante la extracción del ejecutable real y su instalación en:
+El Knowledge Vault fue limpiado de las notas utilizadas exclusivamente durante las pruebas y Miyo reflejó correctamente esas eliminaciones en su índice.
 
-```text
-~/.miyo/bin/miyo
-```
-
-La principal deuda técnica actual es mantener sincronizado ese CLI con futuras actualizaciones de la AppImage.
+El CLI funciona mediante el enlace administrado por Miyo Desktop y utiliza el servicio local de Miyo para consultar el índice semántico.
 
 La siguiente etapa de validación será la batería semántica multinota.
