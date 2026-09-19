@@ -1,0 +1,422 @@
+# SineOS
+
+**SineOS** es un entorno personal de infraestructura, administración de sistemas, desarrollo y conocimiento construido sobre Debian GNU/Linux.
+
+El proyecto busca mantener un entorno reproducible, documentado, modular y recuperable, evitando depender de configuraciones manuales difíciles de reconstruir.
+
+> La mejor IA no es el modelo más pesado, sino la que soporta el equipo de cómputo.
+
+## Objetivos
+
+SineOS busca integrar en una misma arquitectura:
+
+- administración de sistemas Linux;
+- infraestructura reproducible;
+- contenedores rootless;
+- bases de datos;
+- desarrollo de software;
+- automatización y auditoría;
+- monitoreo;
+- inteligencia artificial local y cloud;
+- gestión estructurada del conocimiento;
+- documentación técnica;
+- recuperación y migración del entorno.
+
+El proyecto está diseñado para evolucionar de manera incremental: cada componente debe poder documentarse, auditarse, mantenerse y eventualmente reconstruirse.
+
+## Plataforma base
+
+Entorno actualmente utilizado:
+
+```text
+Sistema operativo : Debian GNU/Linux 13 (Trixie)
+Escritorio         : XFCE 4.20
+Kernel             : Linux 6.12
+Arquitectura       : x86_64
+Filesystem         : Btrfs
+Contenedores       : Podman rootless
+Control de versiones: Git + GitHub
+```
+
+### Hardware principal
+
+SineOS se desarrolla actualmente sobre una laptop Gateway GWTN141-10.
+
+```text
+CPU       : Intel Core i5-1135G7
+Núcleos   : 4
+Hilos     : 8
+GPU       : Intel Iris Xe integrada
+RAM       : 16 GB LPDDR4
+SSD       : 512 GB SATA
+Firmware  : UEFI
+Secure Boot: habilitado
+```
+
+La arquitectura se diseña considerando los recursos reales del equipo y evitando desplegar servicios o modelos cuyo costo computacional no aporte un beneficio práctico.
+
+## Arquitectura del repositorio
+
+```text
+SineOS/
+├── Ansible/
+├── Archive/
+├── Containers/
+├── Documentation/
+├── Foundation/
+├── Infrastructure/
+├── Lab/
+├── Platform/
+├── Scripts/
+└── Terraform/
+```
+
+Las responsabilidades se dividen conceptualmente en:
+
+- **Foundation:** sistema operativo, shell, filesystem, red y seguridad base.
+- **Infrastructure:** contenedores, virtualización, almacenamiento, red y monitoreo.
+- **Platform:** servicios, bases de datos y herramientas de desarrollo.
+- **Containers:** definición y persistencia de los servicios desplegados mediante Podman.
+- **Scripts:** auditoría, diagnóstico, mantenimiento y automatización.
+- **Documentation:** arquitectura, operación, seguridad y registro técnico.
+- **Lab:** experimentos, pruebas de concepto y benchmarks.
+- **Ansible/Terraform:** automatización e infraestructura reproducible conforme el proyecto evolucione.
+
+## Contenedores
+
+SineOS utiliza **Podman rootless** como plataforma principal de contenedores.
+
+La estructura general es:
+
+```text
+Containers/
+├── stacks/
+├── volumes/
+├── backups/
+├── configs/
+├── secrets/
+└── logs/
+```
+
+Los datos persistentes, secretos, respaldos y logs no deben incorporarse accidentalmente al repositorio Git.
+
+Los stacks contemplados actualmente incluyen:
+
+```text
+grafana
+jupyterlab
+loki
+netdata
+ollama
+open-webui
+pgadmin
+postgres
+prometheus
+```
+
+No todos los stacks representan necesariamente servicios desplegados o terminados. La presencia de su estructura en el repositorio no implica que el componente esté en producción.
+## PostgreSQL
+
+La base de datos principal desplegada actualmente en SineOS es **PostgreSQL 18**.
+
+Se ejecuta mediante Podman rootless y cuenta con:
+
+- persistencia en el host;
+- healthcheck;
+- usuario y base de datos propios de SineOS;
+- almacenamiento separado del archivo de composición;
+- validación de persistencia después de reinicios.
+
+La información sensible, como contraseñas y archivos `.env`, no debe almacenarse en Git.
+
+La configuración se encuentra en:
+
+```text
+Containers/stacks/postgres/
+```
+
+Los datos persistentes se mantienen fuera del seguimiento de Git.
+
+## Inteligencia artificial
+
+SineOS utiliza una arquitectura híbrida de IA basada en el principio:
+
+> Local first → free cloud when useful → paid DeepSeek only when it adds value.
+
+La arquitectura actualmente definida es:
+
+```text
+                    ┌──────────────┐
+                    │   Obsidian   │
+                    │ Source of    │
+                    │    Truth     │
+                    └──────┬───────┘
+                           │
+                           ▼
+                    ┌──────────────┐
+                    │     Miyo     │
+                    │  Semantic    │
+                    │    Index     │
+                    └──────┬───────┘
+                           │
+                           ▼
+                 ┌───────────────────┐
+                 │ Copilot/OpenCode  │
+                 │   Agent Layer     │
+                 └─────────┬─────────┘
+                           │
+             ┌─────────────┼─────────────┐
+             ▼             ▼             ▼
+        Ollama/Qwen    Gemini Flash    DeepSeek
+          Local           Cloud          Cloud
+```
+
+### Ollama
+
+Ollama proporciona ejecución local de modelos para tareas privadas, simples y offline.
+
+Modelos locales seleccionados:
+
+```text
+qwen3.5:2b
+qwen2.5-coder:3b-instruct
+```
+
+Los modelos locales pequeños no se utilizan como agentes complejos cuando el costo del prompt, las herramientas y el contexto supera sus capacidades prácticas.
+
+### Open WebUI
+
+Open WebUI proporciona una interfaz local para interactuar con Ollama.
+
+Configuración actual:
+
+```text
+http://127.0.0.1:3000
+```
+
+La comunicación con Ollama se realiza mediante:
+
+```text
+http://host.containers.internal:11434
+```
+
+El servicio utiliza persistencia dentro de la estructura de volúmenes de SineOS.
+
+La imagen actualmente utiliza una etiqueta móvil y queda pendiente fijar una versión o digest antes de considerarla una configuración endurecida y reproducible.
+
+### Gemini
+
+Gemini 3.8 Flash funciona como modelo cloud principal para:
+
+- contexto amplio;
+- documentos;
+- tareas agentic;
+- integración con herramientas;
+- consultas que exceden las capacidades prácticas de los modelos locales.
+
+### DeepSeek
+
+DeepSeek se utiliza como backend cloud de pago para tareas donde un modelo de mayor capacidad aporta valor adicional, especialmente razonamiento y programación.
+
+La integración fue validada de extremo a extremo mediante:
+
+```text
+DeepSeek
+   ↓
+Copilot/OpenCode
+   ↓
+miyo-search
+   ↓
+Miyo CLI
+   ↓
+Servicio Miyo
+   ↓
+Índice semántico
+   ↓
+Obsidian Vault
+```
+
+### Proveedores descartados
+
+Groq fue probado durante el desarrollo de la arquitectura.
+
+La integración con Copilot/OpenCode presentó ciclos relacionados con la compactación del contexto utilizando los modelos evaluados, por lo que fue retirado de la arquitectura operativa.
+
+No se agregan proveedores únicamente por disponer de una capa gratuita.
+
+## Knowledge Vault
+
+El conocimiento permanente de SineOS se administra mediante **Obsidian**.
+
+El Vault se encuentra en:
+
+```text
+/home/argenis/Obsidian/SineOS
+```
+
+El repositorio Git se encuentra en:
+
+```text
+/home/argenis/Workspace/SineOS
+```
+
+Son componentes diferentes.
+
+**El Vault no es un repositorio Git de SineOS.**
+
+El repositorio contiene infraestructura y código.
+
+El Vault contiene conocimiento, decisiones, procedimientos, incidencias y documentación académica y profesional.
+
+Miyo proporciona búsqueda semántica sobre este conocimiento.
+
+La arquitectura detallada está documentada en:
+
+```text
+Documentation/Architecture/Knowledge-Vault.md
+```
+## Sistema académico
+
+SineOS incluye un sistema de gestión académica construido sobre Obsidian y Templater.
+
+Actualmente existen siete templates funcionalmente validados:
+
+```text
+Materia.md
+Unidad.md
+Tarea.md
+Actividad.md
+Examen.md
+Proyecto-Integrador.md
+Etapa-Proyecto.md
+```
+
+Las entidades utilizan identificadores estables:
+
+```text
+MAT-YYYYMMDD-XXXX
+UNI-YYYYMMDD-XXXX
+TAR-YYYYMMDD-XXXX
+ACT-YYYYMMDD-XXXX
+EXA-YYYYMMDD-XXXX
+PRO-YYYYMMDD-XXXX
+ETA-YYYYMMDD-XXXX
+```
+
+El sistema implementa validación de relaciones padre-hijo, protección de notas estructurales, detección de duplicados, generación dinámica de directorios y reglas de evaluación.
+
+La documentación completa se encuentra en:
+
+```text
+Documentation/Operations/Academic-Templates.md
+```
+
+## Auditoría
+
+SineOS dispone de herramientas propias de auditoría y diagnóstico.
+
+El auditor actualmente desarrollado inspecciona, entre otros:
+
+- sistema operativo y kernel;
+- hardware;
+- almacenamiento y Btrfs;
+- memoria y swap;
+- APT y paquetes;
+- servicios systemd;
+- journal;
+- red;
+- seguridad básica;
+- Git y GitHub;
+- SSH;
+- Podman;
+- contenedores SineOS;
+- PostgreSQL;
+- XFCE;
+- audio;
+- dispositivos de entrada;
+- SMART;
+- procesos y recursos;
+- entorno de usuario.
+
+El auditor está diseñado para diagnóstico y evita modificar deliberadamente la configuración del sistema.
+
+Los reportes generados no deben incorporarse automáticamente al historial de Git.
+
+## Seguridad
+
+SineOS adopta una estrategia de seguridad por capas.
+
+La arquitectura prevista contempla:
+
+1. baseline y hardening del sistema operativo;
+2. control de acceso obligatorio mediante AppArmor;
+3. firewall;
+4. SSH;
+5. aislamiento mediante Podman rootless;
+6. gestión de secretos;
+7. cifrado y almacenamiento;
+8. snapshots y recuperación;
+9. monitoreo y auditoría;
+10. VPN y privacidad cuando sean necesarias;
+11. gestión de credenciales;
+12. backup y recuperación ante desastres.
+
+No todas estas capas se consideran actualmente terminadas.
+
+Las configuraciones pendientes se documentan como deuda técnica en lugar de presentarlas como controles ya implementados.
+
+## Estado actual
+
+Componentes validados o funcionales:
+
+- Debian GNU/Linux 13 como plataforma base;
+- Btrfs;
+- Git y acceso a GitHub mediante SSH;
+- Podman rootless;
+- PostgreSQL 18 con persistencia;
+- Ollama;
+- Open WebUI;
+- Obsidian;
+- Miyo;
+- búsqueda semántica local;
+- integración agentic con el Vault;
+- Gemini como backend cloud principal;
+- DeepSeek como backend adicional;
+- arquitectura académica;
+- siete templates académicos funcionalmente validados.
+
+## Trabajo pendiente
+
+Entre las tareas técnicas identificadas se encuentran:
+
+- sustituir el arranque temporal de PostgreSQL por una configuración Quadlet definitiva;
+- revisar la configuración de red del Quadlet de PostgreSQL;
+- definir la política de firewall para los servicios locales;
+- fijar versión o digest de Open WebUI;
+- establecer un secreto fijo y administrado para Open WebUI;
+- formalizar la gestión de secretos;
+- hacer permanente la configuración de `~/.local/bin` cuando corresponda;
+- definir el mecanismo de actualización del CLI de Miyo;
+- continuar con snapshots, backup y recuperación;
+- desarrollar templates técnicos para Incidencias, Procedimientos y ADR;
+- continuar las pruebas semánticas y de síntesis entre múltiples notas.
+
+## Principios del proyecto
+
+SineOS sigue cuatro principios fundamentales:
+
+**Reproducibilidad**
+Una configuración importante debe poder reconstruirse.
+
+**Documentación**
+Una decisión técnica relevante debe quedar explicada.
+
+**Seguridad**
+Los secretos y datos persistentes no pertenecen al repositorio.
+
+**Pragmatismo**
+Las herramientas se seleccionan según el valor que aportan y los recursos reales disponibles.
+
+---
+
+SineOS es un proyecto personal en evolución. Los componentes marcados como pendientes o experimentales no deben interpretarse como configuraciones de producción terminadas.
