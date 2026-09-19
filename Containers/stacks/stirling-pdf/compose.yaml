@@ -1,0 +1,28 @@
+services:
+  stirling-pdf:
+    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:2.14.3-fat
+    container_name: sineos-stirling-pdf
+
+    ports:
+      - "127.0.0.1:8080:8080"
+
+    volumes:
+      - ../../volumes/stirling-pdf/configs:/configs
+      - ../../volumes/stirling-pdf/logs:/logs
+      - ../../volumes/stirling-pdf/customFiles:/customFiles
+      - ../../volumes/stirling-pdf/pipeline:/pipeline
+      - ../../volumes/stirling-pdf/tessdata:/usr/share/tessdata
+
+    environment:
+      SECURITY_ENABLELOGIN: "false"
+      DISABLE_ADDITIONAL_FEATURES: "false"
+      SYSTEM_DEFAULTLOCALE: "es-ES"
+
+    networks:
+      - default
+      - sineos-monitoring
+
+networks:
+  default:
+  sineos-monitoring:
+    external: true

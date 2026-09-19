@@ -1,0 +1,19 @@
+services:
+  uptime-kuma:
+    image: docker.io/louislam/uptime-kuma:2
+    container_name: sineos-uptime-kuma
+
+    ports:
+      - "127.0.0.1:3001:3001"
+
+    volumes:
+      - ../../volumes/uptime-kuma/data:/app/data
+
+    networks:
+      - default
+      - sineos-monitoring
+
+networks:
+  default:
+  sineos-monitoring:
+    external: true
