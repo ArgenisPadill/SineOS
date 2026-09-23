@@ -26,6 +26,12 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ### Documentación
 
+- Creada `Documentation/Lifecycle/` como guía viva y numerada de construcción/reconstrucción de SineOS, desde preparación de Debian hasta el estado actual.
+- Añadidos comandos operativos listos para terminal y estados `VALIDADO`, `VALIDADO HISTÓRICAMENTE` y `PENDIENTE DE REVALIDAR` para evitar documentar como hecho lo que aún no se ha reproducido desde cero.
+- Creado `Apps/README.md` como catálogo de programas propios de SineOS; NetworkPrivacy queda registrada como primera aplicación de referencia.
+- Integrados en la guía los ciclos de Debian, XFCE, Git/SSH, Podman, PostgreSQL, Ollama, Open WebUI, Knowledge Vault/Miyo, monitoreo, seguridad, NetworkPrivacy, automatización y auditoría.
+- Identificados como huecos de reproducibilidad los timers de monitoreo y el ruleset nftables, que funcionan en el equipo pero todavía no están versionados como código.
+
 - Creado un índice central de documentación en `Documentation/README.md`.
 - Adoptado un estándar documental con Definition of Done por componente.
 - Adoptado un estándar de ciclo de vida para scripts y automatizaciones.
