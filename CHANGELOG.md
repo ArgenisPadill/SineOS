@@ -110,17 +110,14 @@ SHA-256 de la versión validada:
 - Añadida exclusión de reportes locales de auditoría en `.gitignore`.
 - Desarrollada una nueva versión del auditor de SineOS para diagnóstico ampliado.
 
-### Pendiente
+### Pendiente actual
 
-- Sustituir el arranque temporal de PostgreSQL por Quadlet definitivo.
-- Corregir y validar la red del Quadlet de PostgreSQL.
-- Formalizar política de firewall.
-- Fijar versión o digest de Open WebUI.
-- Formalizar gestión de secretos.
-- Definir mecanismo de actualización del CLI de Miyo.
-- Implementar estrategia completa de snapshots, backup y recuperación.
-- Crear templates técnicos para Incidencias, Procedimientos y ADR.
-- Continuar benchmarks semánticos entre múltiples notas.
+- Fijar versión/digest de Open WebUI, definir secret persistente y retirar `restart: unless-stopped` de forma controlada.
+- Determinar consumidores de Tor.
+- Validar Ollama desde otro equipo y revisar nftables frente a Podman/netavark.
+- Auditar AppArmor y formalizar gestión de secretos.
+- Implementar backups, snapshots y recuperación ante desastre.
+- Definir actualización del CLI de Miyo y crear templates técnicos.
 
 ---
 

@@ -1,55 +1,30 @@
 # SineOS — PostgreSQL
 
-Stack de PostgreSQL 18 para el ecosistema SineOS.
+Stack de PostgreSQL 18 para SineOS.
 
 ## Plataforma
-
 - Runtime: Podman rootless
-- Orquestación: podman-compose
-- Imagen: docker.io/library/postgres:18
-- Arquitectura: amd64
-- Puerto: 5432
-- Persistencia: Containers/volumes/postgres/
+- Imagen: `docker.io/library/postgres:18`
+- Contenedor: `sineos-postgres`
+- Host: `127.0.0.1:5432`
+- Persistencia: `Containers/volumes/postgres/data`
+- Arranque: manual desde Podman Desktop
 
 ## Configuración
-
-La configuración local se encuentra en `.env`.
-El archivo `.env` contiene credenciales y no debe versionarse.
-La plantilla `.env.example` sirve como referencia para reconstruir la configuración.
-
-## Operación
-
-```bash
-make config
-make pull
-make up
-make ps
-make logs
-make health
-make restart
-make down
-```
+`.env` contiene la configuración local y credenciales; no se versiona. `.env.example` conserva solo la estructura reproducible.
 
 ## Persistencia
-
-Los datos PostgreSQL se almacenan fuera del contenedor mediante un bind mount.
-PostgreSQL 18 utiliza `/var/lib/postgresql` como punto de montaje recomendado.
+`Containers/volumes/postgres/data -> /var/lib/postgresql`. Los datos sobrevivieron a la recreación controlada del contenedor.
 
 ## Seguridad
+El Compose publica únicamente loopback. Las credenciales permanecen fuera de Git.
 
-El contenedor funciona mediante Podman rootless.
-Las credenciales se mantienen fuera del repositorio Git.
+## Validación
+```bash
+podman exec sineos-postgres pg_isready -U sineos -d sineos
+```
 
-## Estado
+También se validaron DBeaver, pgAdmin y persistencia. El Compose actual no define healthcheck; que `podman ps` no muestre `healthy` no implica una falla.
 
-Stack funcional y validado.
-
-Se verificó:
-
-- creación y arranque del contenedor;
-- healthcheck de PostgreSQL;
-- conexión local mediante PostgreSQL;
-- exposición del puerto 5432;
-- persistencia mediante bind mount;
-- persistencia de datos después de reiniciar;
-- persistencia de datos después de eliminar y recrear el contenedor.
+## Autostart
+La antigua intención de Quadlet fue reemplazada por arranque manual. No debe restaurarse autostart salvo una decisión explícita posterior.

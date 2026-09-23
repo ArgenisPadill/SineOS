@@ -371,28 +371,9 @@ Cada servicio debe tener una razón explícita para escuchar fuera de loopback.
 
 ## 17. nftables
 
-La política definitiva de firewall todavía no está implementada.
+OPERATIVO — validado el 23-09-2026.
 
-Estado:
-
-```text
-PENDIENTE
-```
-
-Este es uno de los pendientes de seguridad de mayor prioridad.
-
-La política futura debe contemplar:
-
-- tráfico entrante;
-- tráfico saliente cuando corresponda;
-- loopback;
-- conexiones establecidas;
-- servicios locales;
-- contenedores;
-- VPN;
-- interfaces de red.
-
----
+INPUT usa política `drop`. Se permiten loopback, `established,related`, ICMP/ICMPv6 y LocalSend TCP/UDP 53317 limitado a `192.168.0.0/24`. La salida permanece permitida. Pendiente: revisar `flush ruleset` frente a Podman/netavark.
 
 ## 18. Regla de firewall
 
@@ -514,7 +495,7 @@ Los controles relevantes incluyen:
 - exposición de red;
 - backups;
 - logs;
-- healthcheck.
+- disponibilidad comprobable mediante `pg_isready` cuando el contenedor está activo.
 
 ---
 
@@ -1071,7 +1052,7 @@ Antes de considerar cerrada la fase inicial de hardening deben estar resueltos a
 
 ```text
 [ ] Auditoría de AppArmor
-[ ] Política nftables
+[x] Política nftables
 [ ] Revisión de exposición de Ollama
 [ ] Auditoría SSH
 [ ] Verificación/documentación de LUKS
@@ -1113,7 +1094,7 @@ El siguiente bloque de seguridad debe concentrarse primero en:
 2. Verificar AppArmor
 3. Verificar LUKS
 4. Inventariar puertos
-5. Diseñar nftables
+5. Revisar convivencia nftables/Podman y validar Ollama desde LAN
 6. Proteger Ollama
 7. Formalizar secretos
 8. Rotar credenciales

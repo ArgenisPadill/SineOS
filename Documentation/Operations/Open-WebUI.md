@@ -192,19 +192,9 @@ La nomenclatura ayuda a evitar confundirlo con contenedores ajenos al proyecto.
 
 ---
 
-## 9. Restart policy
+## 9. Política de arranque
 
-La configuración contiene:
-
-```yaml
-restart: unless-stopped
-```
-
-Esta política permite que el proveedor Compose gestione el reinicio del contenedor según su comportamiento soportado.
-
-No debe confundirse con una estrategia completa de integración systemd/Quadlet.
-
-La arquitectura futura de servicios debe evaluar si Open WebUI también debe administrarse mediante Quadlet.
+La política operativa es iniciar y detener Open WebUI manualmente desde Podman Desktop. El Compose todavía contiene `restart: unless-stopped`, por lo que existe una divergencia que debe corregirse mediante recreación controlada preservando el volumen. No se planea Quadlet mientras siga vigente el arranque manual.
 
 ---
 
@@ -516,17 +506,7 @@ La seguridad debe evaluarse por componente.
 
 ## 25. nftables
 
-La política definitiva de nftables de SineOS todavía está pendiente.
-
-Esto afecta especialmente a Ollama por su escucha actual en:
-
-```text
-*:11434
-```
-
-Open WebUI ya utiliza un bind explícito a loopback para el puerto web.
-
-La futura política de firewall debe comprobar ambos componentes.
+nftables está operativo con INPUT `drop`. Open WebUI está limitado a `127.0.0.1:3000`. Open WebUI alcanza Ollama por `host.containers.internal:11434` con `pasta`; queda pendiente validar el bloqueo de Ollama desde otro dispositivo y revisar nftables con Podman/netavark.
 
 ---
 
@@ -766,8 +746,8 @@ Pendientes conocidos:
 [ ] Definir secret persistente
 [ ] Mantener secretos fuera de Git
 [ ] Evaluar backup de datos de Open WebUI
-[ ] Revisar integración con futura política nftables
-[ ] Evaluar integración futura con Quadlet
+[x] nftables operativo; revisión Podman/netavark pendiente
+[x] Quadlet descartado mientras el arranque sea manual
 [ ] Documentar actualización controlada
 ```
 

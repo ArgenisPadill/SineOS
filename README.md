@@ -102,21 +102,16 @@ Containers/
 
 Los datos persistentes, secretos, respaldos y logs no deben incorporarse accidentalmente al repositorio Git.
 
-Los stacks contemplados actualmente incluyen:
+Los stacks con definición operativa actual incluyen:
 
 ```text
-grafana
-jupyterlab
-loki
-netdata
-ollama
-open-webui
-pgadmin
 postgres
-prometheus
+open-webui
+stirling-pdf
+uptime-kuma
 ```
 
-No todos los stacks representan necesariamente servicios desplegados o terminados. La presencia de su estructura en el repositorio no implica que el componente esté en producción.
+Además existen esqueletos reservados para Grafana, JupyterLab, Loki, Netdata, pgAdmin y Prometheus. Sus archivos vacíos son scaffolding y no significan que esos servicios estén desplegados. La presencia de su estructura en el repositorio no implica que el componente esté en producción.
 ## PostgreSQL
 
 La base de datos principal desplegada actualmente en SineOS es **PostgreSQL 18**.
@@ -394,21 +389,31 @@ Componentes validados o funcionales:
 - NetworkPrivacy v0.3 para activar/restaurar DNSCrypt por red y mostrar el estado de Proton VPN;
 - lanzador de NetworkPrivacy integrado al menú Internet de XFCE.
 
+## Servicios locales y monitoreo
+
+| Componente | Ejecución | Acceso host |
+|---|---|---|
+| PostgreSQL 18 | Podman rootless, manual | `127.0.0.1:5432` |
+| Open WebUI | Podman rootless | `127.0.0.1:3000` |
+| Stirling PDF | Podman rootless, manual | `127.0.0.1:8080` |
+| Uptime Kuma | Podman rootless, manual | `127.0.0.1:3001` |
+| Ollama 0.34.0 | host | `*:11434`, protegido por nftables |
+| DNSCrypt | host | `127.0.2.1:53` |
+| Tor | host, en revisión | `127.0.0.1:9050` |
+
+Uptime Kuma usa la red `sineos-monitoring`. Stirling PDF se comprueba directamente en esa red; Open WebUI y PostgreSQL usan scripts Push desde el host. Las URLs Push permanecen fuera de Git en `~/.config/sineos/monitoring/`.
+
 ## Trabajo pendiente
 
-Entre las tareas técnicas identificadas se encuentran:
-
-- mantener PostgreSQL bajo política de arranque manual y acceso loopback;
-- continuar validando la convivencia de nftables con Podman/netavark;
-- completar la auditoría de servicios locales pendientes;
-- fijar versión o digest de Open WebUI;
-- establecer un secreto fijo y administrado para Open WebUI;
-- formalizar la gestión de secretos;
-- hacer permanente la configuración de `~/.local/bin` cuando corresponda;
-- definir el mecanismo de actualización del CLI de Miyo;
-- continuar con snapshots, backup y recuperación;
-- desarrollar templates técnicos para Incidencias, Procedimientos y ADR;
-- continuar las pruebas semánticas y de síntesis entre múltiples notas.
+- fijar versión/digest de Open WebUI, definir secret persistente y retirar `restart: unless-stopped` mediante recreación controlada;
+- determinar si Tor tiene consumidores reales;
+- validar Ollama desde otro dispositivo de la LAN;
+- revisar `flush ruleset` de nftables frente a Podman/netavark;
+- completar auditoría de AppArmor;
+- revisar manualmente candidatos de `apt autoremove`;
+- definir backups de PostgreSQL/Vault, snapshots y Disaster Recovery;
+- formalizar actualización de Miyo y continuar benchmarks semánticos;
+- crear templates de Incidencia, Procedimiento y ADR.
 
 ## Principios del proyecto
 

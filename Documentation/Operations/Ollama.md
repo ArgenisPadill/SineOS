@@ -209,21 +209,9 @@ Por ello esta configuración tiene implicaciones de seguridad.
 
 ---
 
-## 9. Deuda de seguridad
+## 9. Estado de seguridad de red
 
-Actualmente la política definitiva de firewall/nftables de SineOS no está terminada.
-
-Por tanto:
-
-```text
-*:11434
-```
-
-debe considerarse una configuración funcional pendiente de hardening.
-
-No debe interpretarse como configuración final de producción.
-
-La futura política de red debe garantizar que Ollama sea accesible únicamente desde los componentes autorizados.
+nftables está operativo con INPUT `drop`. Ollama conserva `*:11434` porque Open WebUI con Podman rootless/`pasta` necesita alcanzar el host mediante `host.containers.internal`. La conectividad desde el contenedor fue validada. Falta una prueba desde otro dispositivo de la LAN y revisar la convivencia nftables/netavark.
 
 ---
 
@@ -865,8 +853,8 @@ El hardening de red sigue pendiente.
 | Open WebUI → Ollama | Validado |
 | Modelos locales con tareas simples | Validados |
 | Agentic complejo con 2B–3B | Limitado |
-| nftables | Pendiente |
-| Hardening de 11434 | Pendiente |
+| nftables | Operativo |
+| Hardening de 11434 | Parcial: prueba externa pendiente |
 | PATH permanente para llmfit | Pendiente |
 
 ---
@@ -876,7 +864,7 @@ El hardening de red sigue pendiente.
 Pendientes relacionados con Ollama:
 
 ```text
-[ ] Implementar política nftables
+[x] Implementar política nftables
 [ ] Revisar exposición de Ollama en 11434
 [ ] Formalizar acceso desde contenedores
 [ ] Hacer permanente ~/.local/bin en Zsh
@@ -942,4 +930,4 @@ qwen2.5-coder:3b-instruct
 
 La ejecución mediante CPU ofrece actualmente un mejor resultado práctico que el backend Vulkan probado sobre Intel Iris Xe.
 
-La principal deuda técnica relacionada con Ollama es el hardening de su exposición de red y la futura política nftables de SineOS.
+La deuda restante es validar externamente el bloqueo de 11434 y revisar nftables con el networking rootless de Podman.
