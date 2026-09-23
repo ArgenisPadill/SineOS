@@ -77,6 +77,8 @@ Las responsabilidades se dividen actualmente en:
 - **Documentation:** arquitectura, operación, seguridad y registro técnico.
 - **Scripts:** auditoría, diagnóstico, mantenimiento y automatización, incluida la configuración visual reproducible de XFCE, monitoreo e instaladores de aplicaciones.
 
+El índice general de documentación se encuentra en `Documentation/README.md`. El catálogo y ciclo de vida de automatizaciones se documenta en `Scripts/README.md` y `Documentation/Architecture/Script-Standard.md`.
+
 Directorios adicionales como Ansible, Terraform, Lab, Foundation, Infrastructure o Platform podrán incorporarse cuando exista una implementación real que justifique versionarlos. No se mantienen directorios vacíos únicamente como scaffolding.
 
 ## Contenedores
