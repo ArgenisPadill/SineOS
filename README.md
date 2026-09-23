@@ -67,9 +67,9 @@ SineOS/
 ├── Infrastructure/
 ├── Lab/
 ├── Platform/
+├── Apps/
 ├── Scripts/
-├── Terraform/
-└── configuracion visual/
+└── Terraform/
 ```
 
 Las responsabilidades se dividen conceptualmente en:
@@ -78,8 +78,8 @@ Las responsabilidades se dividen conceptualmente en:
 - **Infrastructure:** contenedores, virtualización, almacenamiento, red y monitoreo.
 - **Platform:** servicios, bases de datos y herramientas de desarrollo.
 - **Containers:** definición y persistencia de los servicios desplegados mediante Podman.
-- **Scripts:** auditoría, diagnóstico, mantenimiento y automatización.
-- **configuracion visual:** personalización reproducible de XFCE, panel superior, Dock, tema, iconos, tipografías y recuperación visual.
+- **Apps:** aplicaciones propias de SineOS. Actualmente incluye NetworkPrivacy.
+- **Scripts:** auditoría, diagnóstico, mantenimiento y automatización, incluida la configuración visual reproducible de XFCE y los instaladores de aplicaciones.
 - **Documentation:** arquitectura, operación, seguridad y registro técnico.
 - **Lab:** experimentos, pruebas de concepto y benchmarks.
 - **Ansible/Terraform:** automatización e infraestructura reproducible conforme el proyecto evolucione.
@@ -124,7 +124,8 @@ La base de datos principal desplegada actualmente en SineOS es **PostgreSQL 18**
 Se ejecuta mediante Podman rootless y cuenta con:
 
 - persistencia en el host;
-- healthcheck;
+- acceso publicado únicamente en `127.0.0.1`;
+- arranque y detención manual desde Podman Desktop;
 - usuario y base de datos propios de SineOS;
 - almacenamiento separado del archivo de composición;
 - validación de persistencia después de reinicios.
@@ -386,15 +387,20 @@ Componentes validados o funcionales:
 - DeepSeek como backend adicional;
 - arquitectura académica;
 - siete templates académicos funcionalmente validados;
-- configuración visual reproducible de XFCE con barra superior translúcida, Dock auto-ocultable, tema, iconos y tipografías documentadas.
+- configuración visual reproducible de XFCE con barra superior translúcida, Dock auto-ocultable, tema, iconos y tipografías documentadas;
+- firewall nftables activo con política de entrada restrictiva;
+- Proton VPN validado con DNS propio durante la conexión;
+- DNSCrypt integrado por perfil de NetworkManager para redes de confianza;
+- NetworkPrivacy v0.3 para activar/restaurar DNSCrypt por red y mostrar el estado de Proton VPN;
+- lanzador de NetworkPrivacy integrado al menú Internet de XFCE.
 
 ## Trabajo pendiente
 
 Entre las tareas técnicas identificadas se encuentran:
 
-- sustituir el arranque temporal de PostgreSQL por una configuración Quadlet definitiva;
-- revisar la configuración de red del Quadlet de PostgreSQL;
-- definir la política de firewall para los servicios locales;
+- mantener PostgreSQL bajo política de arranque manual y acceso loopback;
+- continuar validando la convivencia de nftables con Podman/netavark;
+- completar la auditoría de servicios locales pendientes;
 - fijar versión o digest de Open WebUI;
 - establecer un secreto fijo y administrado para Open WebUI;
 - formalizar la gestión de secretos;

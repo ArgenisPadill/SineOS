@@ -83,9 +83,9 @@ Otras todavía requieren implementación o validación formal.
 | Btrfs | Operativo |
 | Podman rootless | Operativo |
 | Git mediante SSH | Operativo |
-| Servicios ligados a loopback cuando aplica | Parcial |
+| Servicios ligados a loopback cuando aplica | Operativo en PostgreSQL y servicios locales seleccionados; Ollama requiere excepción técnica por pasta |
 | AppArmor | Requiere auditoría formal |
-| nftables | Pendiente |
+| nftables | Operativo; revisión de convivencia con Podman/netavark pendiente |
 | Hardening SSH | Requiere auditoría formal |
 | Gestión central de secretos | Pendiente |
 | LUKS | Requiere verificación/documentación |
@@ -1164,3 +1164,37 @@ HARDENING EN PROGRESO
 ```
 
 El objetivo de la siguiente fase es reducir la superficie de exposición y garantizar que los datos importantes puedan recuperarse sin sacrificar la mantenibilidad del sistema.
+
+
+---
+
+# Actualización operativa — 2026-09-23
+
+## Firewall
+
+SineOS utiliza actualmente `nftables` con una cadena de entrada de política `drop`. Se permiten loopback, tráfico `established,related`, ICMP/ICMPv6 y LocalSend TCP/UDP 53317 limitado a la red LAN configurada `192.168.0.0/24`.
+
+La configuración actual utiliza `flush ruleset`. Aunque los contenedores rootless continúan funcionando, queda pendiente revisar formalmente su interacción a largo plazo con las reglas que pueda administrar Podman/netavark antes de considerar cerrado este punto.
+
+## Privacidad DNS y VPN
+
+DNSCrypt escucha localmente en `127.0.2.1:53` y se utiliza por perfil de NetworkManager en redes de confianza. No se fuerza globalmente para evitar problemas con redes públicas y portales cautivos.
+
+Cuando Proton VPN está conectado, Proton toma control del DNS efectivo y de la ruta mediante WireGuard y policy routing. Al desconectarlo, NetworkManager vuelve al DNS configurado para el perfil Wi-Fi.
+
+NetworkPrivacy proporciona una interfaz GTK3 para activar DNSCrypt en la red actual, restaurar exactamente la configuración DNS previa y mostrar cuándo DNSCrypt queda en espera porque Proton VPN está activo. El estado original por perfil se almacena fuera del repositorio en `~/.local/state/sineos-network-privacy/profiles.json` con permisos restrictivos.
+
+## Servicios revisados
+
+- KDE Connect: retirado por no utilizarse.
+- i2pd: retirado tras verificar que Proton VPN no dependía de él.
+- redsocks: retirado; no existían redirecciones activas que lo utilizaran.
+- AnyDesk: conservado por uso real; funciona con conexiones salientes bajo la política actual.
+- Dropbox y MEGA: conservados por uso real.
+- Avahi: conservado por dependencias y posible descubrimiento de impresión/escaneo; la política de entrada puede limitar descubrimiento mDNS desde LAN.
+- Tor: servicio local en `127.0.0.1:9050`; pendiente identificar consumidores antes de decidir su permanencia.
+- Ollama: escucha en todas las interfaces por requerimiento de comunicación con el alias de host de pasta; nftables bloquea el acceso LAN no solicitado. Se mantiene pendiente una validación adicional desde otro dispositivo de la LAN.
+
+## PostgreSQL
+
+PostgreSQL 18 se publica exclusivamente como `127.0.0.1:5432`. Se retiró `restart: unless-stopped` para mantener la política de inicio manual desde Podman Desktop. La persistencia se conserva mediante bind mount y fue validada después de recrear el contenedor.

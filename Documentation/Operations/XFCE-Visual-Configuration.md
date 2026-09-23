@@ -1,4 +1,4 @@
-# SineOS — Configuración visual XFCE
+# SineOS — Configuración visual reproducible de XFCE
 
 Esta carpeta contiene la configuración visual reproducible de **SineOS** para Debian con XFCE.
 
@@ -199,7 +199,7 @@ chmod +x sineos-xfce-macos.sh
 Ejecutar:
 
 ```bash
-./sineos-xfce-macos.sh install
+./Scripts/Desktop/sineos-xfce-macos.sh install
 ```
 
 El script pedirá privilegios administrativos únicamente cuando APT los necesite.
@@ -215,7 +215,7 @@ En una instalación limpia sin XFCE:
 ```bash
 cd "configuracion visual"
 chmod +x sineos-xfce-macos.sh
-./sineos-xfce-macos.sh install
+./Scripts/Desktop/sineos-xfce-macos.sh install
 ```
 
 El instalador:
@@ -263,13 +263,13 @@ su -
 y ejecutar:
 
 ```bash
-./sineos-xfce-macos.sh packages
+./Scripts/Desktop/sineos-xfce-macos.sh packages
 ```
 
 Después se debe cerrar la sesión de root, entrar en XFCE como el usuario normal y ejecutar:
 
 ```bash
-./sineos-xfce-macos.sh apply
+./Scripts/Desktop/sineos-xfce-macos.sh apply
 ```
 
 La personalización del escritorio **siempre debe ejecutarse como el usuario normal**.
@@ -281,7 +281,7 @@ La personalización del escritorio **siempre debe ejecutarse como el usuario nor
 ## Instalación completa
 
 ```bash
-./sineos-xfce-macos.sh install
+./Scripts/Desktop/sineos-xfce-macos.sh install
 ```
 
 Instala dependencias y aplica el diseño.
@@ -293,7 +293,7 @@ Si todavía no existe una sesión gráfica activa, programa el diseño para el p
 ## Instalar solamente paquetes
 
 ```bash
-./sineos-xfce-macos.sh packages
+./Scripts/Desktop/sineos-xfce-macos.sh packages
 ```
 
 No aplica la personalización.
@@ -303,7 +303,7 @@ No aplica la personalización.
 ## Aplicar o actualizar el diseño
 
 ```bash
-./sineos-xfce-macos.sh apply
+./Scripts/Desktop/sineos-xfce-macos.sh apply
 ```
 
 Debe ejecutarse:
@@ -317,7 +317,7 @@ Debe ejecutarse:
 ## Consultar estado
 
 ```bash
-./sineos-xfce-macos.sh status
+./Scripts/Desktop/sineos-xfce-macos.sh status
 ```
 
 Muestra, entre otros datos:
@@ -337,7 +337,7 @@ Muestra, entre otros datos:
 ## Restaurar
 
 ```bash
-./sineos-xfce-macos.sh restore
+./Scripts/Desktop/sineos-xfce-macos.sh restore
 ```
 
 Restaura el último respaldo generado antes de aplicar cambios.
@@ -474,7 +474,7 @@ Después de aplicar por primera vez el layout, el script crea:
 Si posteriormente se ejecuta:
 
 ```bash
-./sineos-xfce-macos.sh apply
+./Scripts/Desktop/sineos-xfce-macos.sh apply
 ```
 
 el script no reconstruye nuevamente la lista completa de plugins.
@@ -585,7 +585,7 @@ El área sensible de autoocultación se mantiene deliberadamente pequeña.
 Si todavía existe un problema:
 
 ```bash
-./sineos-xfce-macos.sh restore
+./Scripts/Desktop/sineos-xfce-macos.sh restore
 ```
 
 ---
@@ -609,7 +609,7 @@ Esto puede ser normal.
 Ejecutar:
 
 ```bash
-./sineos-xfce-macos.sh restore
+./Scripts/Desktop/sineos-xfce-macos.sh restore
 ```
 
 La restauración evita `xfce4-panel --restart`.
@@ -637,7 +637,7 @@ Debe finalizar sin mostrar errores.
 Para consultar el estado después de instalar:
 
 ```bash
-./sineos-xfce-macos.sh status
+./Scripts/Desktop/sineos-xfce-macos.sh status
 ```
 
 ---
@@ -678,8 +678,8 @@ mkdir -p "configuracion visual"
 Copiar los archivos y validar:
 
 ```bash
-chmod +x "configuracion visual/sineos-xfce-macos.sh"
-bash -n "configuracion visual/sineos-xfce-macos.sh"
+chmod +x "Scripts/Desktop/sineos-xfce-macos.sh"
+bash -n "Scripts/Desktop/sineos-xfce-macos.sh"
 ```
 
 Revisar:

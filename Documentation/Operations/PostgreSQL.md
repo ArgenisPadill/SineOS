@@ -893,3 +893,28 @@ hardening
 ```
 
 Estas tareas deben completarse antes de considerar PostgreSQL una implementación operativa completamente cerrada.
+
+
+---
+
+# Estado operativo actualizado — 2026-09-23
+
+La política actual sustituye la intención anterior de autostart/Quadlet para PostgreSQL. El servicio se administra manualmente desde Podman Desktop.
+
+Configuración validada:
+
+```text
+Contenedor : sineos-postgres
+Motor      : PostgreSQL 18
+Host       : 127.0.0.1:5432
+Arranque   : manual
+Persistencia: Containers/volumes/postgres/data -> /var/lib/postgresql
+```
+
+El archivo `compose.yaml` no utiliza `restart: unless-stopped` y publica el puerto únicamente sobre loopback. El healthcheck de Compose fue retirado; la disponibilidad puede comprobarse cuando el contenedor está activo mediante:
+
+```bash
+podman exec sineos-postgres pg_isready -U sineos -d sineos
+```
+
+La recreación del contenedor mantuvo los datos persistentes y se validó la conectividad desde DBeaver y pgAdmin. Las credenciales permanecen en `.env` y no deben incorporarse a Git.

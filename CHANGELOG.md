@@ -4,6 +4,26 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ## [Unreleased]
 
+### Red, privacidad y seguridad — 2026-09-23
+
+- Activado y validado nftables con política de entrada restrictiva y excepción de LocalSend limitada a la LAN configurada.
+- Eliminados KDE Connect, i2pd y redsocks tras verificar que no eran necesarios para la operación actual.
+- Reparado el servicio de split tunneling de Proton VPN instalando los headers del kernel y el metapaquete `linux-headers-amd64`.
+- Validado el ciclo Proton VPN: interfaz WireGuard, policy routing y DNS de Proton durante la conexión.
+- Integrado DNSCrypt en el perfil Wi-Fi de confianza sin imponerlo globalmente a redes nuevas o cautivas.
+- Añadida NetworkPrivacy v0.3, aplicación GTK3 para administrar DNSCrypt por perfil, detectar Proton VPN y restaurar la configuración DNS original.
+- Añadido instalador de NetworkPrivacy y lanzador para la categoría Internet de XFCE.
+- PostgreSQL limitado a `127.0.0.1:5432` y ajustado a política de arranque manual.
+- Conservados AnyDesk, Dropbox, MEGA y Avahi por uso funcional; permanecen sujetos a la política del firewall.
+- Tor queda pendiente de determinar si alguna aplicación lo utiliza antes de retirarlo o conservarlo.
+
+### Automatización y organización
+
+- La automatización visual de XFCE se trasladó a `Scripts/Desktop/`.
+- La documentación visual se trasladó a `Documentation/Operations/XFCE-Visual-Configuration.md`.
+- La aplicación NetworkPrivacy permanece en `Apps/NetworkPrivacy/`; su instalación e integración de escritorio se automatiza desde `Scripts/NetworkPrivacy/`.
+
+
 ### Documentación
 
 - Creado el `README.md` principal de SineOS.

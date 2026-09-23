@@ -918,3 +918,26 @@ mantenimiento
 ```
 
 El objetivo es convertir una plataforma funcional en una plataforma recuperable, mantenible y predecible.
+
+
+---
+
+# Revisión de deuda técnica — 2026-09-23
+
+## Cerrado o redefinido
+
+- **Firewall ausente:** cerrado. nftables está activo con entrada restrictiva.
+- **PostgreSQL expuesto por el host:** cerrado para el escenario actual. El puerto se publica solo en `127.0.0.1:5432`.
+- **Autostart de PostgreSQL:** redefinido. La política actual es arranque manual desde Podman Desktop; no se restaurará Quadlet/autostart mientras esta política siga vigente.
+- **DNS de confianza:** implementado mediante DNSCrypt por perfil de NetworkManager y administrable con NetworkPrivacy.
+- **Proton split tunneling fallando:** cerrado tras instalar headers del kernel y validar el servicio.
+
+## Pendiente
+
+- Determinar si alguna aplicación consume Tor en `127.0.0.1:9050`.
+- Revisar formalmente la convivencia de `flush ruleset` de nftables con Podman/netavark.
+- Validar desde otro equipo de la LAN que Ollama no sea accesible externamente bajo el firewall actual.
+- Retirar `restart: unless-stopped` de Open WebUI para alinearlo con la política de arranque manual, recreando el contenedor sin afectar su volumen persistente.
+- Auditar AppArmor con herramientas de usuario cuando se decida instalar `apparmor-utils`.
+- Revisar candidatos de `apt autoremove` manualmente; no ejecutar autoremove a ciegas porque aparecen paquetes que pueden seguir siendo útiles, incluido `sshfs`.
+- Completar cifrado, snapshots, backup y recuperación.
