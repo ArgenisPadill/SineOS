@@ -29,6 +29,7 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 - Adoptado y documentado el estándar de aplicaciones nativas de SineOS a partir de la experiencia de NetworkPrivacy.
 - Definido Python 3 + GTK3/PyGObject como patrón preferente para utilidades pequeñas de escritorio cuando una GUI aporta una mejora operativa real.
 - Establecidos como entregables mínimos: código fuente, instalador reproducible, integración con el menú, dependencias, manual de instalación, documentación operativa, justificación y validación funcional.
+- Congelado el estándar de experiencia de usuario para aplicaciones SineOS: uso cotidiano sin terminal, estado visible, acciones contextuales, lenguaje humano, divulgación progresiva, prevención de errores, safe defaults, feedback verificable, rollback, consistencia e integración natural con XFCE.
 
 - Creado el `README.md` principal de SineOS.
 - Documentada la arquitectura general del proyecto.
