@@ -57,32 +57,27 @@ La arquitectura se diseña considerando los recursos reales del equipo y evitand
 
 ## Arquitectura del repositorio
 
+La estructura versionada actual es:
+
 ```text
 SineOS/
-├── Ansible/
-├── Archive/
+├── Apps/
 ├── Containers/
 ├── Documentation/
-├── Foundation/
-├── Infrastructure/
-├── Lab/
-├── Platform/
-├── Apps/
 ├── Scripts/
-└── Terraform/
+├── .gitignore
+├── CHANGELOG.md
+└── README.md
 ```
 
-Las responsabilidades se dividen conceptualmente en:
+Las responsabilidades se dividen actualmente en:
 
-- **Foundation:** sistema operativo, shell, filesystem, red y seguridad base.
-- **Infrastructure:** contenedores, virtualización, almacenamiento, red y monitoreo.
-- **Platform:** servicios, bases de datos y herramientas de desarrollo.
-- **Containers:** definición y persistencia de los servicios desplegados mediante Podman.
 - **Apps:** aplicaciones propias de SineOS. Actualmente incluye NetworkPrivacy.
-- **Scripts:** auditoría, diagnóstico, mantenimiento y automatización, incluida la configuración visual reproducible de XFCE y los instaladores de aplicaciones.
+- **Containers:** definiciones reproducibles de los servicios desplegados mediante Podman. Los datos persistentes, respaldos, secretos y logs permanecen fuera de Git.
 - **Documentation:** arquitectura, operación, seguridad y registro técnico.
-- **Lab:** experimentos, pruebas de concepto y benchmarks.
-- **Ansible/Terraform:** automatización e infraestructura reproducible conforme el proyecto evolucione.
+- **Scripts:** auditoría, diagnóstico, mantenimiento y automatización, incluida la configuración visual reproducible de XFCE, monitoreo e instaladores de aplicaciones.
+
+Directorios adicionales como Ansible, Terraform, Lab, Foundation, Infrastructure o Platform podrán incorporarse cuando exista una implementación real que justifique versionarlos. No se mantienen directorios vacíos únicamente como scaffolding.
 
 ## Contenedores
 
@@ -111,7 +106,7 @@ stirling-pdf
 uptime-kuma
 ```
 
-Además existen esqueletos reservados para Grafana, JupyterLab, Loki, Netdata, pgAdmin y Prometheus. Sus archivos vacíos son scaffolding y no significan que esos servicios estén desplegados. La presencia de su estructura en el repositorio no implica que el componente esté en producción.
+No se conservan stacks vacíos como scaffolding. Un servicio se incorpora a `Containers/stacks/` cuando existe una definición operativa que deba versionarse.
 ## PostgreSQL
 
 La base de datos principal desplegada actualmente en SineOS es **PostgreSQL 18**.
