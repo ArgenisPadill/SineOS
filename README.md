@@ -412,7 +412,7 @@ Uptime Kuma usa la red `sineos-monitoring`. Stirling PDF se comprueba directamen
 
 ## Principios del proyecto
 
-SineOS sigue cuatro principios fundamentales:
+SineOS sigue cinco principios fundamentales:
 
 **Reproducibilidad**
 Una configuración importante debe poder reconstruirse.
@@ -425,6 +425,9 @@ Los secretos y datos persistentes no pertenecen al repositorio.
 
 **Pragmatismo**
 Las herramientas se seleccionan según el valor que aportan y los recursos reales disponibles.
+
+**Usabilidad operativa**
+Cuando una operación recurrente del propio sistema depende innecesariamente de ejecutar comandos manuales y una interfaz aporta una mejora real, SineOS prioriza una utilidad nativa, ligera, documentada e instalable. Para herramientas pequeñas en Debian/XFCE, el patrón preferente es Python 3 + GTK3/PyGObject, utilizando las interfaces nativas del sistema. La decisión completa está documentada en `Documentation/Architecture/Native-Applications.md`.
 
 ---
 
