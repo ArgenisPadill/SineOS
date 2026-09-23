@@ -60,6 +60,148 @@ Debe considerarse una aplicación nativa cuando se cumplan una o varias de estas
 
 Una operación de diagnóstico ocasional, un script de mantenimiento no interactivo o una automatización destinada exclusivamente a ejecución programada puede seguir siendo un script de terminal.
 
+## Estándar de experiencia de usuario
+
+La experiencia de NetworkPrivacy establece que una aplicación SineOS no debe limitarse a envolver comandos en botones. Debe **reducir la carga mental y operacional** del usuario.
+
+> Una aplicación SineOS debe hacer evidente qué está ocurriendo, qué puede hacer el usuario y qué ocurrirá después de ejecutar una acción.
+
+El usuario no debería necesitar conocer cómo funciona internamente el servicio para realizar una operación cotidiana de forma segura. Los detalles técnicos deben seguir disponibles, pero no dominar la experiencia normal.
+
+### 1. Uso normal sin terminal
+
+Una aplicación creada para sustituir una operación manual debe permitir completar su flujo normal sin abrir una terminal. La terminal queda para diagnóstico avanzado, recuperación excepcional, desarrollo y administración especializada.
+
+Si después de instalar la aplicación el uso cotidiano todavía obliga a copiar comandos, la experiencia no se considera terminada.
+
+### 2. Mínimo número de pasos
+
+Las tareas frecuentes deben requerir el menor número razonable de acciones. Deben evitarse asistentes, ventanas, preguntas y campos técnicos innecesarios.
+
+Las confirmaciones se reservan para acciones que interrumpan conectividad, afecten datos, modifiquen configuración sensible o tengan consecuencias difíciles de revertir.
+
+### 3. Estado antes que controles
+
+La interfaz debe responder primero: **¿qué está ocurriendo ahora?** y después: **¿qué puedo hacer?**
+
+El estado actual debe ser visible sin obligar al usuario a interpretar logs o ejecutar comprobaciones adicionales. Cuando aplique, deben diferenciarse claramente estados como activo, inactivo, disponible, en espera, requiere atención, error o sin conexión.
+
+No debe mostrarse un estado positivo si la aplicación no puede verificarlo razonablemente.
+
+### 4. Acciones contextuales
+
+La acción principal debe cambiar de acuerdo con el estado real. No deben mostrarse simultáneamente acciones incompatibles que obliguen al usuario a conocer detalles internos para decidir.
+
+NetworkPrivacy fija el patrón de referencia: DNS de red → **Activar DNSCrypt**; DNSCrypt activo → **Restaurar DNS de la red**; Proton VPN activo → la modificación DNS queda bloqueada mientras la VPN controla esa función.
+
+### 5. Lenguaje humano
+
+Los textos principales deben describir efectos y estados en lenguaje comprensible: **Conexión protegida**, **VPN activa**, **Restaurar DNS de la red**, **No se pudo activar DNSCrypt**.
+
+Puertos, parámetros, interfaces, servicios y comandos pueden mostrarse en detalles técnicos. La interfaz no debe ocultar la realidad técnica, pero tampoco exigir conocerla para operar correctamente.
+
+### 6. Divulgación progresiva
+
+La información debe organizarse en capas:
+
+```text
+Resumen
+   ↓
+estado y acción principal
+   ↓
+detalles técnicos opcionales
+```
+
+La pantalla principal debe resolver la necesidad cotidiana. Los datos de diagnóstico deben permanecer accesibles sin saturar la vista.
+
+### 7. Prevención de errores
+
+Siempre que sea posible se debe **prevenir antes que corregir**: deshabilitar acciones inválidas, detectar estados incompatibles, validar precondiciones, conservar estados necesarios para rollback y no continuar cuando falte información para una restauración segura.
+
+### 8. Safe defaults
+
+El comportamiento inicial debe ser conservador. Una aplicación no debe activar servicios sensibles, abrir puertos, borrar datos, reemplazar configuración válida o mantener privilegios elevados solo por comodidad.
+
+Los cambios importantes deben ser explícitos y comprensibles.
+
+### 9. Feedback inmediato y verificable
+
+Después de una acción, la aplicación debe comprobar el estado real siempre que sea viable:
+
+```text
+acción
+   ↓
+validación
+   ↓
+resultado mostrado al usuario
+```
+
+Debe distinguirse entre operación completada, fallida, pendiente o no verificable.
+
+### 10. Recuperación y rollback
+
+Cuando una acción modifique configuración relevante debe evaluarse desde el diseño cómo conservar y restaurar el estado anterior. El rollback no debe ser una ocurrencia posterior a un fallo.
+
+### 11. El usuario conserva el control
+
+La aplicación debe ayudar sin apropiarse silenciosamente del sistema. Se evitan cambios ocultos, configuraciones irreversibles sin advertencia, procesos permanentes innecesarios y eliminación automática de configuraciones previas.
+
+Cuando una decisión requiera contexto humano, el usuario conserva la decisión final.
+
+### 12. Integración natural con el escritorio
+
+Una aplicación interactiva debe sentirse parte de Debian/XFCE: aparecer en la categoría correcta del menú, usar un nombre comprensible, ejecutar sin terminal visible, respetar el tema GTK y reutilizar iconografía del sistema cuando sea suficiente.
+
+Se debe evitar introducir Electron, un navegador embebido o una interfaz web local para una utilidad pequeña si una aplicación nativa resuelve mejor la tarea.
+
+### 13. Legibilidad y jerarquía
+
+La información debe priorizarse así: estado general → contexto actual → acción principal → estados secundarios → detalles técnicos.
+
+Tipografía, espaciado y tamaño de controles deben favorecer lectura cómoda. No debe sacrificarse legibilidad únicamente para mostrar más información en una ventana.
+
+### 14. Consistencia entre aplicaciones
+
+Las aplicaciones SineOS deben compartir una lógica reconocible: nombres claros, estados visibles, acciones principales diferenciadas, confirmaciones coherentes, errores explicativos, detalles técnicos opcionales e instalación semejante.
+
+No tienen que verse idénticas, pero sí sentirse parte del mismo sistema.
+
+### 15. Practicidad sobre complejidad
+
+Cada control debe justificar su presencia respondiendo: **¿ayuda al usuario a completar mejor la tarea?**
+
+Una aplicación pequeña que resuelva correctamente una función es preferible a una interfaz compleja que intente administrar todo el sistema.
+
+### 16. Prueba de uso cotidiano
+
+Antes de declarar una aplicación terminada, el flujo principal debe poder realizarse sin consultar comandos, sin conocer archivos internos, sin interpretar logs, sin recordar parámetros técnicos y sin abrir una terminal.
+
+La documentación sigue siendo obligatoria, pero no debe ser necesaria para comprender las acciones cotidianas de la interfaz.
+
+### 17. Experiencia de instalación
+
+La instalación también forma parte de la UX y debe tender a este flujo:
+
+```text
+obtener repositorio
+    ↓
+ejecutar instalador
+    ↓
+validar dependencias
+    ↓
+integrar aplicación
+    ↓
+encontrarla en el menú
+```
+
+El instalador debe explicar qué comprueba, qué falta, qué va a modificar, dónde queda la integración, cómo consultar el estado y cómo retirarla. Una dependencia faltante debe producir una instrucción clara y accionable, no un error críptico.
+
+### 18. Criterio de experiencia terminada
+
+La UX puede considerarse terminada cuando el propósito es evidente, el estado actual es comprensible, la acción principal es clara, las acciones inválidas están prevenidas, los cambios sensibles requieren confirmación, el resultado se valida y comunica, existe recuperación cuando corresponde, los detalles técnicos no dominan la interfaz, el uso normal no depende de terminal y la aplicación está integrada y documentada.
+
+La estética importa para legibilidad, jerarquía y coherencia, pero nunca sustituye funcionalidad, seguridad ni claridad.
+
 ## Requisitos mínimos de una aplicación SineOS
 
 Una aplicación nativa no se considera terminada únicamente porque su interfaz funcione.
