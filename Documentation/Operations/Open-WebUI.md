@@ -63,7 +63,7 @@ Containers/stacks/open-webui/compose.yaml
 Dentro del repositorio:
 
 ```text
-/home/argenis/Workspace/SineOS
+${SINEOS_REPO}
 ```
 
 El archivo `compose.yaml` forma parte de Git.

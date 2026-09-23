@@ -249,13 +249,13 @@ El conocimiento permanente de SineOS se administra mediante **Obsidian**.
 El Vault se encuentra en:
 
 ```text
-/home/argenis/Obsidian/SineOS
+${SINEOS_VAULT}
 ```
 
 El repositorio Git se encuentra en:
 
 ```text
-/home/argenis/Workspace/SineOS
+${SINEOS_REPO}
 ```
 
 Son componentes diferentes.

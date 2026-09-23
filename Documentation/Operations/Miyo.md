@@ -65,7 +65,7 @@ Vault de Obsidian
 El Vault utilizado por Miyo es:
 
 ```text
-/home/argenis/Obsidian/SineOS
+${SINEOS_VAULT}
 ```
 
 Este directorio constituye la fuente de conocimiento permanente del sistema.
@@ -122,7 +122,7 @@ La AppImage constituye la aplicación principal de Miyo.
 El scope configurado es:
 
 ```text
-/home/argenis/Obsidian/SineOS
+${SINEOS_VAULT}
 ```
 
 Miyo debe indexar el Knowledge Vault y no el repositorio Git de SineOS.
@@ -130,11 +130,11 @@ Miyo debe indexar el Knowledge Vault y no el repositorio Git de SineOS.
 Separación:
 
 ```text
-/home/argenis/Workspace/SineOS
+${SINEOS_REPO}
         ↓
 Git / código / infraestructura / documentación técnica
 
-/home/argenis/Obsidian/SineOS
+${SINEOS_VAULT}
         ↓
 Knowledge Vault / conocimiento / memoria
 ```

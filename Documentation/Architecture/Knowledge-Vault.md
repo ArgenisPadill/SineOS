@@ -6,8 +6,8 @@ El Knowledge Vault de SineOS constituye la base de conocimiento permanente del e
 
 El Vault utiliza Obsidian y se mantiene deliberadamente separado del repositorio Git operativo de SineOS.
 
-- Repositorio SineOS: `/home/argenis/Workspace/SineOS`
-- Knowledge Vault: `/home/argenis/Obsidian/SineOS`
+- Repositorio SineOS: `${SINEOS_REPO}`
+- Knowledge Vault: `${SINEOS_VAULT}`
 
 El repositorio almacena código, configuración, scripts e infraestructura.
 

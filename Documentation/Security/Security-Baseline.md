@@ -373,7 +373,7 @@ Cada servicio debe tener una razón explícita para escuchar fuera de loopback.
 
 OPERATIVO — validado el 23-09-2026.
 
-INPUT usa política `drop`. Se permiten loopback, `established,related`, ICMP/ICMPv6 y LocalSend TCP/UDP 53317 limitado a `192.168.0.0/24`. La salida permanece permitida. Pendiente: revisar `flush ruleset` frente a Podman/netavark.
+INPUT usa política `drop`. Se permiten loopback, `established,related`, ICMP/ICMPv6 y LocalSend TCP/UDP 53317 limitado a `<TRUSTED_LAN_CIDR>`. La salida permanece permitida. Pendiente: revisar `flush ruleset` frente a Podman/netavark.
 
 ## 18. Regla de firewall
 
@@ -724,7 +724,7 @@ GitHub solo debe recibir la clave pública correspondiente.
 El Knowledge Vault reside en:
 
 ```text
-/home/argenis/Obsidian/SineOS
+${SINEOS_VAULT}
 ```
 
 Puede contener:
@@ -745,7 +745,7 @@ Debe tratarse como información local sensible.
 El Vault no forma parte del repositorio:
 
 ```text
-/home/argenis/Workspace/SineOS
+${SINEOS_REPO}
 ```
 
 La separación es intencional.
@@ -1153,7 +1153,7 @@ El objetivo de la siguiente fase es reducir la superficie de exposición y garan
 
 ## Firewall
 
-SineOS utiliza actualmente `nftables` con una cadena de entrada de política `drop`. Se permiten loopback, tráfico `established,related`, ICMP/ICMPv6 y LocalSend TCP/UDP 53317 limitado a la red LAN configurada `192.168.0.0/24`.
+SineOS utiliza actualmente `nftables` con una cadena de entrada de política `drop`. Se permiten loopback, tráfico `established,related`, ICMP/ICMPv6 y LocalSend TCP/UDP 53317 limitado a la red LAN configurada `<TRUSTED_LAN_CIDR>`.
 
 La configuración actual utiliza `flush ruleset`. Aunque los contenedores rootless continúan funcionando, queda pendiente revisar formalmente su interacción a largo plazo con las reglas que pueda administrar Podman/netavark antes de considerar cerrado este punto.
 

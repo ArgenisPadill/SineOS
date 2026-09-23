@@ -79,7 +79,7 @@ Obsidian funciona como la fuente permanente de conocimiento de SineOS.
 El Vault principal se encuentra en:
 
 ```text
-/home/argenis/Obsidian/SineOS
+${SINEOS_VAULT}
 ```
 
 El Vault almacena:
