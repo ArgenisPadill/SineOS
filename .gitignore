@@ -21,11 +21,6 @@ Containers/volumes/*
 Containers/backups/*
 Containers/logs/*
 
-# Mantener la estructura de directorios
-!Containers/volumes/.gitkeep
-!Containers/backups/.gitkeep
-!Containers/logs/.gitkeep
-
 # ------------------------------------------------------------
 # Local container runtime data
 # ------------------------------------------------------------
