@@ -68,7 +68,8 @@ SineOS/
 ├── Lab/
 ├── Platform/
 ├── Scripts/
-└── Terraform/
+├── Terraform/
+└── configuracion visual/
 ```
 
 Las responsabilidades se dividen conceptualmente en:
@@ -78,6 +79,7 @@ Las responsabilidades se dividen conceptualmente en:
 - **Platform:** servicios, bases de datos y herramientas de desarrollo.
 - **Containers:** definición y persistencia de los servicios desplegados mediante Podman.
 - **Scripts:** auditoría, diagnóstico, mantenimiento y automatización.
+- **configuracion visual:** personalización reproducible de XFCE, panel superior, Dock, tema, iconos, tipografías y recuperación visual.
 - **Documentation:** arquitectura, operación, seguridad y registro técnico.
 - **Lab:** experimentos, pruebas de concepto y benchmarks.
 - **Ansible/Terraform:** automatización e infraestructura reproducible conforme el proyecto evolucione.
@@ -383,7 +385,8 @@ Componentes validados o funcionales:
 - Gemini como backend cloud principal;
 - DeepSeek como backend adicional;
 - arquitectura académica;
-- siete templates académicos funcionalmente validados.
+- siete templates académicos funcionalmente validados;
+- configuración visual reproducible de XFCE con barra superior translúcida, Dock auto-ocultable, tema, iconos y tipografías documentadas.
 
 ## Trabajo pendiente
 
