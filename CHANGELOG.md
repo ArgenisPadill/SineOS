@@ -26,6 +26,13 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ### Documentación
 
+- Creado un índice central de documentación en `Documentation/README.md`.
+- Adoptado un estándar documental con Definition of Done por componente.
+- Adoptado un estándar de ciclo de vida para scripts y automatizaciones.
+- Creado `Scripts/README.md` como catálogo operativo de los scripts versionados.
+- Clasificados scripts pilares, recurrentes, de instalación, migración, one-shot y experimentales.
+- Registrados explícitamente los huecos documentales que deben cerrarse con procedimientos validados.
+
 - Adoptado y documentado el estándar de aplicaciones nativas de SineOS a partir de la experiencia de NetworkPrivacy.
 - Definido Python 3 + GTK3/PyGObject como patrón preferente para utilidades pequeñas de escritorio cuando una GUI aporta una mejora operativa real.
 - Establecidos como entregables mínimos: código fuente, instalador reproducible, integración con el menú, dependencias, manual de instalación, documentación operativa, justificación y validación funcional.
