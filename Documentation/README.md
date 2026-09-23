@@ -8,6 +8,7 @@ El objetivo no es únicamente describir componentes aislados, sino permitir ente
 
 ```text
 Documentation/
+├── Lifecycle/      # guía ordenada para construir y reconstruir SineOS
 ├── Architecture/   # por qué existe cada diseño y cómo se relacionan sus partes
 ├── Operations/     # cómo se usa, valida, mantiene y diagnostica
 ├── Security/       # controles, riesgos, políticas y hardening
@@ -15,6 +16,14 @@ Documentation/
 ```
 
 No se crean directorios vacíos solo para representar una arquitectura futura.
+
+## Lifecycle
+
+`Documentation/Lifecycle/README.md` es el runbook vivo de construcción de SineOS.
+
+Contiene capítulos numerados desde la preparación de la imagen de Debian hasta el estado actual, con comandos listos para terminal y marcas explícitas de qué fue validado y qué necesita revalidación.
+
+También enlaza los programas propios, scripts, stacks y documentos profundos que sostienen cada etapa.
 
 ## Architecture
 
@@ -69,6 +78,12 @@ Baseline de seguridad, estado de controles, red, servicios, secretos, backups y 
 
 ### Documentation-Privacy.md
 Reglas para evitar publicar secretos, rutas privadas, identificadores y reportes sensibles.
+
+## Programas propios
+
+El catálogo de aplicaciones y programas desarrollados específicamente para SineOS se encuentra en:
+
+`Apps/README.md`
 
 ## Scripts
 
