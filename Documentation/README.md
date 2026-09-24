@@ -79,6 +79,12 @@ Baseline de seguridad, estado de controles, red, servicios, secretos, backups y 
 ### Documentation-Privacy.md
 Reglas para evitar publicar secretos, rutas privadas, identificadores y reportes sensibles.
 
+### Agentic-Security-Validation.md
+Diseño de la etapa final de validación defensiva asistida por agente.
+
+### Agentic-Security-Allowlist.md
+Allowlist inicial de skills defensivas autorizadas para evaluación de SineOS.
+
 ## Programas propios
 
 El catálogo de aplicaciones y programas desarrollados específicamente para SineOS se encuentra en:
