@@ -12,16 +12,21 @@
 set -u
 set -o pipefail
 
+# Los binarios administrativos de Debian viven normalmente en /usr/sbin.
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
+
 NAME="sineos-health-audit"
-VERSION="1.0.0"
+VERSION="1.1.0"
 TS="$(date '+%Y-%m-%d_%H-%M-%S')"
 OK=0
 WARN=0
 ERR=0
+INFO=0
 
 ok(){ echo "[ OK ] $1"; ((OK+=1)); }
 warn(){ echo "[WARN] $1"; ((WARN+=1)); }
 err(){ echo "[ERROR] $1"; ((ERR+=1)); }
+info(){ echo "[INFO] $1"; ((INFO+=1)); }
 section(){ printf '\n============================================================\n %s\n============================================================\n' "$1"; }
 has(){ command -v "$1" >/dev/null 2>&1; }
 
@@ -70,6 +75,7 @@ else
 fi
 
 section "3. SYSTEMD Y JOURNAL"
+info "Las líneas de contenedores escritas a stderr pueden aparecer en journald con prioridad err aunque el mensaje interno sea INFO/WARN."
 failed="$(systemctl --failed --no-legend 2>/dev/null || true)"
 [[ -z "$failed" ]] && ok "Sin unidades systemd fallidas." || { err "Hay unidades systemd fallidas:"; echo "$failed"; }
 
@@ -203,6 +209,7 @@ section "13. RESUMEN"
 echo "OK: $OK"
 echo "Advertencias: $WARN"
 echo "Errores: $ERR"
+echo "Información: $INFO"
 echo "Reporte: $REPORT"
 
 if [[ "$ERR" -gt 0 ]]; then
