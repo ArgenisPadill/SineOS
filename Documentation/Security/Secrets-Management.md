@@ -179,6 +179,40 @@ Los valores reales nunca deben incluirse en este inventario.
 
 SineOS utiliza Gitleaks para comprobar el working tree y el historial de Git.
 
+### Validación 23-09-2026
+
+Se instaló desde los repositorios oficiales de Debian 13:
+
+```text
+gitleaks 8.16.0-1+b12
+```
+
+Se ejecutaron dos escaneos:
+
+```text
+working tree    -> 0 hallazgos
+historial Git   -> 0 hallazgos
+```
+
+Los reportes locales quedaron bajo:
+
+```text
+~/.local/state/sineos/security/gitleaks/
+```
+
+con:
+
+```text
+directorio          700
+working-tree.json   600
+git-history.json    600
+```
+
+Conclusión: no se detectaron secretos mediante las reglas de Gitleaks ni en el estado actual ni en el historial Git disponible al momento de la validación.
+
+Esto no sustituye futuras revisiones; representa un checkpoint limpio.
+
+
 Debian 13 Trixie proporciona el paquete `gitleaks` en sus repositorios oficiales.
 
 Los reportes locales deben almacenarse fuera del repositorio, por ejemplo:
@@ -258,9 +292,9 @@ TD-001 puede cerrarse cuando:
 [x] Directorio ~/.config/sineos restringido a 700
 [x] URLs Push protegidas a 600
 [x] PostgreSQL .env protegido a 600 y fuera de Git
-[ ] Escaneo Gitleaks del working tree
-[ ] Escaneo Gitleaks del historial
-[ ] Hallazgos reales resueltos o aceptados
+[x] Escaneo Gitleaks del working tree — 0 hallazgos
+[x] Escaneo Gitleaks del historial — 0 hallazgos
+[x] Hallazgos reales resueltos o aceptados — no hubo hallazgos
 [ ] Secret persistente Open WebUI definido
 [ ] Procedimiento de rotación documentado para secretos críticos
 [ ] Comprobación recurrente incorporada al auditor o a un script de seguridad
