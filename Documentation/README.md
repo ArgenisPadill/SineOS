@@ -68,6 +68,12 @@ Deuda técnica abierta y decisiones ya cerradas.
 ### Quarterly-Health.md
 Política y estado de la auditoría profunda trimestral de salud de SineOS.
 
+### Health-Status.md
+Último estado trimestral validado que sirve como evidencia versionada para el gate GitHub.
+
+### Maintenance.md
+Arquitectura, instalación y operación de la aplicación nativa SineOS · Mantenimiento.
+
 ### XFCE-Visual-Configuration.md
 Instalación, aplicación, respaldo, restauración y mantenimiento del escritorio XFCE reproducible.
 
