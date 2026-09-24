@@ -3,7 +3,7 @@
 # Nombre: sineos-health-audit.sh
 # Propósito: auditoría profunda trimestral de salud de SineOS.
 # Categoría: operativo recurrente / auditoría
-# Estado: pendiente de revalidación final v1.2.3
+# Estado: validado 24-09-2026
 # Plataforma: Debian 13 Trixie
 # Reejecutable: sí
 # Privilegios: usuario normal; sudo -n solo para lecturas cuando esté disponible.
