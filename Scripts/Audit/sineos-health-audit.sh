@@ -78,7 +78,32 @@ section "3. SYSTEMD Y JOURNAL"
 failed="$(systemctl --failed --no-legend 2>/dev/null || true)"
 [[ -z "$failed" ]] && ok "Sin unidades systemd fallidas." || { err "Hay unidades systemd fallidas:"; echo "$failed"; }
 
-journal_all="$(journalctl -p err..alert -b --no-pager 2>/dev/null | grep -v '^-- No entries --
+journal_all="$(journalctl -p err..alert -b --no-pager 2>/dev/null | grep -v '^-- No entries --$' || true)"
+
+host_errors="$(
+  printf '%s\n' "$journal_all" |
+  grep -Ev 'sineos-(open-webui|stirling-pdf|uptime-kuma|postgres)\[' |
+  grep -Ev 'sudo\[[0-9]+\].*password is required' ||
+  true
+)"
+
+if [[ -z "$host_errors" ]]; then
+  ok "Sin errores de prioridad alta del host fuera de contenedores conocidos."
+else
+  warn "El journal del host contiene eventos err..alert que requieren revisión."
+  printf '%s\n' "$host_errors" | tail -n 40
+fi
+
+container_err_n="$(
+  printf '%s\n' "$journal_all" |
+  grep -Ec 'sineos-(open-webui|stirling-pdf|uptime-kuma|postgres)\[' ||
+  true
+)"
+
+if [[ "$container_err_n" -gt 0 ]]; then
+  info "$container_err_n entrada(s) de contenedores aparecen con prioridad err; se conservan como contexto y no equivalen por sí solas a fallo del host."
+fi
+
 section "4. APT Y PAQUETES"
 latest="$(find /var/lib/apt/lists -maxdepth 1 -type f -name '*InRelease' -printf '%T@\n' 2>/dev/null | sort -nr | head -n1 | cut -d. -f1)"
 if [[ -n "$latest" ]]; then
