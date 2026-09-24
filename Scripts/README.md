@@ -12,7 +12,7 @@ La política completa se encuentra en `Documentation/Architecture/Script-Standar
 | Escritorio XFCE | `Desktop/sineos-xfce-macos.sh` | Pilar / instalación | Activo | Instala, aplica, valida y restaura la configuración visual reproducible de XFCE |
 | Open WebUI | `Monitoring/check-open-webui.sh` | Operativo recurrente | Activo | Comprueba el endpoint local y envía heartbeat Push a Uptime Kuma |
 | PostgreSQL | `Monitoring/check-postgresql.sh` | Operativo recurrente | Activo | Comprueba PostgreSQL mediante `pg_isready` y envía heartbeat Push |
-| NetworkPrivacy | `NetworkPrivacy/install-network-privacy.sh` | Pilar / instalación | Activo | Valida dependencias e integra SineOS Privacidad de red con XFCE |
+| NetworkPrivacy | `NetworkPrivacy/install-network-privacy.sh` | Pilar / instalación | Activo | Valida dependencias e integra SineOS Privacidad de red con XFCE |\n| Seguridad | `Security/sineos-secrets-audit.sh` | Operativo recurrente | Pendiente de validar | Audita permisos, Git y Gitleaks sin mostrar secretos |
 
 ## Audit — sineos-audit.sh
 
@@ -152,6 +152,30 @@ Comprueba dependencias pero no instala automáticamente las que faltan.
 
 - `Documentation/Operations/NetworkPrivacy.md`
 - `Documentation/Architecture/Native-Applications.md`
+
+## Security — sineos-secrets-audit.sh
+
+### Propósito
+
+Comprobar de forma recurrente la higiene de secretos de SineOS sin mostrar valores ni modificar configuración.
+
+### Controles
+
+- permisos de archivos `.env`;
+- `.env` ignorados por Git;
+- permisos de `~/.config/sineos`;
+- nombres sensibles rastreados por Git;
+- Gitleaks sobre working tree;
+- Gitleaks sobre historial Git;
+- estado del working tree.
+
+### Reportes
+
+Se guardan fuera del repositorio bajo `~/.local/state/sineos/security/` con permisos privados.
+
+### Estado
+
+Pendiente de primera validación funcional en el equipo SineOS.
 
 ## Automatización fuera de Scripts/
 
