@@ -34,6 +34,7 @@ Está pensada como un **runbook vivo**: los bloques de terminal pueden copiarse 
 13 Programas, scripts y automatización
 14 Auditoría y mantenimiento
 15 Estado actual y siguientes pasos
+16 Validación final de seguridad asistida por agente
 ```
 
 ## Alcance
