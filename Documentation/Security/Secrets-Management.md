@@ -171,7 +171,7 @@ Las restricciones del runtime o de una aplicación externa deben documentarse si
 | Monitoring Open WebUI | `~/.config/sineos/monitoring/open-webui.env` | Push URL | Protegido 600 |
 | Monitoring PostgreSQL | `~/.config/sineos/monitoring/postgresql.env` | Push URL | Protegido 600 |
 | Stirling PDF | volumen persistente `/configs` | JWT key generada | Fuera de Git; permisos controlados por upstream 2.14.3 |
-| Open WebUI | `Containers/stacks/open-webui/.env` | secret persistente | Recuperado sin rotación; 600 / fuera de Git; pendiente de recreación controlada |
+| Open WebUI | `Containers/stacks/open-webui/.env` | secret persistente | Validado; 600 / fuera de Git / mismo valor tras dos recreaciones |
 
 Los valores reales nunca deben incluirse en este inventario.
 
@@ -288,14 +288,14 @@ No se adopta una herramienta adicional hasta verificar:
 TD-001 puede cerrarse cuando:
 
 ```text
-[ ] Política documentada
+[x] Política documentada
 [x] Directorio ~/.config/sineos restringido a 700
 [x] URLs Push protegidas a 600
 [x] PostgreSQL .env protegido a 600 y fuera de Git
 [x] Escaneo Gitleaks del working tree — 0 hallazgos
 [x] Escaneo Gitleaks del historial — 0 hallazgos
 [x] Hallazgos reales resueltos o aceptados — no hubo hallazgos
-[~] Secret persistente Open WebUI definido — falta validar recreación controlada
+[x] Secret persistente Open WebUI definido y validado mediante dos recreaciones
 [ ] Procedimiento de rotación documentado para secretos críticos
 [ ] Comprobación recurrente incorporada al auditor o a un script de seguridad
 ```
