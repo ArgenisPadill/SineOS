@@ -297,5 +297,5 @@ TD-001 puede cerrarse cuando:
 [x] Hallazgos reales resueltos o aceptados — no hubo hallazgos
 [x] Secret persistente Open WebUI definido y validado mediante dos recreaciones
 [ ] Procedimiento de rotación documentado para secretos críticos
-[ ] Comprobación recurrente incorporada al auditor o a un script de seguridad
+[~] Comprobación recurrente implementada en `Scripts/Security/sineos-secrets-audit.sh` — pendiente de primera validación
 ```
