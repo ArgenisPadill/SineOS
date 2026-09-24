@@ -25,6 +25,7 @@ Este documento registra únicamente deuda vigente.
 | TD-015 | Media | Recuperación | Procedimiento de migración |
 | TD-016 | Alta | Recuperación | Prueba de Disaster Recovery |
 | TD-017 | Media | Vault | Templates Incidencia/Procedimiento/ADR |
+| TD-018 | Alta | Seguridad | Ejecutar validación final asistida por agente después de cerrar hardening y DR |
 
 ## Decisiones cerradas
 
@@ -61,6 +62,9 @@ No ejecutar `apt autoremove` a ciegas. `sshfs` apareció entre candidatos y pued
 
 ### Miyo y Vault
 Formalizar actualización, continuar benchmarks y crear templates técnicos.
+
+### Validación final asistida por agente
+La fase final utilizará una allowlist defensiva de `Anthropic-Cybersecurity-Skills` después de cerrar las capas tradicionales de hardening y recuperación. No debe marcarse como completada por instalar la biblioteca: requiere evaluación, evidencia, remediación individual y revalidación.
 
 ## Regla de cierre
 Una deuda se cierra solo después de aplicar y validar el cambio.
