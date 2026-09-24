@@ -8,7 +8,6 @@ Este documento registra únicamente deuda vigente.
 
 | ID | Prioridad | Área | Pendiente |
 |---|---|---|---|
-| TD-002 | Alta | Backups | Política general de backup |
 | TD-003 | Alta | PostgreSQL | Backup y restauración probados |
 | TD-004 | Alta | Vault | Backup independiente del Knowledge Vault |
 | TD-006 | Media | Open WebUI | Fijar imagen por versión/digest |
@@ -36,6 +35,8 @@ Este documento registra únicamente deuda vigente.
 
 **Gestión de secretos (TD-001):** cerrada. Política, inventario, permisos, Gitleaks, secret persistente de Open WebUI, auditor recurrente y procedimientos de rotación quedaron documentados y validados.
 
+**Política general de backup (TD-002):** cerrada. SineOS adopta Restic como motor preferente para backup cifrado/versionado y Btrfs/Snapper únicamente como rollback local. La implementación queda dividida en TD-003, TD-004 y TD-016.
+
 **DNSCrypt/Proton:** DNSCrypt por perfil y el ciclo Proton VPN/DNS fueron implementados y validados mediante NetworkPrivacy.
 
 **Servicios retirados:** KDE Connect, i2pd y redsocks fueron retirados tras comprobar que no eran necesarios.
@@ -58,7 +59,7 @@ Gitleaks historial Git          -> 0 hallazgos
 TD-001 cerrado el 23-09-2026. El auditor recurrente v1.1.0 fue validado con 12 controles OK, 0 advertencias y 0 errores; la rotación quedó documentada en `Documentation/Security/Secrets-Rotation.md`.
 
 ### Backups y recuperación
-Definir frecuencia, retención, destino y pruebas. Prioridad: Knowledge Vault y PostgreSQL. Snapshot Btrfs no equivale a backup.
+La política general está definida en `Documentation/Recovery/Backup-Policy.md`. Falta seleccionar un destino físico separado e implementar/probar backup y restore de Knowledge Vault y PostgreSQL. Snapshot Btrfs no equivale a backup.
 
 ### Open WebUI
 El secret persistente ya quedó validado y TD-005 está cerrado. Permanecen como deuda fijar la imagen y retirar `restart: unless-stopped` mediante recreación controlada preservando datos.
