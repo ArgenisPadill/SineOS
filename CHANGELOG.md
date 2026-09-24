@@ -1,4 +1,5 @@
 # Changelog
+- Validada la instalación local de `SineOS · Mantenimiento`: wrapper local, timer `enabled/active`, estado/configuración privados y Git limpio; adopción inicial todavía pendiente.
 - Corregida la instalación de `SineOS · Mantenimiento` para no cambiar permisos de archivos versionados; ahora usa un wrapper local en `~/.local/bin` y lanza la auditoría mediante `bash`.
 
 Todos los cambios relevantes de SineOS se documentan en este archivo.
