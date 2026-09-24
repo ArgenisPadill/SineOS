@@ -1,6 +1,6 @@
 # SineOS — Mantenimiento
 
-**Estado:** Implementación pendiente de validación local  
+**Estado:** Instalación validada; adopción inicial pendiente  
 **Componente:** Aplicación nativa de mantenimiento  
 **Plataforma:** Debian 13 + XFCE
 
@@ -212,16 +212,41 @@ La desinstalación retira timer, service, lanzador y wrapper de ejecución. Cons
 Antes de cerrar TD-022 deben comprobarse:
 
 ```text
-[ ] sintaxis Python
-[ ] sintaxis Bash
-[ ] instalación
+[x] sintaxis Python
+[x] sintaxis Bash
+[x] instalación
 [ ] lanzador XFCE
-[ ] estado inicial
+[x] estado inicial
 [ ] adopción de la auditoría v1.2.3
-[ ] timer habilitado y activo
+[x] timer habilitado y activo
 [ ] ausencia de notificación mientras el ciclo esté vigente
-[ ] persistencia del estado
+[x] creación de estado privado 700/600
+[ ] persistencia tras reinicio de sesión
 [ ] desinstalación / rollback
 ```
 
 La función de commit/push se validará en el siguiente ciclo real o mediante una prueba controlada que no falsifique la fecha trimestral.
+
+
+## Validación de instalación — 24-09-2026
+
+Comprobado en el equipo real:
+
+```text
+Python                         OK
+Bash                           OK
+GTK 3.24.49                    OK
+wrapper ~/.local/bin           OK
+timer enabled                  OK
+timer active                   OK
+state dir 700                  OK
+state.json 600                 OK
+maintenance.env 600            OK
+SINEOS_BACKUP_ENABLED=0        OK
+Git final limpio               OK
+GitHub sincronizado            OK
+```
+
+El primer instalador modificaba únicamente los modos de tres archivos versionados. Se verificó que su contenido era idéntico a Git, se restauraron los modos y se corrigió el instalador para usar un wrapper local sin volver a modificar archivos rastreados.
+
+TD-022 permanece abierto hasta validar la adopción inicial, la GUI, el comportamiento del recordatorio y el rollback.
