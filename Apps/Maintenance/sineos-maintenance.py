@@ -289,7 +289,7 @@ class MaintenanceWindow(Gtk.Window):
             return
         try:
             subprocess.Popen([
-                "exo-open", "--launch", "TerminalEmulator", str(core.INTERACTIVE_AUDIT)
+                "exo-open", "--launch", "TerminalEmulator", "bash", str(core.INTERACTIVE_AUDIT)
             ])
         except OSError as exc:
             self.message("No se pudo abrir la auditoría", str(exc), error=True)
