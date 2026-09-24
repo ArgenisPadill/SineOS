@@ -223,13 +223,14 @@ Antes de cerrar TD-022 deben comprobarse:
 [x] sintaxis Python
 [x] sintaxis Bash
 [x] instalación
-[ ] lanzador XFCE
+[x] lanzador XFCE
+[x] GUI GTK3
 [x] estado inicial
 [x] adopción de la auditoría v1.2.3
 [x] timer habilitado y activo
 [x] servicio de recordatorio termina en success con ciclo vigente
 [x] creación de estado privado 700/600
-[ ] persistencia tras reinicio de sesión
+[ ] persistencia tras reinstalación / nueva sesión
 [ ] desinstalación / rollback
 ```
 
@@ -293,3 +294,29 @@ SubState=dead
 El timer permanece `enabled` y `active`.
 
 TD-022 continúa abierto exclusivamente para validar la GUI/lanzador, persistencia tras una nueva sesión y rollback/desinstalación.
+
+
+## Validación de GUI y lanzador — 24-09-2026
+
+Se abrió la aplicación mediante el lanzador XFCE con `gtk-launch sineos-maintenance`.
+
+Resultado visual y funcional:
+
+```text
+Título                         SineOS · Mantenimiento
+Estado general                 SineOS está al día
+Salud trimestral               VALIDADA
+Última validación              24-09-2026
+Próxima validación             24-12-2026
+Commit mostrado                62d725c17f4a…
+Adoptar validación actual      deshabilitado
+Registrar/sincronizar GitHub   deshabilitado
+Ejecutar auditoría             habilitado
+Backup externo                 PENDIENTE TD-021
+Git                            limpio
+GitHub                         sincronizado
+```
+
+La sección de detalles técnicos mostró rama `main`, repositorio limpio, HEAD remoto sincronizado y el reporte local más reciente.
+
+Abrir y cerrar la GUI no generó cambios en el working tree.
