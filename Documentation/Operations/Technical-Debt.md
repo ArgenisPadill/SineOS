@@ -26,6 +26,7 @@ Este documento registra únicamente deuda vigente.
 | TD-016 | Alta | Recuperación | Prueba de Disaster Recovery |
 | TD-017 | Media | Vault | Templates Incidencia/Procedimiento/ADR |
 | TD-018 | Alta | Seguridad | Ejecutar validación final asistida por agente después de cerrar hardening y DR |
+| TD-019 | Media | Stirling PDF | Revisar permisos de `/configs` al actualizar desde 2.14.3; la versión actual restablece archivos sensibles a 755 al arrancar |
 
 ## Decisiones cerradas
 
@@ -62,6 +63,9 @@ No ejecutar `apt autoremove` a ciegas. `sshfs` apareció entre candidatos y pued
 
 ### Miyo y Vault
 Formalizar actualización, continuar benchmarks y crear templates técnicos.
+
+### Stirling PDF
+La imagen estable 2.14.3 ejecuta `chmod -R 755` sobre `/configs` durante el arranque. Esto revierte permisos restrictivos aplicados a claves JWT y backups SQL. No se mantiene un parche local; se revisará una futura versión estable donde upstream ya haya corregido esta lógica.
 
 ### Validación final asistida por agente
 La fase final utilizará una allowlist defensiva de `Anthropic-Cybersecurity-Skills` después de cerrar las capas tradicionales de hardening y recuperación. No debe marcarse como completada por instalar la biblioteca: requiere evaluación, evidencia, remediación individual y revalidación.
