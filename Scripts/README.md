@@ -12,7 +12,8 @@ La política completa se encuentra en `Documentation/Architecture/Script-Standar
 | Escritorio XFCE | `Desktop/sineos-xfce-macos.sh` | Pilar / instalación | Activo | Instala, aplica, valida y restaura la configuración visual reproducible de XFCE |
 | Open WebUI | `Monitoring/check-open-webui.sh` | Operativo recurrente | Activo | Comprueba el endpoint local y envía heartbeat Push a Uptime Kuma |
 | PostgreSQL | `Monitoring/check-postgresql.sh` | Operativo recurrente | Activo | Comprueba PostgreSQL mediante `pg_isready` y envía heartbeat Push |
-| NetworkPrivacy | `NetworkPrivacy/install-network-privacy.sh` | Pilar / instalación | Activo | Valida dependencias e integra SineOS Privacidad de red con XFCE |\n| Seguridad | `Security/sineos-secrets-audit.sh` | Operativo recurrente | Pendiente de validar | Audita permisos, Git y Gitleaks sin mostrar secretos |
+| NetworkPrivacy | `NetworkPrivacy/install-network-privacy.sh` | Pilar / instalación | Activo | Valida dependencias e integra SineOS Privacidad de red con XFCE |
+| Seguridad | `Security/sineos-secrets-audit.sh` | Operativo recurrente | Validado | Audita permisos, Git y Gitleaks sin mostrar secretos |
 
 ## Audit — sineos-audit.sh
 
@@ -165,7 +166,7 @@ Comprobar de forma recurrente la higiene de secretos de SineOS sin mostrar valor
 - `.env` ignorados por Git;
 - permisos de `~/.config/sineos`;
 - nombres sensibles rastreados por Git;
-- Gitleaks sobre working tree;
+- Gitleaks sobre snapshot versionado/versionable excluyendo archivos ignorados;
 - Gitleaks sobre historial Git;
 - estado del working tree.
 
@@ -175,7 +176,7 @@ Se guardan fuera del repositorio bajo `~/.local/state/sineos/security/` con perm
 
 ### Estado
 
-Pendiente de primera validación funcional en el equipo SineOS.
+Validado el 23-09-2026: 12 controles OK, 0 advertencias, 0 errores; snapshot versionable e historial Git sin hallazgos.
 
 ## Automatización fuera de Scripts/
 
