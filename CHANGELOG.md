@@ -28,6 +28,9 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 - Añadido `sineos-health-audit.sh` para la primera validación del estado trimestral de SineOS; aplicación nativa y servicio/timer permanecen pendientes hasta validar el auditor real.
 - Primera auditoría profunda ejecutada: 14 OK, 7 advertencias y 2 errores de certificación; se refinó el auditor a v1.1.0 para incluir `/usr/sbin` y distinguir paquetes locales de repositorios huérfanos.
 - Segunda auditoría profunda: 20 OK, 5 advertencias y 0 errores tras instalar `debsecan` y aplicar la actualización de seguridad pendiente; auditor refinado a v1.2.0 para eliminar falsos positivos sin ocultar fallos reales.
+- Validado definitivamente `sineos-health-audit.sh` v1.2.3: 21 OK, 0 advertencias, 0 errores y `RESULTADO: OK`; TD-020 cerrado.
+- Añadida la primera implementación de `SineOS · Mantenimiento`: GUI GTK3, estado local privado, gate Git/GitHub, lanzador interactivo del auditor y timer de usuario; TD-022 permanece abierto hasta validación local.
+- El bloque de backup de la aplicación permanece deshabilitado hasta implementar y validar TD-021; no se ejecuta Restic ni se escribe en discos externos desde esta versión.
 
 ### Automatización y organización
 
