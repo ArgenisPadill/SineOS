@@ -26,6 +26,7 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 - Adoptada la política general de backups: Restic como motor preferente de backup cifrado/versionado, Btrfs/Snapper reservado para rollback local, con frecuencia, retención, verificación y restore definidos; TD-002 cerrado.
 - Ampliada la política de mantenimiento: auditoría profunda cada 3 meses, respaldo oficial en disco externo bajo `SineOsBackups`, validación mediante `restic check` + restore de prueba, GitHub como respaldo de configuración y bitácora `Respaldo-<commit>.md` con gate de sincronización.
 - Añadido `sineos-health-audit.sh` para la primera validación del estado trimestral de SineOS; aplicación nativa y servicio/timer permanecen pendientes hasta validar el auditor real.
+- Primera auditoría profunda ejecutada: 14 OK, 7 advertencias y 2 errores de certificación; se refinó el auditor a v1.1.0 para incluir `/usr/sbin` y distinguir paquetes locales de repositorios huérfanos.
 
 ### Automatización y organización
 
