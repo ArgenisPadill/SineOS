@@ -285,6 +285,13 @@ def sync_health_validation():
         raise MaintenanceError(reason)
     report = latest_health_report()
 
+    state = load_state()
+    registered_day = parse_iso_day(state["health"].get("last_validated"))
+    if registered_day and report.get("date") and registered_day >= report["date"]:
+        raise MaintenanceError(
+            "La última auditoría ya pertenece al ciclo validado. Ejecuta una auditoría nueva antes de registrar otro ciclo."
+        )
+
     before = git_sync_state()
     if before["branch"] != "main":
         raise MaintenanceError("La rama activa no es main.")
