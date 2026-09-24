@@ -3,7 +3,7 @@
 # Nombre: sineos-health-audit.sh
 # Propósito: auditoría profunda trimestral de salud de SineOS.
 # Categoría: operativo recurrente / auditoría
-# Estado: pendiente de revalidación final v1.2.2
+# Estado: pendiente de revalidación final v1.2.3
 # Plataforma: Debian 13 Trixie
 # Reejecutable: sí
 # Privilegios: usuario normal; sudo -n solo para lecturas cuando esté disponible.
@@ -15,7 +15,7 @@ set -o pipefail
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
 
 NAME="sineos-health-audit"
-VERSION="1.2.2"
+VERSION="1.2.3"
 TS="$(date '+%Y-%m-%d_%H-%M-%S')"
 OK=0
 WARN=0
@@ -229,7 +229,12 @@ has aa-status && { aa-status 2>/dev/null | head -n 30 || true; ok "AppArmor disp
 
 if has nft; then
   if sudo -n true >/dev/null 2>&1; then
-    sudo -n nft list ruleset 2>/dev/null | grep -q 'policy drop' && ok "nftables contiene policy drop." || warn "No se confirmó policy drop."
+    nft_ruleset="$(sudo -n nft list ruleset 2>/dev/null || true)"
+    if [[ -n "$nft_ruleset" ]] && grep -Fq 'policy drop' <<< "$nft_ruleset"; then
+      ok "nftables contiene policy drop."
+    else
+      warn "No se confirmó policy drop."
+    fi
   else
     warn "nftables no legible sin sudo no interactivo."
   fi
