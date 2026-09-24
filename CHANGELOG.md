@@ -20,6 +20,7 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 - La biblioteca externa no se activa completa por defecto: SineOS separa los procedimientos defensivos de las técnicas ofensivas/dual-use y mantiene revisión humana antes de cualquier remediación.
 - Auditado Stirling PDF 2.14.3: se confirmó que el entrypoint upstream restablece `/configs` a permisos 755 en cada arranque; el hallazgo queda documentado y pendiente de reevaluar en una futura versión estable sin introducir un parche local frágil.
 - Adoptada la política formal de gestión de secretos de SineOS, incluyendo ubicaciones permitidas, permisos, inventario, escaneo con Gitleaks y criterios de rotación.
+- Ejecutado Gitleaks 8.16.0 sobre el working tree y todo el historial Git: 0 hallazgos en ambos escaneos; reportes locales almacenados fuera del repositorio con permisos restrictivos.
 
 ### Automatización y organización
 
