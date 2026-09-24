@@ -65,6 +65,7 @@ Las capas previstas para SineOS son:
 10. VPN / privacidad cuando corresponda
 11. Gestor de contraseñas
 12. Backup / Disaster Recovery
+13. Validación final de seguridad asistida por agente
 ```
 
 Algunas capas están operativas.
@@ -96,6 +97,7 @@ Otras todavía requieren implementación o validación formal.
 | Monitoreo integral | Pendiente |
 | Auditoría SineOS | Operativa |
 | Rotación de credenciales | Pendiente |
+| Validación final asistida por agente | Planificada; depende del cierre del hardening y DR |
 
 ---
 
@@ -1065,6 +1067,7 @@ Antes de considerar cerrada la fase inicial de hardening deben estar resueltos a
 [ ] Política de snapshots
 [ ] Revisión de puertos
 [ ] Disaster Recovery probado
+[ ] Validación final de seguridad asistida por agente
 ```
 
 ---
@@ -1100,6 +1103,7 @@ El siguiente bloque de seguridad debe concentrarse primero en:
 8. Rotar credenciales
 9. Diseñar backups
 10. Probar recuperación
+11. Ejecutar validación final de seguridad asistida por agente
 ```
 
 No deben realizarse todos estos cambios simultáneamente.
@@ -1148,6 +1152,50 @@ El objetivo de la siguiente fase es reducir la superficie de exposición y garan
 
 
 ---
+
+---
+
+# 56. Validación final de seguridad asistida por agente
+
+SineOS incorpora como etapa final del bloque de seguridad una revisión defensiva asistida por agente basada inicialmente en la biblioteca comunitaria `mukul975/Anthropic-Cybersecurity-Skills`.
+
+La biblioteca revisada contiene procedimientos defensivos, ofensivos y de doble uso. Por ello SineOS no activa automáticamente el catálogo completo.
+
+La política adoptada es:
+
+```text
+hardening tradicional
+        ↓
+backup / recovery / DR
+        ↓
+allowlist defensiva
+        ↓
+evaluación asistida por agente
+        ↓
+evidencia local
+        ↓
+remediación individual
+        ↓
+revalidación
+```
+
+La primera pasada debe ser de solo lectura. Una recomendación del agente no equivale a un hallazgo confirmado y ninguna skill concede autorización automática para modificar el sistema.
+
+Referencia:
+
+```text
+Documentation/Security/Agentic-Security-Validation.md
+Documentation/Security/Agentic-Security-Allowlist.md
+Documentation/Lifecycle/16-Validacion-seguridad-agentica.md
+```
+
+Estado:
+
+```text
+PLANIFICADA
+DEPENDE DEL CIERRE DEL HARDENING Y DISASTER RECOVERY
+```
+
 
 # Actualización operativa — 2026-09-23
 
