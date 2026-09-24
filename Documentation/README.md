@@ -68,6 +68,11 @@ Deuda técnica abierta y decisiones ya cerradas.
 ### XFCE-Visual-Configuration.md
 Instalación, aplicación, respaldo, restauración y mantenimiento del escritorio XFCE reproducible.
 
+## Recovery
+
+### Backup-Policy.md
+Política general de backups: clasificación de datos, frecuencia, retención, cifrado, verificación, restore y relación con Btrfs/Snapper y Restic.
+
 ## Security
 
 ### README.md
@@ -112,8 +117,6 @@ Estos huecos no se consideran documentación terminada hasta que exista implemen
 
 - instalación completa de SineOS desde Debian 13 limpio;
 - inventario global de dependencias;
-- gestión formal de secretos;
-- política global de backups;
 - backup y restore probado de PostgreSQL;
 - backup y recuperación del Knowledge Vault;
 - Disaster Recovery completo;
