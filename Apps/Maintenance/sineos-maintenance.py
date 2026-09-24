@@ -244,7 +244,14 @@ class MaintenanceWindow(Gtk.Window):
             self.adopt_button.set_sensitive(False)
 
         latest_valid, _ = core.latest_health_is_valid()
-        self.sync_button.set_sensitive(bool(latest_valid and git["clean"] and git["synced"]))
+        report_day = report.get("date") if report else None
+        registered_day = core.parse_iso_day(state["health"].get("last_validated"))
+        report_is_new = bool(
+            report_day and (registered_day is None or report_day > registered_day)
+        )
+        self.sync_button.set_sensitive(
+            bool(latest_valid and report_is_new and git["clean"] and git["synced"])
+        )
 
         backup = info["backup"]
         cfg = backup["config"]
