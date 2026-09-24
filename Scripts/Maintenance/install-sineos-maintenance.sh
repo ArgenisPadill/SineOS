@@ -48,8 +48,15 @@ install_all(){
     check_dependencies
     mkdir -p "$LOCAL_BIN" "$DESKTOP_DIR" "$SYSTEMD_DIR" "$STATE_DIR" "$CONFIG_DIR"
     chmod 700 "$STATE_DIR" "$CONFIG_DIR"
-    chmod 755 "$APP" "$CORE" "$RUNNER"
-    ln -sfn "$APP" "$APP_LINK"
+
+    # Nunca modificar permisos de archivos versionados del repositorio.
+    # El ejecutable instalado es un wrapper local fuera de Git.
+    rm -f "$APP_LINK"
+    cat > "$APP_LINK" <<EOF
+#!/usr/bin/env sh
+exec /usr/bin/python3 "$APP" "\$@"
+EOF
+    chmod 755 "$APP_LINK"
 
     if [[ ! -e "$CONFIG_FILE" ]]; then
         cat > "$CONFIG_FILE" <<'EOF'
@@ -116,7 +123,7 @@ EOF
 show_status(){
     check_dependencies
     printf '%s\n' "$APP_NAME"
-    printf 'Aplicación : %s\n' "$([[ -L "$APP_LINK" ]] && echo instalada || echo no-installada)"
+    printf 'Aplicación : %s\n' "$([[ -x "$APP_LINK" && ! -L "$APP_LINK" ]] && echo instalada || echo no-installada)"
     printf 'Timer habilitado : %s\n' "$(systemctl --user is-enabled sineos-maintenance-reminder.timer 2>/dev/null || true)"
     printf 'Timer activo     : %s\n' "$(systemctl --user is-active sineos-maintenance-reminder.timer 2>/dev/null || true)"
     echo
