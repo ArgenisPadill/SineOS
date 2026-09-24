@@ -105,6 +105,9 @@ services:
     image: ghcr.io/open-webui/open-webui:main
     container_name: sineos-open-webui
 
+    env_file:
+      - .env
+
     restart: unless-stopped
 
     network_mode: pasta
@@ -424,12 +427,13 @@ Sin embargo, después de cambios relevantes debe repetirse la validación operat
 
 Open WebUI puede requerir secretos persistentes para determinados aspectos de su operación.
 
-La configuración actual todavía no establece una estrategia definitiva para un secret persistente administrado por SineOS.
+El secreto persistente existente fue recuperado sin rotarlo y almacenado localmente en `Containers/stacks/open-webui/.env` con permisos `600`. El archivo está excluido de Git y el Compose lo carga mediante `env_file`.
 
 Estado:
 
 ```text
-PENDIENTE
+CONFIGURADO
+PENDIENTE DE VALIDAR MEDIANTE RECREACIÓN CONTROLADA
 ```
 
 No debe introducirse un secreto real directamente en:
@@ -743,7 +747,7 @@ Pendientes conocidos:
 ```text
 [ ] Sustituir `:main` por versión o digest fijo
 [ ] Validar la imagen seleccionada
-[ ] Definir secret persistente
+[~] Secret persistente configurado; falta recreación controlada
 [ ] Mantener secretos fuera de Git
 [ ] Evaluar backup de datos de Open WebUI
 [x] nftables operativo; revisión Podman/netavark pendiente
@@ -765,7 +769,7 @@ Pendientes conocidos:
 | Integración con Ollama | Validada previamente |
 | Contenedor activo permanentemente | No asumido |
 | Imagen fija | Pendiente |
-| Secret persistente | Pendiente |
+| Secret persistente | Configurado; pendiente de validar tras recreación |
 | Hardening final | Pendiente |
 
 ---
