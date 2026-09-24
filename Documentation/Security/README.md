@@ -2,7 +2,8 @@
 
 - [Security Baseline](Security-Baseline.md): controles implementados, parciales y pendientes.
 - [Política de documentación y privacidad](Documentation-Privacy.md): reglas para publicar información técnica sin exponer datos locales.
-- [Gestión de secretos](Secrets-Management.md): ubicaciones permitidas, permisos, inventario, escaneo y rotación.
+- [Gestión de secretos](Secrets-Management.md): ubicaciones permitidas, permisos, inventario y escaneo.
+- [Rotación de secretos](Secrets-Rotation.md): criterios, procedimientos, validación y rollback para secretos críticos.
 - [Validación final asistida por agente](Agentic-Security-Validation.md): etapa final de revisión defensiva una vez cerrado el hardening base.
 - [Allowlist de skills defensivas](Agentic-Security-Allowlist.md): procedimientos externos autorizados para la primera fase de evaluación.
 
