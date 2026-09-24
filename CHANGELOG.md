@@ -24,6 +24,8 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 - Validado `WEBUI_SECRET_KEY` persistente de Open WebUI mediante dos recreaciones completas del contenedor conservando el mismo secret, volumen persistente e imagen; TD-005 cerrado.
 - Validado `sineos-secrets-audit.sh` v1.1.0 con 12 controles OK, 0 advertencias y 0 errores; documentados los procedimientos de rotación y cerrado TD-001.
 - Adoptada la política general de backups: Restic como motor preferente de backup cifrado/versionado, Btrfs/Snapper reservado para rollback local, con frecuencia, retención, verificación y restore definidos; TD-002 cerrado.
+- Ampliada la política de mantenimiento: auditoría profunda cada 3 meses, respaldo oficial en disco externo bajo `SineOsBackups`, validación mediante `restic check` + restore de prueba, GitHub como respaldo de configuración y bitácora `Respaldo-<commit>.md` con gate de sincronización.
+- Añadido `sineos-health-audit.sh` para la primera validación del estado trimestral de SineOS; aplicación nativa y servicio/timer permanecen pendientes hasta validar el auditor real.
 
 ### Automatización y organización
 
