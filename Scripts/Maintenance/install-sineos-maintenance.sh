@@ -2,8 +2,8 @@
 # SineOS
 # Nombre: install-sineos-maintenance.sh
 # Propósito: instalar la aplicación nativa y el recordatorio trimestral de mantenimiento.
-# Categoría: pilar / installación
- Estado: pendiente de validación
+# Categoría: pilar / instalación
+# Estado: pendiente de validación
 # Plataforma: Debian 13 / XFCE
 # Reejecutable: sí
 # Privilegios: usuario normal
@@ -117,8 +117,8 @@ show_status(){
     check_dependencies
     printf '%s\n' "$APP_NAME"
     printf 'Aplicación : %s\n' "$([[ -L "$APP_LINK" ]] && echo instalada || echo no-installada)"
-    printf 'Lanzador   : %s\n' "$(systemctl --user is-enabled sineos-maintenance-reminder.timer 2>/dev/null || true)"
-    printf 'Target     : %s\n' "$(systemctl --user is-active sineos-maintenance-reminder.timer 2>/dev/null || true)"
+    printf 'Timer habilitado : %s\n' "$(systemctl --user is-enabled sineos-maintenance-reminder.timer 2>/dev/null || true)"
+    printf 'Timer activo     : %s\n' "$(systemctl --user is-active sineos-maintenance-reminder.timer 2>/dev/null || true)"
     echo
     python3 "$APP" --status || true
 }
