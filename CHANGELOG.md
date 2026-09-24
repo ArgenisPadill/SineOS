@@ -18,6 +18,7 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 - Tor queda pendiente de determinar si alguna aplicación lo utiliza antes de retirarlo o conservarlo.
 - Definida como etapa final de seguridad una validación defensiva asistida por agente basada en `mukul975/Anthropic-Cybersecurity-Skills`, con commit revisado, allowlist explícita y primera pasada de solo lectura.
 - La biblioteca externa no se activa completa por defecto: SineOS separa los procedimientos defensivos de las técnicas ofensivas/dual-use y mantiene revisión humana antes de cualquier remediación.
+- Auditado Stirling PDF 2.14.3: se confirmó que el entrypoint upstream restablece `/configs` a permisos 755 en cada arranque; el hallazgo queda documentado y pendiente de reevaluar en una futura versión estable sin introducir un parche local frágil.
 
 ### Automatización y organización
 
