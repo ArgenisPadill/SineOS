@@ -1,6 +1,6 @@
 # SineOS — Mantenimiento
 
-**Estado:** Instalación validada; adopción inicial pendiente  
+**Estado:** Instalación y adopción inicial validadas; GUI y rollback pendientes  
 **Componente:** Aplicación nativa de mantenimiento  
 **Plataforma:** Debian 13 + XFCE
 
@@ -217,9 +217,9 @@ Antes de cerrar TD-022 deben comprobarse:
 [x] instalación
 [ ] lanzador XFCE
 [x] estado inicial
-[ ] adopción de la auditoría v1.2.3
+[x] adopción de la auditoría v1.2.3
 [x] timer habilitado y activo
-[ ] ausencia de notificación mientras el ciclo esté vigente
+[x] servicio de recordatorio termina en success con ciclo vigente
 [x] creación de estado privado 700/600
 [ ] persistencia tras reinicio de sesión
 [ ] desinstalación / rollback
@@ -250,3 +250,38 @@ GitHub sincronizado            OK
 El primer instalador modificaba únicamente los modos de tres archivos versionados. Se verificó que su contenido era idéntico a Git, se restauraron los modos y se corrigió el instalador para usar un wrapper local sin volver a modificar archivos rastreados.
 
 TD-022 permanece abierto hasta validar la adopción inicial, la GUI, el comportamiento del recordatorio y el rollback.
+
+
+## Validación de adopción inicial — 24-09-2026
+
+La auditoría validada del mismo día fue adoptada como inicio del primer ciclo trimestral administrado por la aplicación.
+
+```text
+Fecha validada       2026-09-24
+Próxima salud        2026-12-24
+Salud vencida        no
+Auditor              1.2.3
+Commit de referencia 62d725c17f4a9903976c5a63fefbd966154440c4
+Backup activo        no
+Git sincronizado     sí
+```
+
+Permisos comprobados:
+
+```text
+~/.local/state/sineos-maintenance            700
+~/.local/state/sineos-maintenance/state.json 600
+```
+
+El servicio de recordatorio fue ejecutado manualmente con el ciclo vigente y terminó con:
+
+```text
+Result=success
+ExecMainStatus=0
+ActiveState=inactive
+SubState=dead
+```
+
+El timer permanece `enabled` y `active`.
+
+TD-022 continúa abierto exclusivamente para validar la GUI/lanzador, persistencia tras una nueva sesión y rollback/desinstalación.
