@@ -164,7 +164,7 @@ Desde la raíz de SineOS:
 bash Scripts/Maintenance/install-sineos-maintenance.sh install
 ```
 
-El instalador valida dependencias, crea estado y configuración privados, instala un enlace en `~/.local/bin`, registra el lanzador XFCE, crea service/timer de usuario y habilita el timer. No requiere root.
+El instalador valida dependencias, crea estado y configuración privados, instala un **wrapper local** en `~/.local/bin`, registra el lanzador XFCE, crea service/timer de usuario y habilita el timer. No requiere root. El wrapper ejecuta Python sin modificar permisos de archivos versionados del repositorio.
 
 ## Estado
 
@@ -184,7 +184,7 @@ bash Scripts/Maintenance/install-sineos-maintenance.sh adopt-current
 bash Scripts/Maintenance/install-sineos-maintenance.sh uninstall
 ```
 
-La desinstalación retira timer, service, lanzador y enlace de ejecución. Conserva deliberadamente `state.json` y `maintenance.env`.
+La desinstalación retira timer, service, lanzador y wrapper de ejecución. Conserva deliberadamente `state.json` y `maintenance.env`.
 
 ## Dependencias
 
