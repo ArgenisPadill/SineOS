@@ -9,11 +9,13 @@ La política completa se encuentra en `Documentation/Architecture/Script-Standar
 | Componente | Archivo | Clasificación | Estado | Uso |
 |---|---|---|---|---|
 | Auditoría | `Audit/sineos-audit.sh` | Operativo recurrente | Activo | Diagnóstico de solo lectura de la plataforma SineOS |
-| Salud trimestral | `Audit/sineos-health-audit.sh` | Operativo recurrente | Pendiente de validar | Auditoría profunda de sistema, seguridad, actualizaciones, Git y contenedores |
+| Salud trimestral | `Audit/sineos-health-audit.sh` | Operativo recurrente | Validado | Auditoría profunda de sistema, seguridad, actualizaciones, Git y contenedores |
 | Escritorio XFCE | `Desktop/sineos-xfce-macos.sh` | Pilar / instalación | Activo | Instala, aplica, valida y restaura la configuración visual reproducible de XFCE |
 | Open WebUI | `Monitoring/check-open-webui.sh` | Operativo recurrente | Activo | Comprueba el endpoint local y envía heartbeat Push a Uptime Kuma |
 | PostgreSQL | `Monitoring/check-postgresql.sh` | Operativo recurrente | Activo | Comprueba PostgreSQL mediante `pg_isready` y envía heartbeat Push |
 | NetworkPrivacy | `NetworkPrivacy/install-network-privacy.sh` | Pilar / instalación | Activo | Valida dependencias e integra SineOS Privacidad de red con XFCE |
+| Mantenimiento | `Maintenance/install-sineos-maintenance.sh` | Pilar / instalación | Pendiente de validar | Integra la app nativa, lanzador XFCE y timer de recordatorio |
+| Mantenimiento | `Maintenance/run-health-audit-interactive.sh` | Operativo recurrente | Pendiente de validar | Lanza la auditoría trimestral interactiva desde la app |
 | Seguridad | `Security/sineos-secrets-audit.sh` | Operativo recurrente | Validado | Audita permisos, Git y Gitleaks sin mostrar secretos |
 
 ## Audit — sineos-audit.sh
@@ -41,6 +43,25 @@ Los reportes están excluidos de Git.
 ### Frecuencia
 
 Bajo demanda, antes y después de cambios importantes o durante diagnóstico.
+
+
+## Salud trimestral — sineos-health-audit.sh
+
+### Estado
+
+Validado el 24-09-2026 con:
+
+```text
+21 OK
+0 advertencias
+0 errores
+RESULTADO: OK
+```
+
+### Documentación
+
+- `Documentation/Operations/Quarterly-Health.md`
+- `Documentation/Operations/Health-Status.md`
 
 ## Desktop — sineos-xfce-macos.sh
 
