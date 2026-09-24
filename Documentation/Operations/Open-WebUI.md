@@ -432,17 +432,12 @@ El secreto persistente existente fue recuperado sin rotarlo y almacenado localme
 Estado:
 
 ```text
-CONFIGURADO
-PENDIENTE DE VALIDAR MEDIANTE RECREACIÓN CONTROLADA
+VALIDADO
 ```
 
-No debe introducirse un secreto real directamente en:
+No debe introducirse un secreto real directamente en `compose.yaml` ni en `.env.example` si esos archivos serán versionados.
 
-```text
-compose.yaml
-```
-
-si ese archivo será versionado.
+La persistencia fue validada mediante dos recreaciones completas del contenedor: en ambas, Open WebUI respondió por HTTP, conservó el mismo volumen, reutilizó exactamente la misma imagen y recibió el mismo `WEBUI_SECRET_KEY`.
 
 ---
 
@@ -747,7 +742,7 @@ Pendientes conocidos:
 ```text
 [ ] Sustituir `:main` por versión o digest fijo
 [ ] Validar la imagen seleccionada
-[~] Secret persistente configurado; falta recreación controlada
+[x] Secret persistente configurado y validado mediante dos recreaciones
 [ ] Mantener secretos fuera de Git
 [ ] Evaluar backup de datos de Open WebUI
 [x] nftables operativo; revisión Podman/netavark pendiente
@@ -769,7 +764,7 @@ Pendientes conocidos:
 | Integración con Ollama | Validada previamente |
 | Contenedor activo permanentemente | No asumido |
 | Imagen fija | Pendiente |
-| Secret persistente | Configurado; pendiente de validar tras recreación |
+| Secret persistente | Validado mediante dos recreaciones; mismo valor conservado |
 | Hardening final | Pendiente |
 
 ---
@@ -828,7 +823,6 @@ Las principales tareas pendientes son:
 
 ```text
 fijar imagen
-definir secret persistente
 hardening
 revisar estrategia de servicio
 ```
