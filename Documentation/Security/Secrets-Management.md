@@ -1,6 +1,6 @@
 # SineOS — Gestión de secretos
 
-**Estado:** Adoptado — implementación en progreso  
+**Estado:** Adoptado y validado  
 **Fecha:** 23-09-2026
 
 ## Propósito
@@ -252,6 +252,8 @@ Eliminar únicamente el texto del último commit no invalida una credencial que 
 
 ## Rotación
 
+El procedimiento formal vive en `Secrets-Rotation.md`.
+
 Todo secreto debe poder rotarse sin reconstruir innecesariamente el sistema completo.
 
 Se prioriza rotación cuando:
@@ -296,6 +298,10 @@ TD-001 puede cerrarse cuando:
 [x] Escaneo Gitleaks del historial — 0 hallazgos
 [x] Hallazgos reales resueltos o aceptados — no hubo hallazgos
 [x] Secret persistente Open WebUI definido y validado mediante dos recreaciones
-[ ] Procedimiento de rotación documentado para secretos críticos
-[~] Comprobación recurrente implementada en `Scripts/Security/sineos-secrets-audit.sh` — pendiente de primera validación
+[x] Procedimiento de rotación documentado para secretos críticos
+[x] Comprobación recurrente validada en `Scripts/Security/sineos-secrets-audit.sh` — 12 OK, 0 advertencias, 0 errores
 ```
+
+## Cierre de TD-001
+
+TD-001 se considera cerrado el 23-09-2026 después de validar política, permisos, inventario, Gitleaks, persistencia de Open WebUI, auditor recurrente y procedimiento de rotación.
