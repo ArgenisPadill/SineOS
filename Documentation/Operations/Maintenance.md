@@ -117,6 +117,14 @@ RESULTADO: OK
 
 Por ello la primera instalación permite **Adoptar validación actual**. Esta operación registra localmente la auditoría válida existente únicamente si el último reporte es OK, la rama es `main`, el working tree está limpio y HEAD local coincide con `origin/main`.
 
+
+
+### Protección contra registro duplicado
+
+Si el último reporte de auditoría corresponde a la misma fecha —o una anterior— que el ciclo ya validado localmente, la aplicación deshabilita **Registrar y sincronizar con GitHub** y el núcleo rechaza también la operación.
+
+Esto evita crear commits redundantes o volver a cerrar el mismo ciclo por error.
+
 ## Auditoría desde la aplicación
 
 El botón **Ejecutar auditoría** abre el emulador de terminal predeterminado de XFCE mediante `exo-open --launch TerminalEmulator` y ejecuta `Scripts/Maintenance/run-health-audit-interactive.sh`.
