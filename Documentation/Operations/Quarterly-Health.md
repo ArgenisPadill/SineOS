@@ -1,6 +1,6 @@
 # SineOS — Estado de salud trimestral
 
-**Estado:** Primera ejecución realizada — requiere remediación y revalidación  
+**Estado:** Segunda ejecución sin errores — auditor v1.2.0 pendiente de revalidación final  
 **Frecuencia:** Cada 3 meses
 
 ## Objetivo
@@ -103,11 +103,39 @@ Hallazgos principales:
 
 El auditor se corrigió a v1.1.0 para incluir `/usr/sbin` en PATH y clasificar por separado los paquetes instalados localmente.
 
+## Segunda ejecución — 23-09-2026
+
+Después de instalar `debsecan`, aplicar la actualización de seguridad pendiente y reejecutar:
+
+```text
+OK: 20
+Advertencias: 5
+Errores: 0
+Información: 1
+RESULTADO: CON_ADVERTENCIAS
+```
+
+Validado:
+
+- no quedan paquetes actualizables según APT;
+- `dpkg` consistente;
+- `debsecan --only-fixed` sin correcciones de seguridad pendientes;
+- Btrfs con todos los contadores de error en cero;
+- SMART de `/dev/sdb`: PASSED;
+- AppArmor cargado;
+- nftables con política `drop`;
+- contenedores sin estados unhealthy/dead/created;
+- auditoría de secretos en OK.
+
+Las cinco advertencias restantes provenían principalmente de clasificación: stderr de contenedores en journald, paquetes instalados localmente, inventario general de debsecan, un dispositivo sin soporte SMART y el tag `:main` conocido de Open WebUI.
+
+El auditor v1.2.0 corrige estas categorías sin ocultar fallos reales.
+
 ## Estado actual
 
 ```text
-Auditor profundo          v1.1.0 / PENDIENTE DE REVALIDACIÓN
+Auditor profundo          v1.2.0 / PENDIENTE DE REVALIDACIÓN FINAL
 Aplicación nativa         PENDIENTE
 Servicio/timer            PENDIENTE
-Primer ciclo trimestral   PENDIENTE
+Primer ciclo trimestral   PENDIENTE DE BACKUP EXTERNO CERTIFICADO
 ```
