@@ -9,6 +9,18 @@ Definir qué información de SineOS debe respaldarse, con qué prioridad, frecue
 
 Esta política es la base para los procedimientos específicos de PostgreSQL, Knowledge Vault, secretos, aplicaciones y Disaster Recovery.
 
+También define el **ciclo trimestral certificado de mantenimiento de SineOS**, compuesto por:
+
+```text
+auditoría profunda de salud
+        +
+respaldo externo validado
+        +
+registro versionado
+        +
+sincronización confirmada con GitHub
+```
+
 ## Principios
 
 ### 1. Un snapshot no es un backup
@@ -58,6 +70,48 @@ Las credenciales de acceso al repositorio de backup:
 - no se imprimen en reportes;
 - deben tener recuperación independiente;
 - deben tratarse según la política de secretos.
+
+## GitHub como respaldo de configuración
+
+GitHub cumple dos funciones simultáneas dentro de SineOS:
+
+1. repositorio vivo donde la configuración, scripts, aplicaciones y documentación evolucionan;
+2. copia remota de la **configuración reproducible** del sistema.
+
+GitHub no sustituye los backups de datos privados o runtime. No debe almacenar bases de datos, volúmenes de contenedores, secretos, el Knowledge Vault privado ni dumps sensibles.
+
+La reconstrucción conceptual queda:
+
+```text
+GitHub
+   ↓
+configuración + código + documentación
+   +
+Disco externo
+   ↓
+datos + estado + artefactos de recuperación
+```
+
+Por ello una recuperación completa necesita ambas fuentes.
+
+## Ciclo trimestral certificado
+
+Cada tres meses SineOS debe ejecutar un ciclo completo de mantenimiento:
+
+```text
+1. auditoría profunda de salud
+2. resolución o revisión de hallazgos críticos
+3. respaldo externo
+4. comprobación de integridad
+5. restauración de prueba
+6. registro en Git
+7. sincronización con GitHub
+8. validación del commit remoto
+```
+
+La aplicación nativa de mantenimiento conserva el estado pendiente mientras este flujo no se complete.
+
+La notificación visual puede ser cerrada por el escritorio, pero eso **no marca el ciclo como completado**. El estado persistente seguirá pendiente y el servicio volverá a recordarlo hasta validar la sincronización Git.
 
 ## Motor de backup
 
@@ -123,29 +177,76 @@ Normalmente no requiere backup de datos pesados:
 
 El repositorio Git de SineOS ya conserva la definición reproducible de infraestructura.
 
-## Frecuencia base
+## Frecuencia
 
-### Nivel A
+### Respaldo externo certificado
 
-```text
-diario
-+
-antes de operaciones de alto riesgo
-+
-después de cambios críticos cuando corresponda
-```
-
-### Nivel B
+La regla operativa principal de SineOS es:
 
 ```text
-semanal
-+
-antes de cambios destructivos o migraciones
+cada 3 meses
 ```
+
+Cada corte trimestral debe incluir los componentes definidos por la política y la auditoría profunda del sistema.
+
+Esto implica que, si no existen copias intermedias, el RPO real del respaldo externo puede llegar a tres meses. La aplicación debe mostrar esta realidad y no presentar el esquema como protección diaria.
+
+### Copias extraordinarias
+
+También se realiza un respaldo antes de:
+
+- migraciones;
+- cambios destructivos;
+- operaciones de recuperación;
+- actualizaciones de alto riesgo;
+- cambios relevantes de almacenamiento.
+
+Pueden existir copias intermedias más frecuentes, pero no sustituyen el corte trimestral certificado.
 
 ### Nivel C
 
-No se respalda por defecto salvo necesidad concreta.
+Los artefactos completamente reproducibles o descargables no se respaldan por defecto salvo necesidad concreta.
+
+## Destino externo obligatorio
+
+Los respaldos oficiales de SineOS se almacenan en un **disco físicamente externo**.
+
+La ruta no se codifica en scripts. Se define mediante:
+
+```text
+SINEOS_BACKUP_ROOT
+```
+
+La ruta configurada debe apuntar a una carpeta cuyo nombre sea:
+
+```text
+SineOsBackups
+```
+
+Ejemplo conceptual:
+
+```text
+<disco-externo>/SineOsBackups/
+```
+
+El flujo debe rechazar como respaldo oficial una ruta ubicada en el mismo filesystem físico principal del equipo.
+
+## Identificador de cada respaldo
+
+Cada ejecución utiliza el formato:
+
+```text
+SineOsBackups-DDMMAA-HHMM
+```
+
+Este identificador se emplea como:
+
+- tag del snapshot Restic;
+- nombre lógico del evento;
+- referencia en el manifiesto;
+- referencia en la bitácora GitHub.
+
+Restic conserva internamente su propio snapshot ID; SineOS conserva además este nombre humano.
 
 ## Retención objetivo
 
@@ -255,12 +356,21 @@ Uso no permitido como única protección:
 
 ### Cada ejecución
 
-Comprobar:
+Un backup no se aprueba por el simple hecho de que Restic termine sin error.
+
+Debe comprobarse:
 
 - código de salida;
-- que se creó snapshot de backup;
+- existencia del snapshot;
+- tag SineOS correcto;
 - ausencia de errores de lectura;
-- tamaño/archivos razonables.
+- tamaño/archivos razonables;
+- `restic check`;
+- restauración real a una ubicación temporal;
+- comprobación del contenido restaurado;
+- validaciones específicas del componente.
+
+Si no existe evidencia suficiente de que SineOS y sus componentes pueden recuperarse, el respaldo se considera **NO VALIDADO**.
 
 ### Periódicamente
 
@@ -294,6 +404,61 @@ Cuando exista una copia remota/off-site:
 - debe estar cifrada antes de abandonar el equipo;
 - no debe depender de la confidencialidad del proveedor;
 - sus credenciales deben estar separadas de los datos respaldados.
+
+## Bitácora versionada en GitHub
+
+Cada respaldo aprobado se registra en:
+
+```text
+Documentation/Recovery/Backup-Log/
+```
+
+con el nombre:
+
+```text
+Respaldo-<COMMIT_DEL_EVENTO>.md
+```
+
+La regla completa está documentada en `Backup-Log/README.md`.
+
+Debido a que el hash de Git depende del contenido del commit, el archivo no puede llamarse con el hash del mismo commit que lo contiene. SineOS utiliza dos commits:
+
+```text
+COMMIT A
+registro del evento de respaldo
+        ↓
+obtener hash A
+        ↓
+Respaldo-<hash-A>.md
+        ↓
+COMMIT B
+bitácora y sincronización
+        ↓
+push
+        ↓
+HEAD local = origin/main = main remoto
+```
+
+El ciclo solo queda cerrado después de comprobar el **COMMIT B sincronizado**.
+
+`Documentation/Recovery/Backup-Status.md` conserva la fecha y referencia del último respaldo validado.
+
+## Recordatorio trimestral y aplicación nativa
+
+SineOS implementará una aplicación nativa de mantenimiento siguiendo el estándar de `Native-Applications.md`.
+
+Funciones mínimas:
+
+- mostrar fecha del último chequeo de salud;
+- mostrar fecha del último respaldo externo;
+- indicar próximo vencimiento trimestral;
+- ejecutar o lanzar la auditoría;
+- ejecutar el flujo de respaldo cuando el disco esté disponible;
+- mostrar validaciones;
+- comprobar sincronización con GitHub;
+- mantener estado pendiente hasta validación por commit.
+
+El componente residente se implementa como servicio/timer de usuario, evitando un proceso activo permanente cuando no sea necesario.
 
 ## Automatización
 
@@ -377,6 +542,13 @@ Open WebUI backup manual temporal    EXISTENTE / MISMO EQUIPO
 Snapshots Btrfs/Snapper              ROLLBACK, NO BACKUP
 ```
 
-## Próximo paso
+## Próximos pasos
 
-Inventariar almacenamiento disponible en el equipo y seleccionar el primer destino físicamente independiente antes de inicializar Restic.
+1. validar el auditor profundo de salud;
+2. inventariar el disco externo;
+3. configurar `SINEOS_BACKUP_ROOT=<...>/SineOsBackups`;
+4. implementar y validar TD-003 PostgreSQL;
+5. identificar y validar TD-004 Knowledge Vault;
+6. validar Restic de extremo a extremo;
+7. integrar el flujo en la aplicación nativa trimestral;
+8. validar la bitácora `Respaldo-<commit>.md` y el gate de sincronización GitHub.
