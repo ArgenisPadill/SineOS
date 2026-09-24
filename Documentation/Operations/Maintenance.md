@@ -230,8 +230,9 @@ Antes de cerrar TD-022 deben comprobarse:
 [x] timer habilitado y activo
 [x] servicio de recordatorio termina en success con ciclo vigente
 [x] creación de estado privado 700/600
-[ ] persistencia tras reinstalación / nueva sesión
-[ ] desinstalación / rollback
+[x] persistencia tras desinstalación / reinstalación
+[x] desinstalación / rollback
+[ ] persistencia tras nueva sesión de XFCE o reinicio
 ```
 
 La función de commit/push se validará en el siguiente ciclo real o mediante una prueba controlada que no falsifique la fecha trimestral.
@@ -320,3 +321,27 @@ GitHub                         sincronizado
 La sección de detalles técnicos mostró rama `main`, repositorio limpio, HEAD remoto sincronizado y el reporte local más reciente.
 
 Abrir y cerrar la GUI no generó cambios en el working tree.
+
+
+## Validación de rollback y reinstalación — 24-09-2026
+
+Se ejecutó una desinstalación real de la integración y una reinstalación posterior.
+
+La desinstalación retiró wrapper, lanzador XFCE y unidades systemd de usuario. El timer quedó deshabilitado/retirado.
+
+Los archivos privados `state.json` y `maintenance.env` conservaron exactamente su contenido durante el rollback.
+
+Tras reinstalar se recuperó el mismo ciclo:
+
+```text
+Salud validada     2026-09-24
+Próxima salud      2026-12-24
+Salud vencida      no
+Commit salud       62d725c17f4a9903976c5a63fefbd966154440c4
+Backup activo      no
+Git sincronizado   sí
+```
+
+El timer quedó `loaded`, `active` y `enabled`. Los permisos volvieron a ser 700 para directorios privados y 600 para archivos privados. El working tree final quedó limpio.
+
+Para cerrar TD-022 falta únicamente comprobar el mismo estado después de una nueva sesión de XFCE o un reinicio real.
