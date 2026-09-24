@@ -1,6 +1,6 @@
 # SineOS — Estado de salud trimestral
 
-**Estado:** Segunda ejecución sin errores — auditor v1.2.0 pendiente de revalidación final  
+**Estado:** Validado  
 **Frecuencia:** Cada 3 meses
 
 ## Objetivo
@@ -131,11 +131,28 @@ Las cinco advertencias restantes provenían principalmente de clasificación: st
 
 El auditor v1.2.0 corrige estas categorías sin ocultar fallos reales.
 
+## Validación definitiva — 24-09-2026
+
+```text
+Auditor:          v1.2.3
+OK:               21
+Advertencias:     0
+Errores:          0
+Información:      7
+Resultado:        OK
+Git:              limpio
+GitHub:           HEAD local = main remoto
+```
+
+La auditoría profunda trimestral queda validada funcionalmente.
+
+TD-020 se considera cerrado.
+
 ## Estado actual
 
 ```text
-Auditor profundo          v1.2.0 / PENDIENTE DE REVALIDACIÓN FINAL
-Aplicación nativa         PENDIENTE
-Servicio/timer            PENDIENTE
-Primer ciclo trimestral   PENDIENTE DE BACKUP EXTERNO CERTIFICADO
+Auditor profundo          v1.2.3 / VALIDADO
+Aplicación nativa         EN IMPLEMENTACIÓN (TD-022)
+Servicio/timer            EN IMPLEMENTACIÓN (TD-022)
+Primer backup externo     PENDIENTE (TD-021)
 ```
