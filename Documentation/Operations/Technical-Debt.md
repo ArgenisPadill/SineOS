@@ -8,7 +8,6 @@ Este documento registra únicamente deuda vigente.
 
 | ID | Prioridad | Área | Pendiente |
 |---|---|---|---|
-| TD-001 | Alta | Secretos | Formalizar gestión de secretos |
 | TD-002 | Alta | Backups | Política general de backup |
 | TD-003 | Alta | PostgreSQL | Backup y restauración probados |
 | TD-004 | Alta | Vault | Backup independiente del Knowledge Vault |
@@ -35,6 +34,8 @@ Este documento registra únicamente deuda vigente.
 
 **Open WebUI secret persistente (TD-005):** cerrado. El `WEBUI_SECRET_KEY` existente fue recuperado sin rotación, almacenado en `.env` local con permisos `600`, excluido de Git y validado mediante dos recreaciones completas del contenedor conservando el mismo secret, volumen e imagen.
 
+**Gestión de secretos (TD-001):** cerrada. Política, inventario, permisos, Gitleaks, secret persistente de Open WebUI, auditor recurrente y procedimientos de rotación quedaron documentados y validados.
+
 **DNSCrypt/Proton:** DNSCrypt por perfil y el ciclo Proton VPN/DNS fueron implementados y validados mediante NetworkPrivacy.
 
 **Servicios retirados:** KDE Connect, i2pd y redsocks fueron retirados tras comprobar que no eran necesarios.
@@ -54,7 +55,7 @@ Gitleaks working tree           -> 0 hallazgos
 Gitleaks historial Git          -> 0 hallazgos
 ```
 
-TD-001 permanece abierto únicamente hasta documentar rotación de secretos críticos e incorporar una comprobación recurrente al flujo de auditoría/seguridad.
+TD-001 cerrado el 23-09-2026. El auditor recurrente v1.1.0 fue validado con 12 controles OK, 0 advertencias y 0 errores; la rotación quedó documentada en `Documentation/Security/Secrets-Rotation.md`.
 
 ### Backups y recuperación
 Definir frecuencia, retención, destino y pruebas. Prioridad: Knowledge Vault y PostgreSQL. Snapshot Btrfs no equivale a backup.
