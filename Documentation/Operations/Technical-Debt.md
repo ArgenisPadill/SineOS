@@ -1,6 +1,6 @@
 # SineOS — Deuda técnica
 
-Última revisión: 23-09-2026
+Última revisión: 24-09-2026
 
 Este documento registra únicamente deuda vigente.
 
@@ -24,7 +24,6 @@ Este documento registra únicamente deuda vigente.
 | TD-017 | Media | Vault | Templates Incidencia/Procedimiento/ADR |
 | TD-018 | Alta | Seguridad | Ejecutar validación final asistida por agente después de cerrar hardening y DR |
 | TD-019 | Media | Stirling PDF | Revisar permisos de `/configs` al actualizar desde 2.14.3; la versión actual restablece archivos sensibles a 755 al arrancar |
-| TD-020 | Alta | Salud | Validar auditoría profunda trimestral de SineOS |
 | TD-021 | Alta | Backups | Implementar backup externo certificado en `SineOsBackups` con Restic + restore de prueba |
 | TD-022 | Media | Mantenimiento | Crear aplicación nativa + servicio/timer trimestral con gate de commit sincronizado |
 
@@ -39,6 +38,8 @@ Este documento registra únicamente deuda vigente.
 **Gestión de secretos (TD-001):** cerrada. Política, inventario, permisos, Gitleaks, secret persistente de Open WebUI, auditor recurrente y procedimientos de rotación quedaron documentados y validados.
 
 **Política general de backup (TD-002):** cerrada. SineOS adopta Restic como motor preferente para backup cifrado/versionado y Btrfs/Snapper únicamente como rollback local. La implementación queda dividida en TD-003, TD-004 y TD-016.
+
+**Salud trimestral (TD-020):** cerrada. `sineos-health-audit.sh` v1.2.3 fue validado el 24-09-2026 con 21 controles OK, 0 advertencias, 0 errores y `RESULTADO: OK`; Git quedó limpio y sincronizado con GitHub.
 
 **DNSCrypt/Proton:** DNSCrypt por perfil y el ciclo Proton VPN/DNS fueron implementados y validados mediante NetworkPrivacy.
 
