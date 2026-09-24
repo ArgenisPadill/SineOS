@@ -79,6 +79,9 @@ Baseline de seguridad, estado de controles, red, servicios, secretos, backups y 
 ### Documentation-Privacy.md
 Reglas para evitar publicar secretos, rutas privadas, identificadores y reportes sensibles.
 
+### Secrets-Management.md
+Política de almacenamiento, permisos, inventario, escaneo y rotación de secretos.
+
 ### Agentic-Security-Validation.md
 Diseño de la etapa final de validación defensiva asistida por agente.
 
