@@ -100,7 +100,17 @@ backup Knowledge Vault
 snapshots / recuperación
     ↓
 Disaster Recovery
+    ↓
+validación final de seguridad asistida por agente
 ```
+
+## Etapa final de seguridad
+
+Después de cerrar el hardening, backup y recuperación, SineOS ejecutará la fase:
+
+`Documentation/Lifecycle/16-Validacion-seguridad-agentica.md`
+
+Esta etapa utiliza una allowlist defensiva de procedimientos externos y no sustituye los controles anteriores.
 
 ## Regla de actualización de esta guía
 
