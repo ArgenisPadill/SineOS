@@ -12,7 +12,6 @@ Este documento registra únicamente deuda vigente.
 | TD-002 | Alta | Backups | Política general de backup |
 | TD-003 | Alta | PostgreSQL | Backup y restauración probados |
 | TD-004 | Alta | Vault | Backup independiente del Knowledge Vault |
-| TD-005 | Alta | Open WebUI | Secret persistente fuera de Git |
 | TD-006 | Media | Open WebUI | Fijar imagen por versión/digest |
 | TD-007 | Media | Open WebUI | Retirar restart automático y recrear |
 | TD-008 | Media | Red | Revisar nftables + Podman/netavark |
@@ -34,6 +33,8 @@ Este documento registra únicamente deuda vigente.
 
 **PostgreSQL/Quadlet:** la política vigente es arranque manual desde Podman Desktop y loopback `127.0.0.1:5432`. Quadlet/autostart deja de ser objetivo mientras esta decisión siga vigente.
 
+**Open WebUI secret persistente (TD-005):** cerrado. El `WEBUI_SECRET_KEY` existente fue recuperado sin rotación, almacenado en `.env` local con permisos `600`, excluido de Git y validado mediante dos recreaciones completas del contenedor conservando el mismo secret, volumen e imagen.
+
 **DNSCrypt/Proton:** DNSCrypt por perfil y el ciclo Proton VPN/DNS fueron implementados y validados mediante NetworkPrivacy.
 
 **Servicios retirados:** KDE Connect, i2pd y redsocks fueron retirados tras comprobar que no eran necesarios.
@@ -53,13 +54,13 @@ Gitleaks working tree           -> 0 hallazgos
 Gitleaks historial Git          -> 0 hallazgos
 ```
 
-TD-001 permanece abierto hasta resolver el secret persistente de Open WebUI, documentar rotación de secretos críticos e incorporar una comprobación recurrente al flujo de auditoría/seguridad.
+TD-001 permanece abierto únicamente hasta documentar rotación de secretos críticos e incorporar una comprobación recurrente al flujo de auditoría/seguridad.
 
 ### Backups y recuperación
 Definir frecuencia, retención, destino y pruebas. Prioridad: Knowledge Vault y PostgreSQL. Snapshot Btrfs no equivale a backup.
 
 ### Open WebUI
-Fijar imagen, definir secret persistente y retirar `restart: unless-stopped` mediante recreación controlada preservando datos.
+El secret persistente ya quedó validado y TD-005 está cerrado. Permanecen como deuda fijar la imagen y retirar `restart: unless-stopped` mediante recreación controlada preservando datos.
 
 ### Red y Ollama
 Validar 11434 desde otro equipo y comprobar que recargar nftables no interfiera con netavark.
