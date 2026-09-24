@@ -13,7 +13,7 @@ set -u
 set -o pipefail
 
 NAME="sineos-secrets-audit"
-VERSION="1.0.0"
+VERSION="1.1.0"
 TS="$(date '+%Y-%m-%d_%H-%M-%S')"
 OK=0
 WARN=0
@@ -102,13 +102,31 @@ count_json(){
   python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' "$1" 2>/dev/null || echo -1
 }
 
-section "5. GITLEAKS — WORKING TREE"
+section "5. GITLEAKS — SNAPSHOT VERSIONABLE"
 if has gitleaks; then
   rm -f "$WORK_JSON"
-  gitleaks detect --source "$ROOT" --no-git --redact --report-format json --report-path "$WORK_JSON" --exit-code 0 >/dev/null 2>&1
+
+  SNAPSHOT_DIR="$(mktemp -d)"
+  chmod 700 "$SNAPSHOT_DIR"
+
+  COPIED=0
+  while IFS= read -r -d '' rel; do
+    [[ -f "$ROOT/$rel" ]] || continue
+    mkdir -p "$SNAPSHOT_DIR/$(dirname "$rel")"
+    cp -- "$ROOT/$rel" "$SNAPSHOT_DIR/$rel"
+    ((COPIED+=1))
+  done < <(git ls-files -co --exclude-standard -z)
+
+  echo "Archivos versionados/versionables analizados: $COPIED"
+  echo "Los archivos ignorados por Git no se incluyen en este snapshot."
+
+  gitleaks detect --source "$SNAPSHOT_DIR" --no-git --redact --report-format json --report-path "$WORK_JSON" --exit-code 0 >/dev/null 2>&1
   chmod 600 "$WORK_JSON" 2>/dev/null || true
+
+  rm -rf "$SNAPSHOT_DIR"
+
   n="$(count_json "$WORK_JSON")"
-  [[ "$n" == 0 ]] && ok "Working tree: 0 hallazgos." || err "Working tree: $n hallazgo(s). Revisa el JSON privado."
+  [[ "$n" == 0 ]] && ok "Snapshot versionable: 0 hallazgos." || err "Snapshot versionable: $n hallazgo(s). Revisa el JSON privado."
 fi
 
 section "6. GITLEAKS — HISTORIAL"
