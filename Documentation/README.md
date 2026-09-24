@@ -74,7 +74,13 @@ Instalación, aplicación, respaldo, restauración y mantenimiento del escritori
 ## Recovery
 
 ### Backup-Policy.md
-Política general de backups: clasificación de datos, frecuencia, retención, cifrado, verificación, restore y relación con Btrfs/Snapper y Restic.
+Política general de backups: disco externo `SineOsBackups`, ciclo trimestral, cifrado, validación por restore, Restic y sincronización GitHub.
+
+### Backup-Status.md
+Estado versionado del último respaldo externo validado.
+
+### Backup-Log/
+Bitácora histórica `Respaldo-<commit>.md` de respaldos certificados y sincronizados.
 
 ## Security
 
