@@ -23,6 +23,7 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 - Ejecutado Gitleaks 8.16.0 sobre el working tree y todo el historial Git: 0 hallazgos en ambos escaneos; reportes locales almacenados fuera del repositorio con permisos restrictivos.
 - Validado `WEBUI_SECRET_KEY` persistente de Open WebUI mediante dos recreaciones completas del contenedor conservando el mismo secret, volumen persistente e imagen; TD-005 cerrado.
 - Validado `sineos-secrets-audit.sh` v1.1.0 con 12 controles OK, 0 advertencias y 0 errores; documentados los procedimientos de rotación y cerrado TD-001.
+- Adoptada la política general de backups: Restic como motor preferente de backup cifrado/versionado, Btrfs/Snapper reservado para rollback local, con frecuencia, retención, verificación y restore definidos; TD-002 cerrado.
 
 ### Automatización y organización
 
