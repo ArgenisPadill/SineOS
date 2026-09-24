@@ -16,6 +16,8 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 - PostgreSQL limitado a `127.0.0.1:5432` y ajustado a política de arranque manual.
 - Conservados AnyDesk, Dropbox, MEGA y Avahi por uso funcional; permanecen sujetos a la política del firewall.
 - Tor queda pendiente de determinar si alguna aplicación lo utiliza antes de retirarlo o conservarlo.
+- Definida como etapa final de seguridad una validación defensiva asistida por agente basada en `mukul975/Anthropic-Cybersecurity-Skills`, con commit revisado, allowlist explícita y primera pasada de solo lectura.
+- La biblioteca externa no se activa completa por defecto: SineOS separa los procedimientos defensivos de las técnicas ofensivas/dual-use y mantiene revisión humana antes de cualquier remediación.
 
 ### Automatización y organización
 
