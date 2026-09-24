@@ -1,4 +1,5 @@
 # Changelog
+- Validada la GUI y el lanzador XFCE de `SineOS · Mantenimiento`: estado trimestral correcto, botones de adopción/sincronización protegidos, backup bloqueado por TD-021 y Git limpio al cerrar.
 - Añadida protección en `SineOS · Mantenimiento` para impedir registrar/sincronizar dos veces la misma auditoría trimestral.
 - Adoptada la auditoría trimestral del 24-09-2026 en `SineOS · Mantenimiento`: próxima revisión 24-12-2026, estado 700/600, timer activo y servicio de recordatorio en `success` con ciclo vigente.
 - Validada la instalación local de `SineOS · Mantenimiento`: wrapper local, timer `enabled/active`, estado/configuración privados y Git limpio; adopción inicial todavía pendiente.
