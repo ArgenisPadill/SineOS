@@ -3,7 +3,7 @@
 # Nombre: sineos-secrets-audit.sh
 # Propósito: auditar secretos y permisos sin mostrar valores.
 # Categoría: operativo recurrente / seguridad
-# Estado: pendiente de validación
+# Estado: validado 23-09-2026
 # Plataforma: Debian 13
 # Reejecutable: sí
 # Privilegios: usuario normal, sin sudo
