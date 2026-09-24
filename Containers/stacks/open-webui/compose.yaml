@@ -5,6 +5,9 @@ services:
     image: ghcr.io/open-webui/open-webui:main
     container_name: sineos-open-webui
 
+    env_file:
+      - .env
+
     restart: unless-stopped
 
     network_mode: pasta
