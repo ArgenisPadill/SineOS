@@ -1,4 +1,5 @@
 # Changelog
+- Añadida protección en `SineOS · Mantenimiento` para impedir registrar/sincronizar dos veces la misma auditoría trimestral.
 - Adoptada la auditoría trimestral del 24-09-2026 en `SineOS · Mantenimiento`: próxima revisión 24-12-2026, estado 700/600, timer activo y servicio de recordatorio en `success` con ciclo vigente.
 - Validada la instalación local de `SineOS · Mantenimiento`: wrapper local, timer `enabled/active`, estado/configuración privados y Git limpio; adopción inicial todavía pendiente.
 - Corregida la instalación de `SineOS · Mantenimiento` para no cambiar permisos de archivos versionados; ahora usa un wrapper local en `~/.local/bin` y lanza la auditoría mediante `bash`.
