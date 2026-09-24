@@ -8,7 +8,8 @@ La política completa se encuentra en `Documentation/Architecture/Script-Standar
 
 | Componente | Archivo | Clasificación | Estado | Uso |
 |---|---|---|---|---|
-| Auditoría | `Audit/sineos-audit.sh` | Operativo recurrente | Activo | Diagnóstico de solo lectura de la plataforma SineOS |\n| Salud trimestral | `Audit/sineos-health-audit.sh` | Operativo recurrente | Pendiente de validar | Auditoría profunda de sistema, seguridad, actualizaciones, Git y contenedores |
+| Auditoría | `Audit/sineos-audit.sh` | Operativo recurrente | Activo | Diagnóstico de solo lectura de la plataforma SineOS |
+| Salud trimestral | `Audit/sineos-health-audit.sh` | Operativo recurrente | Pendiente de validar | Auditoría profunda de sistema, seguridad, actualizaciones, Git y contenedores |
 | Escritorio XFCE | `Desktop/sineos-xfce-macos.sh` | Pilar / instalación | Activo | Instala, aplica, valida y restaura la configuración visual reproducible de XFCE |
 | Open WebUI | `Monitoring/check-open-webui.sh` | Operativo recurrente | Activo | Comprueba el endpoint local y envía heartbeat Push a Uptime Kuma |
 | PostgreSQL | `Monitoring/check-postgresql.sh` | Operativo recurrente | Activo | Comprueba PostgreSQL mediante `pg_isready` y envía heartbeat Push |
