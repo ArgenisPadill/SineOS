@@ -62,8 +62,7 @@ Arquitectura y operación del stack Open WebUI.
 ### PostgreSQL.md
 Estado operativo actual de PostgreSQL 18 sobre Podman rootless.
 
-### Technical-Debt.md
-Deuda técnica abierta y decisiones ya cerradas.
+### Technical-Debt.md\nDeuda técnica abierta y decisiones ya cerradas.\n\n### Quarterly-Health.md\nPolítica y estado de la auditoría profunda trimestral de salud de SineOS.
 
 ### XFCE-Visual-Configuration.md
 Instalación, aplicación, respaldo, restauración y mantenimiento del escritorio XFCE reproducible.
