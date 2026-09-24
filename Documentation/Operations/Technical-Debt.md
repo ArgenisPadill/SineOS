@@ -41,7 +41,19 @@ Este documento registra únicamente deuda vigente.
 ## Detalle
 
 ### Secretos
-Centralizar criterios para `.env`, URLs Push, claves y futuras credenciales. Ningún secreto real debe entrar en Git.
+La política formal ya existe en `Documentation/Security/Secrets-Management.md`.
+
+Validado el 23-09-2026:
+
+```text
+~/.config/sineos                -> 700
+monitoring/*.env                -> 600
+PostgreSQL .env                 -> 600
+Gitleaks working tree           -> 0 hallazgos
+Gitleaks historial Git          -> 0 hallazgos
+```
+
+TD-001 permanece abierto hasta resolver el secret persistente de Open WebUI, documentar rotación de secretos críticos e incorporar una comprobación recurrente al flujo de auditoría/seguridad.
 
 ### Backups y recuperación
 Definir frecuencia, retención, destino y pruebas. Prioridad: Knowledge Vault y PostgreSQL. Snapshot Btrfs no equivale a backup.
