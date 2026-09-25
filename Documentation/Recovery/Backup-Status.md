@@ -317,3 +317,45 @@ Residuos temporales: ninguno
 ```
 
 Uptime Kuma queda funcionalmente recuperable desde el snapshot Restic. TD-021 continúa abierto hasta completar las validaciones restantes y el cierre documental/sincronización del respaldo.
+
+
+## Open WebUI desde snapshot Restic — validado funcionalmente
+
+Validado el 24-09-2026 usando el snapshot:
+
+```text
+Tag: SineOsBackups-240926-2334
+Snapshot: 536d25fd
+```
+
+Cadena validada:
+
+```text
+Open WebUI productivo apagado limpio
+→ snapshot Restic
+→ restore temporal
+→ copia de trabajo
+→ validación SQLite
+→ contenedor aislado
+→ respuesta HTTP
+→ apagado limpio
+→ destrucción del entorno temporal
+```
+
+Resultados:
+
+```text
+SQLite webui.db: integrity_check OK
+Tablas detectadas: 43
+Cache excluida: sí
+Contenedor temporal aislado: sí
+Puertos publicados: ninguno
+Respuesta HTTP: OK
+Apagado temporal: ExitCode=0
+Restore original sin modificar: OK
+Copia de trabajo eliminada: OK
+Open WebUI productivo final: Running=false / ExitCode=0
+Residuos temporales: ninguno
+```
+
+Open WebUI queda funcionalmente recuperable desde el snapshot Restic. TD-021 continúa abierto hasta completar Stirling PDF y el cierre documental/sincronización del respaldo.
