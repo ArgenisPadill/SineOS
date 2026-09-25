@@ -24,7 +24,7 @@ Este documento registra únicamente deuda vigente.
 | TD-017 | Media | Vault | Templates Incidencia/Procedimiento/ADR |
 | TD-018 | Alta | Seguridad | Ejecutar validación final asistida por agente después de cerrar hardening y DR |
 | TD-019 | Media | Stirling PDF | Revisar permisos de `/configs` al actualizar desde 2.14.3; la versión actual restablece archivos sensibles a 755 al arrancar |
-| TD-021 | Alta | Backups | Implementar backup externo certificado en `SineOsBackups` con Restic + restore de prueba |
+| TD-021 | Alta | Backups | Inicializar Restic en el destino externo ya validado y certificar backup + restore de prueba |
 
 ## Decisiones cerradas
 
