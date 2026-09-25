@@ -1,4 +1,5 @@
 # Changelog
+- Preparado y validado el destino físico de TD-021 en `/media/argenis/InfoDGRC/SineOsBackups`: disco externo distinto de `/dev/sda`, UUID comprobado, 333G libres y prueba de escritura correcta; backup todavía deshabilitado.
 - Cerrado TD-022: `SineOS · Mantenimiento` validó persistencia, rollback, GUI/timer y acceso GitHub no interactivo mediante el socket GCR aun con el agente SSH normal inutilizable.
 - Corregido el protocolo documental de backup para evitar autorreferencia del COMMIT B; el hash de sincronización queda en estado local y la evidencia remota es `HEAD local = origin/main = main remoto`.
 - Aclarado el RPO: el corte externo certificado actual es trimestral y puede implicar hasta 3 meses de pérdida si no existen copias intermedias; 24 h/7 días quedan como objetivos aspiracionales, no garantías actuales.
