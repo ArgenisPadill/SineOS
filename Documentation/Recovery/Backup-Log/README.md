@@ -44,10 +44,12 @@ verificar HEAD local = origin/main = main remoto
 recordatorio puede marcarse como completado
 ```
 
-La aplicación local guarda ambos hashes:
+La aplicación local guarda ambos hashes **después** de que existan:
 
 - `event_commit`: COMMIT A;
-- `sync_commit`: COMMIT B.
+- `sync_commit`: COMMIT B, obtenido después de crear y hacer push del commit.
+
+El hash B no se escribe dentro del archivo comprometido por B.
 
 ## Contenido mínimo
 
@@ -57,7 +59,6 @@ Cada archivo `Respaldo-<commit>.md` registra únicamente metadatos no secretos:
 Fecha:
 Tag SineOS:
 Commit del evento:
-Commit de sincronización:
 Resultado Restic:
 Resultado restore:
 Estado:
@@ -74,3 +75,10 @@ Los intentos fallidos se conservan en reportes locales privados y no se presenta
 ## Regla
 
 > Un respaldo no cuenta como realizado hasta que pueda restaurarse y su evidencia quede sincronizada con GitHub.
+
+
+### Regla de no autorreferencia
+
+`Respaldo-<COMMIT_A>.md` puede contener el hash A porque ese hash ya existe antes de crear el archivo.
+
+No puede contener el hash B del commit que incluye ese mismo archivo. El cierre del segundo commit se demuestra mediante el push y la igualdad del HEAD local/remoto; el hash B se conserva en el estado local privado de la aplicación.
