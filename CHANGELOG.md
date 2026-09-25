@@ -1,4 +1,5 @@
 # Changelog
+- Inicializado y validado el repositorio Restic cifrado de TD-021 en `SineOsBackups`: formato v2, cero snapshots y `restic check` sin errores; el backup permanece deshabilitado hasta crear y restaurar el primer snapshot.
 - Instalado y validado Restic 0.18.0 desde Debian 13 para TD-021; el repositorio externo permanece sin inicializar y el backup sigue deshabilitado.
 - Preparado y validado el destino físico de TD-021 en `/media/argenis/InfoDGRC/SineOsBackups`: disco externo distinto de `/dev/sda`, UUID comprobado, 333G libres y prueba de escritura correcta; backup todavía deshabilitado.
 - Cerrado TD-022: `SineOS · Mantenimiento` validó persistencia, rollback, GUI/timer y acceso GitHub no interactivo mediante el socket GCR aun con el agente SSH normal inutilizable.
