@@ -129,3 +129,28 @@ Estado final del contenedor: detenido
 ```
 
 El tamaño reducido del dump es coherente con una base `sineos` sin objetos de usuario. TD-003 permanece abierto hasta ejecutar una restauración real en un PostgreSQL temporal.
+
+
+## PostgreSQL — restauración real validada
+
+Validado el 24-09-2026:
+
+```text
+Dump lógico: OK
+globals.sql: OK
+SHA-256: OK
+Imagen de restore: docker.io/library/postgres:18
+Contenedor temporal: aislado, sin red ni puertos
+Inicialización completa: OK
+Servidor definitivo estable: OK
+Roles no-sistema restaurados: 1
+database.dump restaurado: OK
+Tablas de usuario: 0
+Secuencias de usuario: 0
+Vistas de usuario: 0
+Entorno temporal eliminado: OK
+PostgreSQL productivo final: Running=false / Status=exited
+Residuos temporales: ninguno
+```
+
+TD-003 queda cerrado. El dump validado queda disponible como origen para el primer snapshot certificado de TD-021.
