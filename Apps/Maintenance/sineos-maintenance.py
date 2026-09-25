@@ -143,7 +143,7 @@ class MaintenanceWindow(Gtk.Window):
         self.backup_row.get_style_context().add_class("status-row")
         page.pack_start(self.backup_row, False, False, 0)
 
-        self.backup_button = Gtk.Button(label="Pendiente de implementación TD-021")
+        self.backup_button = Gtk.Button(label="Automatización pendiente TD-023")
         self.backup_button.set_sensitive(False)
         page.pack_start(self.backup_button, False, False, 0)
 
@@ -257,8 +257,8 @@ class MaintenanceWindow(Gtk.Window):
         cfg = backup["config"]
         if not backup["enabled"]:
             self.backup_row.set_state(
-                "Motor de respaldo externo aún no habilitado. Se integrará con TD-021.",
-                "PENDIENTE TD-021", "badge-neutral"
+                "El respaldo externo no está habilitado en esta instalación. Automatización pendiente en TD-023.",
+                "PENDIENTE TD-023", "badge-neutral"
             )
         elif not cfg["valid_name"]:
             self.backup_row.set_state(

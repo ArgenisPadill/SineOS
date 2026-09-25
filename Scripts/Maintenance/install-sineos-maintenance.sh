@@ -61,7 +61,7 @@ EOF
     if [[ ! -e "$CONFIG_FILE" ]]; then
         cat > "$CONFIG_FILE" <<'EOF'
 # SineOS · Mantenimiento
-# El backup permanece deshabilitado hasta completar TD-021.
+# El backup permanece deshabilitado por defecto hasta configurar y validar un destino externo.
 SINEOS_BACKUP_ENABLED=0
 # SINEOS_BACKUP_ROOT=/ruta/del/disco/SineOsBackups
 EOF

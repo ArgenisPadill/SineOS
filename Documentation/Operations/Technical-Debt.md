@@ -23,7 +23,7 @@ Este documento registra únicamente deuda vigente.
 | TD-017 | Media | Vault | Templates Incidencia/Procedimiento/ADR |
 | TD-018 | Alta | Seguridad | Ejecutar validación final asistida por agente después de cerrar hardening y DR |
 | TD-019 | Media | Stirling PDF | Revisar permisos de `/configs` al actualizar desde 2.14.3; la versión actual restablece archivos sensibles a 755 al arrancar |
-| TD-021 | Alta | Backups | Crear primer snapshot certificado en Restic y validar restore real |
+| TD-023 | Media | Backups | Automatizar e integrar el flujo trimestral de backup en SineOS Mantenimiento, incluyendo ejecución, validación, bitácora y gate GitHub |
 
 ## Decisiones cerradas
 
@@ -42,6 +42,8 @@ Este documento registra únicamente deuda vigente.
 **Salud trimestral (TD-020):** cerrada. `sineos-health-audit.sh` v1.2.3 fue validado el 24-09-2026 con 21 controles OK, 0 advertencias, 0 errores y `RESULTADO: OK`; Git quedó limpio y sincronizado con GitHub.
 
 **Mantenimiento trimestral (TD-022):** cerrado. La aplicación GTK3, el timer, la persistencia, rollback/reinstalación y el gate GitHub no interactivo mediante GCR fueron validados el 24-09-2026. El push real del siguiente ciclo utilizará el mismo entorno GCR ya probado para operaciones remotas.
+
+**Primer respaldo externo certificado (TD-021):** cerrado. El 24-09-2026 se creó el snapshot Restic `536d25fd` con tag `SineOsBackups-240926-2334`, se ejecutó `restic check` sin errores y se validó una restauración real. PostgreSQL, Uptime Kuma, Open WebUI y Stirling PDF fueron probados funcionalmente desde los datos restaurados; el Knowledge Vault también fue restaurado y verificado. La automatización del flujo queda separada como TD-023.
 
 **DNSCrypt/Proton:** DNSCrypt por perfil y el ciclo Proton VPN/DNS fueron implementados y validados mediante NetworkPrivacy.
 

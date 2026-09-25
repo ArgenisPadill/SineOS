@@ -541,26 +541,25 @@ Un componente solo puede declararse cubierto por backup cuando:
 
 ## Estado actual
 
-A 23-09-2026:
+A 24-09-2026:
 
 ```text
-Política general                     VALIDADA DOCUMENTALMENTE
-Restic                               SELECCIONADO / NO IMPLEMENTADO
-Destino físico de backup             PENDIENTE DE INVENTARIO
-Knowledge Vault                      TD-004
-PostgreSQL backup + restore          TD-003
+Política general                     VALIDADA
+Restic                               IMPLEMENTADO / VALIDADO
+Destino físico de backup             InfoDGRC / VALIDADO
+Knowledge Vault                      INCLUIDO / RESTORE VALIDADO / TD-004
+PostgreSQL backup + restore          TD-003 CERRADO
 Disaster Recovery                    TD-016
-Open WebUI backup manual temporal    EXISTENTE / MISMO EQUIPO
+Open WebUI                           RESTORE FUNCIONAL VALIDADO
+Uptime Kuma                          RESTORE FUNCIONAL VALIDADO
+Stirling PDF                         RESTORE FUNCIONAL VALIDADO
 Snapshots Btrfs/Snapper              ROLLBACK, NO BACKUP
 ```
 
 ## Próximos pasos
 
-1. validar el auditor profundo de salud;
-2. inventariar el disco externo;
-3. configurar `SINEOS_BACKUP_ROOT=<...>/SineOsBackups`;
-4. implementar y validar TD-003 PostgreSQL;
-5. identificar y validar TD-004 Knowledge Vault;
-6. validar Restic de extremo a extremo;
-7. integrar el flujo en la aplicación nativa trimestral;
-8. validar la bitácora `Respaldo-<commit>.md` y el gate de sincronización GitHub.
+1. integrar el flujo validado en SineOS Mantenimiento mediante TD-023;
+2. ejecutar la prueba completa de Disaster Recovery de TD-016;
+3. revisar el cierre formal de TD-004 para el Knowledge Vault;
+4. medir el crecimiento del repositorio antes de aplicar prune;
+5. evaluar una copia cifrada off-site cuando sea viable.
