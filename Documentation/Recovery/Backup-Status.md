@@ -274,3 +274,46 @@ Residuos temporales: ninguno
 ```
 
 PostgreSQL queda funcionalmente recuperable desde el snapshot Restic. TD-021 continúa abierto hasta completar las validaciones funcionales restantes y el cierre documental/sincronización del backup.
+
+
+## Uptime Kuma desde snapshot Restic — validado funcionalmente
+
+Validado el 24-09-2026 usando el snapshot:
+
+```text
+Tag: SineOsBackups-240926-2334
+Snapshot: 536d25fd
+```
+
+Cadena validada:
+
+```text
+Uptime Kuma productivo apagado limpio
+→ snapshot Restic
+→ restore temporal
+→ copia de trabajo
+→ contenedor aislado
+→ recuperación MariaDB
+→ respuesta HTTP
+→ apagado limpio
+→ destrucción del entorno temporal
+```
+
+Resultados:
+
+```text
+Archivos restaurados: 261
+Tamaño restaurado: 180M
+MariaDB/kuma presente: sí
+NetworkMode: none
+Puertos publicados: ninguno
+Respuesta HTTP: 302
+Estabilidad posterior: OK
+Apagado temporal: ExitCode=0
+Restore original sin modificar: OK
+Copia de trabajo eliminada: OK
+Uptime Kuma productivo final: Running=false / ExitCode=0
+Residuos temporales: ninguno
+```
+
+Uptime Kuma queda funcionalmente recuperable desde el snapshot Restic. TD-021 continúa abierto hasta completar las validaciones restantes y el cierre documental/sincronización del respaldo.
