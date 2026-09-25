@@ -73,3 +73,20 @@ Backup: DESHABILITADO
 ```
 
 La instalación del motor no equivale a un respaldo válido. Falta definir la credencial de recuperación, inicializar el repositorio y ejecutar backup + check + restore.
+
+
+## Credencial Restic local
+
+Validado el 24-09-2026:
+
+```text
+Ruta local: ~/.config/sineos/restic-password
+Permisos: 600
+Propietario: usuario SineOS
+Contenido expuesto: no
+Repositorio Restic: todavía no inicializado
+```
+
+La credencial no se versiona en Git ni se almacena en el disco externo de backup.
+
+Antes de ejecutar `restic init` debe existir una copia de recuperación independiente de la laptop y del disco `InfoDGRC`.
