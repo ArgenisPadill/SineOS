@@ -213,3 +213,24 @@ ntfsclone exit_code=1
 ```
 
 No se realizaron escrituras ni reparaciones sobre el volumen. La inconsistencia impide a `ntfsclone` abrir el NTFS incluso en modo de metadatos.
+
+
+## Incidente NTFS — resuelto
+
+El 24-09-2026 el volumen externo `InfoDGRC` fue reparado mediante Windows Recovery ejecutado temporalmente en QEMU/KVM, sin instalar Windows y exponiendo únicamente el SSD externo.
+
+Validaciones posteriores:
+
+```text
+chkdsk C: /f: sin problemas encontrados
+fsutil dirty query C:: volumen sin errores
+Debian: montaje normal mediante udisksctl
+Filesystem: ntfs3
+Modo: rw
+UUID: A2B411E1B411B92D
+Repositorio Restic: a1f88f2a
+Snapshots: 0
+restic check: no errors were found
+```
+
+El incidente queda cerrado. TD-021 puede continuar con la creación del primer snapshot certificado y su restauración real.
