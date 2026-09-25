@@ -198,3 +198,18 @@ ntfsclone exit_code=1
 ```
 
 No se ejecutó ninguna reparación sobre el NTFS. El fallo confirma que la inconsistencia de metadatos impide a `ntfsclone` abrir el volumen en modo normal. TD-021 permanece pausado.
+
+
+## Intento de imagen de metadatos NTFS
+
+El 24-09-2026 también se intentó extraer una imagen de metadatos con `ntfsclone --metadata --save-image --ignore-fs-check --force --full-logfile`.
+
+Resultado:
+
+```text
+$MFTMirr does not match $MFT (record 3)
+Opening NTFS failed: Input/output error
+ntfsclone exit_code=1
+```
+
+No se realizaron escrituras ni reparaciones sobre el volumen. La inconsistencia impide a `ntfsclone` abrir el NTFS incluso en modo de metadatos.
