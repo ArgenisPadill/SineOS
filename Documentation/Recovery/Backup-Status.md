@@ -359,3 +359,47 @@ Residuos temporales: ninguno
 ```
 
 Open WebUI queda funcionalmente recuperable desde el snapshot Restic. TD-021 continúa abierto hasta completar Stirling PDF y el cierre documental/sincronización del respaldo.
+
+
+## Stirling PDF desde snapshot Restic — validado funcionalmente
+
+Validado el 24-09-2026 usando el snapshot:
+
+```text
+Tag: SineOsBackups-240926-2334
+Snapshot: 536d25fd
+```
+
+Cadena validada:
+
+```text
+Stirling PDF productivo apagado limpio
+→ snapshot Restic
+→ restore temporal
+→ copia de trabajo
+→ contenedor aislado
+→ respuesta HTTP
+→ validación de base MV
+→ apagado limpio
+→ destrucción del entorno temporal
+```
+
+Resultados:
+
+```text
+Archivos restaurados: 10
+Tamaño restaurado: 160K
+Base MV restaurada: presente
+Imagen: docker.stirlingpdf.com/stirlingtools/stirling-pdf:2.14.3-fat
+NetworkMode: none
+Puertos publicados: ninguno
+Respuesta HTTP: 200
+Estabilidad posterior: OK
+Apagado temporal: ExitCode=0
+Restore original sin modificar: OK
+Copia de trabajo eliminada: OK
+Stirling PDF productivo final: Running=false / ExitCode=0
+Residuos temporales: ninguno
+```
+
+Stirling PDF queda funcionalmente recuperable desde el snapshot Restic. Con PostgreSQL, Uptime Kuma, Open WebUI, Stirling PDF y el Knowledge Vault ya restaurados y validados, TD-021 queda listo para su cierre documental y sincronización final.
