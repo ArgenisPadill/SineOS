@@ -108,3 +108,24 @@ Backup activo: no
 ```
 
 La inicialización y el `restic check` validan el repositorio vacío, pero todavía no constituyen un respaldo de SineOS.
+
+
+## PostgreSQL — dump lógico preliminar
+
+Validado el 24-09-2026:
+
+```text
+PostgreSQL: 18.6
+Estado inicial del contenedor: detenido
+Base postgres: ~7521 kB
+Base sineos: ~7710 kB
+Tablas de usuario en sineos: 0
+Secuencias de usuario en sineos: 0
+Vistas de usuario en sineos: 0
+Tablas de usuario en postgres: 0
+database.dump: formato custom, legible por pg_restore
+globals.sql: generado
+Estado final del contenedor: detenido
+```
+
+El tamaño reducido del dump es coherente con una base `sineos` sin objetos de usuario. TD-003 permanece abierto hasta ejecutar una restauración real en un PostgreSQL temporal.
