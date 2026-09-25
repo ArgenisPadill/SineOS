@@ -58,3 +58,18 @@ Restic: todavía no instalado
 ```
 
 La preparación del destino no equivale a un backup validado. El repositorio Restic aún no existe.
+
+
+## Restic instalado
+
+Validado el 24-09-2026:
+
+```text
+Binario: /usr/bin/restic
+Versión: 0.18.0
+Paquete Debian: 0.18.0-1+b4
+Repositorio Restic: NO INICIALIZADO
+Backup: DESHABILITADO
+```
+
+La instalación del motor no equivale a un respaldo válido. Falta definir la credencial de recuperación, inicializar el repositorio y ejecutar backup + check + restore.
