@@ -1,6 +1,6 @@
 # SineOS — Mantenimiento
 
-**Estado:** Persistencia funcional validada; desbloqueo SSH para gate gráfico pendiente  
+**Estado:** VALIDADO  
 **Componente:** Aplicación nativa de mantenimiento  
 **Plataforma:** Debian 13 + XFCE
 
@@ -233,7 +233,7 @@ Antes de cerrar TD-022 deben comprobarse:
 [x] persistencia tras desinstalación / reinstalación
 [x] desinstalación / rollback
 [x] persistencia tras nueva sesión de XFCE o reinicio
-[ ] validar disponibilidad de la clave SSH para el gate GitHub desde la GUI sin terminal interactiva
+[x] gate GitHub no interactivo mediante GCR validado
 ```
 
 La función de commit/push se validará en el siguiente ciclo real o mediante una prueba controlada que no falsifique la fecha trimestral.
@@ -417,3 +417,35 @@ git ls-remote    exit 0 sin interacción
 ```
 
 La aplicación no modifica la configuración global de SSH ni elimina la passphrase.
+
+
+## Validación final GCR — 24-09-2026
+
+Se ejecutó la aplicación con el `SSH_AUTH_SOCK` normal sustituido deliberadamente por una ruta inexistente.
+
+El núcleo seleccionó:
+
+```text
+SSH_AUTH_SOCK       /run/user/1000/gcr/ssh
+GIT_TERMINAL_PROMPT 0
+SSH_ASKPASS_REQUIRE never
+GIT_SSH_COMMAND     ssh -o BatchMode=yes
+```
+
+Resultado:
+
+```text
+branch       main
+clean        True
+local_head   42b58b931f9c18e9f8d809308f8d32d667779a02
+remote_head  42b58b931f9c18e9f8d809308f8d32d667779a02
+synced       True
+```
+
+La aplicación siguió mostrando `Git sincronizado: sí`.
+
+El agente SSH normal de XFCE permaneció intacto y conservó la clave SineOS.
+
+Con esta prueba queda validado el mecanismo no interactivo usado por las operaciones remotas de la GUI. El `git push` utiliza exactamente el mismo entorno GCR; su ejecución real se comprobará naturalmente en el siguiente ciclo que genere un estado nuevo, sin fabricar una auditoría ficticia.
+
+TD-022 queda cerrado.
