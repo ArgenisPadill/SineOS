@@ -183,3 +183,18 @@ Percentage Used: 4%
 ```
 
 El repositorio Restic queda temporalmente fuera de uso hasta reparar y volver a montar el filesystem NTFS de forma normal. Después de la reparación se debe ejecutar nuevamente `restic check` antes de continuar con el primer snapshot certificado.
+
+
+## Intento de imagen previa a reparación
+
+El 24-09-2026 se intentó crear una imagen previa a reparación con `ntfsclone --save-image --force --full-logfile`.
+
+Resultado:
+
+```text
+$MFTMirr does not match $MFT (record 3)
+Opening NTFS failed: Input/output error
+ntfsclone exit_code=1
+```
+
+No se ejecutó ninguna reparación sobre el NTFS. El fallo confirma que la inconsistencia de metadatos impide a `ntfsclone` abrir el volumen en modo normal. TD-021 permanece pausado.
