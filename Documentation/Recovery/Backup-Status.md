@@ -154,3 +154,32 @@ Residuos temporales: ninguno
 ```
 
 TD-003 queda cerrado. El dump validado queda disponible como origen para el primer snapshot certificado de TD-021.
+
+
+## Incidente NTFS durante TD-021
+
+El 24-09-2026 el disco externo sufrió una desconexión USB mientras NTFS tenía escrituras pendientes.
+
+Evidencia observada:
+
+```text
+USB disconnect
+Buffer I/O error / lost sync page write
+ntfs_set_state failed
+ntfs3_write_inode failed
+volumen marcado dirty
+$MFTMirr no coincide con $MFT
+```
+
+Diagnóstico físico posterior del NVMe:
+
+```text
+SMART overall-health: PASSED
+Critical Warning: 0x00
+Media and Data Integrity Errors: 0
+Error Information Log Entries: 0
+Temperature: 35 C
+Percentage Used: 4%
+```
+
+El repositorio Restic queda temporalmente fuera de uso hasta reparar y volver a montar el filesystem NTFS de forma normal. Después de la reparación se debe ejecutar nuevamente `restic check` antes de continuar con el primer snapshot certificado.
