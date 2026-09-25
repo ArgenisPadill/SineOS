@@ -376,3 +376,44 @@ La persistencia funcional queda validada.
 Durante el primer acceso a GitHub de la nueva sesión, SSH solicitó nuevamente la passphrase de `~/.ssh/id_ed25519_sineos`. Tras introducirla, Git operó normalmente.
 
 Antes de cerrar TD-022 debe validarse un flujo seguro para que el gate GitHub iniciado desde la GUI pueda disponer de la clave cifrada sin depender de una terminal interactiva ni retirar la passphrase.
+
+
+## Autenticación GitHub desde la GUI
+
+Las operaciones remotas de Git iniciadas por SineOS · Mantenimiento utilizan un entorno SSH propio y no interactivo.
+
+Cuando existe:
+
+```text
+$XDG_RUNTIME_DIR/gcr/ssh
+```
+
+la aplicación usa ese socket GCR mediante `SSH_AUTH_SOCK`.
+
+Además establece:
+
+```text
+GIT_TERMINAL_PROMPT=0
+SSH_ASKPASS_REQUIRE=never
+GIT_SSH_COMMAND=ssh -o BatchMode=yes
+```
+
+Objetivos:
+
+- conservar la passphrase de la clave SineOS;
+- no sustituir ni detener el `ssh-agent` normal de XFCE;
+- evitar diálogos ocultos o esperas indefinidas desde la GUI;
+- permitir `git ls-remote` y `git push` cuando GCR ya dispone de la clave desbloqueada;
+- fallar de forma explícita si no existe una credencial utilizable.
+
+La sesión validada del 24-09-2026 mostró simultáneamente:
+
+```text
+agente XFCE      /tmp/ssh-.../agent...
+socket GCR       /run/user/1000/gcr/ssh
+clave SineOS GCR presente
+GitHub GCR       autenticación correcta
+git ls-remote    exit 0 sin interacción
+```
+
+La aplicación no modifica la configuración global de SSH ni elimina la passphrase.
