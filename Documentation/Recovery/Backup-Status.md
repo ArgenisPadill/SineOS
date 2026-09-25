@@ -37,3 +37,24 @@ HEAD local = origin/main = main remoto
 ```
 
 `Backup-Status.md` conserva el commit del evento y el estado de sincronización, no un hash autorreferencial del commit que lo contiene.
+
+
+## Destino externo preparado
+
+Validado el 24-09-2026:
+
+```text
+Montaje: /media/argenis/InfoDGRC
+Partición: /dev/sdc2
+Disco físico: /dev/sdc
+Filesystem: ntfs3
+UUID: A2B411E1B411B92D
+Ruta SineOS: /media/argenis/InfoDGRC/SineOsBackups
+Espacio libre aproximado: 333G
+Prueba crear/leer/renombrar/borrar: OK
+Disco distinto de /dev/sda: OK
+SINEOS_BACKUP_ENABLED=0
+Restic: todavía no instalado
+```
+
+La preparación del destino no equivale a un backup validado. El repositorio Restic aún no existe.
