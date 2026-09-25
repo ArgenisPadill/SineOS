@@ -39,7 +39,7 @@ class MaintenanceError(RuntimeError):
     pass
 
 
-def run(command, timeout=30, cwd=None):
+def run(command, timeout=30, cwd=None, env=None):
     try:
         return subprocess.run(
             command,
@@ -48,9 +48,29 @@ def run(command, timeout=30, cwd=None):
             text=True,
             timeout=timeout,
             check=False,
+            env=env,
         )
     except (OSError, subprocess.TimeoutExpired) as exc:
         raise MaintenanceError(str(exc)) from exc
+
+
+def git_remote_env():
+    env = dict(os.environ)
+    runtime_dir = Path(
+        env.get("XDG_RUNTIME_DIR") or f"/run/user/{os.getuid()}"
+    )
+    gcr_socket = runtime_dir / "gcr" / "ssh"
+
+    if gcr_socket.exists():
+        env["SSH_AUTH_SOCK"] = str(gcr_socket)
+
+    # Las operaciones remotas iniciadas desde la GUI nunca deben quedar
+    # esperando una passphrase en una terminal inexistente.
+    env["GIT_TERMINAL_PROMPT"] = "0"
+    env["SSH_ASKPASS_REQUIRE"] = "never"
+    env["GIT_SSH_COMMAND"] = "ssh -o BatchMode=yes"
+
+    return env
 
 
 def ensure_state_dir():
@@ -148,6 +168,7 @@ def git_sync_state():
     remote = run(
         ["git", "ls-remote", "origin", "refs/heads/main"],
         timeout=20,
+        env=git_remote_env(),
     )
     remote_head = ""
     if remote.returncode == 0 and remote.stdout.strip():
@@ -326,7 +347,11 @@ def sync_health_validation():
         raise MaintenanceError(commit.stderr.strip() or commit.stdout.strip() or "Falló git commit.")
 
     new_head = run(["git", "rev-parse", "HEAD"]).stdout.strip()
-    push = run(["git", "push", "origin", "main"], timeout=90)
+    push = run(
+        ["git", "push", "origin", "main"],
+        timeout=90,
+        env=git_remote_env(),
+    )
     if push.returncode != 0:
         raise MaintenanceError(
             "El commit local se creó, pero el push falló. El recordatorio seguirá pendiente. "
