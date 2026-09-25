@@ -8,7 +8,6 @@ Este documento registra únicamente deuda vigente.
 
 | ID | Prioridad | Área | Pendiente |
 |---|---|---|---|
-| TD-003 | Alta | PostgreSQL | Backup y restauración probados |
 | TD-004 | Alta | Vault | Backup independiente del Knowledge Vault |
 | TD-006 | Media | Open WebUI | Fijar imagen por versión/digest |
 | TD-007 | Media | Open WebUI | Retirar restart automático y recrear |
@@ -37,6 +36,8 @@ Este documento registra únicamente deuda vigente.
 **Gestión de secretos (TD-001):** cerrada. Política, inventario, permisos, Gitleaks, secret persistente de Open WebUI, auditor recurrente y procedimientos de rotación quedaron documentados y validados.
 
 **Política general de backup (TD-002):** cerrada. SineOS adopta Restic como motor preferente para backup cifrado/versionado y Btrfs/Snapper únicamente como rollback local. La implementación queda dividida en TD-003, TD-004 y TD-016.
+
+**PostgreSQL backup/restore (TD-003):** cerrado. El 24-09-2026 se generó un dump lógico con `pg_dump`/ `pg_dumpall`, se validaron hashes SHA-256 y se restauró realmente en una instancia PostgreSQL 18 temporal, aislada, sin red ni puertos publicados. Se verificaron roles y estructura, se eliminó el entorno de prueba y el contenedor productivo permaneció detenido e intacto.
 
 **Salud trimestral (TD-020):** cerrada. `sineos-health-audit.sh` v1.2.3 fue validado el 24-09-2026 con 21 controles OK, 0 advertencias, 0 errores y `RESULTADO: OK`; Git quedó limpio y sincronizado con GitHub.
 
