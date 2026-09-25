@@ -142,11 +142,14 @@ Btrfs/Snapper permanece como mecanismo complementario de rollback local.
 | secretos necesarios para recuperación | backup cifrado y controlado |
 | configuración local no reproducible | incluir cuando sea necesaria para reconstrucción |
 
-Objetivo de pérdida máxima de datos:
+Objetivo deseable si posteriormente se implementan copias intermedias:
 
 ```text
-RPO objetivo: 24 horas
+RPO aspiracional: 24 horas
+RPO garantizado por el esquema certificado actual: hasta 3 meses
 ```
+
+El valor de 24 horas no se considera una garantía vigente mientras no exista una frecuencia intermedia automatizada y validada.
 
 ### Nivel B — Importante / reconstruible con pérdida de estado
 
@@ -157,11 +160,14 @@ RPO objetivo: 24 horas
 | Stirling PDF configuración/datos relevantes | backup según necesidad |
 | configuración XFCE no totalmente versionada | backup mientras no sea 100 % reproducible |
 
-Objetivo:
+Objetivo deseable si posteriormente se implementan copias intermedias:
 
 ```text
-RPO objetivo: 7 días
+RPO aspiracional: 7 días
+RPO garantizado por el esquema certificado actual: hasta 3 meses
 ```
+
+El valor de 7 días no se considera una garantía vigente mientras no exista una frecuencia intermedia automatizada y validada.
 
 ### Nivel C — Reproducible o descargable
 
@@ -441,7 +447,13 @@ HEAD local = origin/main = main remoto
 
 El ciclo solo queda cerrado después de comprobar el **COMMIT B sincronizado**.
 
-`Documentation/Recovery/Backup-Status.md` conserva la fecha y referencia del último respaldo validado.
+El hash de COMMIT B no se escribe dentro del archivo creado por ese mismo commit. Se obtiene después de crear B, se conserva en el estado local privado y la sincronización remota se demuestra comprobando:
+
+```text
+HEAD local = origin/main = main remoto
+```
+
+`Documentation/Recovery/Backup-Status.md` conserva la fecha, tag, commit del evento y estado de sincronización del último respaldo validado.
 
 ## Recordatorio trimestral y aplicación nativa
 
