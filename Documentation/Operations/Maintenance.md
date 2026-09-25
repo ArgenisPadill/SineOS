@@ -1,6 +1,6 @@
 # SineOS — Mantenimiento
 
-**Estado:** Instalación y adopción inicial validadas; GUI y rollback pendientes  
+**Estado:** Persistencia funcional validada; desbloqueo SSH para gate gráfico pendiente  
 **Componente:** Aplicación nativa de mantenimiento  
 **Plataforma:** Debian 13 + XFCE
 
@@ -232,7 +232,8 @@ Antes de cerrar TD-022 deben comprobarse:
 [x] creación de estado privado 700/600
 [x] persistencia tras desinstalación / reinstalación
 [x] desinstalación / rollback
-[ ] persistencia tras nueva sesión de XFCE o reinicio
+[x] persistencia tras nueva sesión de XFCE o reinicio
+[ ] validar disponibilidad de la clave SSH para el gate GitHub desde la GUI sin terminal interactiva
 ```
 
 La función de commit/push se validará en el siguiente ciclo real o mediante una prueba controlada que no falsifique la fecha trimestral.
@@ -345,3 +346,33 @@ Git sincronizado   sí
 El timer quedó `loaded`, `active` y `enabled`. Los permisos volvieron a ser 700 para directorios privados y 600 para archivos privados. El working tree final quedó limpio.
 
 Para cerrar TD-022 falta únicamente comprobar el mismo estado después de una nueva sesión de XFCE o un reinicio real.
+
+
+## Validación post-inicio — 24-09-2026
+
+Después de iniciar una nueva sesión se comprobó:
+
+```text
+Salud validada          2026-09-24
+Próxima salud           2026-12-24
+Salud vencida           no
+Commit salud            62d725c17f4a9903976c5a63fefbd966154440c4
+Backup activo           no
+Git sincronizado        sí
+Timer LoadState         loaded
+Timer ActiveState       active
+Timer UnitFileState     enabled
+Wrapper                 disponible
+Lanzador XFCE           disponible
+state dir               700
+state.json              600
+config dir              700
+maintenance.env         600
+Working tree            limpio
+```
+
+La persistencia funcional queda validada.
+
+Durante el primer acceso a GitHub de la nueva sesión, SSH solicitó nuevamente la passphrase de `~/.ssh/id_ed25519_sineos`. Tras introducirla, Git operó normalmente.
+
+Antes de cerrar TD-022 debe validarse un flujo seguro para que el gate GitHub iniciado desde la GUI pueda disponer de la clave cifrada sin depender de una terminal interactiva ni retirar la passphrase.
