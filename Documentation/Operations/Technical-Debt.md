@@ -25,7 +25,6 @@ Este documento registra únicamente deuda vigente.
 | TD-018 | Alta | Seguridad | Ejecutar validación final asistida por agente después de cerrar hardening y DR |
 | TD-019 | Media | Stirling PDF | Revisar permisos de `/configs` al actualizar desde 2.14.3; la versión actual restablece archivos sensibles a 755 al arrancar |
 | TD-021 | Alta | Backups | Implementar backup externo certificado en `SineOsBackups` con Restic + restore de prueba |
-| TD-022 | Media | Mantenimiento | Validar en la app el gate GitHub no interactivo mediante GCR antes del cierre |
 
 ## Decisiones cerradas
 
@@ -40,6 +39,8 @@ Este documento registra únicamente deuda vigente.
 **Política general de backup (TD-002):** cerrada. SineOS adopta Restic como motor preferente para backup cifrado/versionado y Btrfs/Snapper únicamente como rollback local. La implementación queda dividida en TD-003, TD-004 y TD-016.
 
 **Salud trimestral (TD-020):** cerrada. `sineos-health-audit.sh` v1.2.3 fue validado el 24-09-2026 con 21 controles OK, 0 advertencias, 0 errores y `RESULTADO: OK`; Git quedó limpio y sincronizado con GitHub.
+
+**Mantenimiento trimestral (TD-022):** cerrado. La aplicación GTK3, el timer, la persistencia, rollback/reinstalación y el gate GitHub no interactivo mediante GCR fueron validados el 24-09-2026. El push real del siguiente ciclo utilizará el mismo entorno GCR ya probado para operaciones remotas.
 
 **DNSCrypt/Proton:** DNSCrypt por perfil y el ciclo Proton VPN/DNS fueron implementados y validados mediante NetworkPrivacy.
 
