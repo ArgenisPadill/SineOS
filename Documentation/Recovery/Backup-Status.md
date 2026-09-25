@@ -90,3 +90,21 @@ Repositorio Restic: todavía no inicializado
 La credencial no se versiona en Git ni se almacena en el disco externo de backup.
 
 Antes de ejecutar `restic init` debe existir una copia de recuperación independiente de la laptop y del disco `InfoDGRC`.
+
+
+## Repositorio Restic inicializado
+
+Validado el 24-09-2026:
+
+```text
+Repositorio: /media/argenis/InfoDGRC/SineOsBackups
+ID: a1f88f2abd…
+Formato: versión 2
+Compresión: auto
+Snapshots: 0
+restic check: OK
+Errores: 0
+Backup activo: no
+```
+
+La inicialización y el `restic check` validan el repositorio vacío, pero todavía no constituyen un respaldo de SineOS.
