@@ -234,3 +234,43 @@ restic check: no errors were found
 ```
 
 El incidente queda cerrado. TD-021 puede continuar con la creación del primer snapshot certificado y su restauración real.
+
+
+## PostgreSQL desde snapshot Restic — validado funcionalmente
+
+Validado el 24-09-2026 usando el snapshot:
+
+```text
+Tag: SineOsBackups-240926-2334
+Snapshot: 536d25fd
+```
+
+Cadena validada:
+
+```text
+PostgreSQL productivo
+→ dump lógico
+→ snapshot Restic
+→ restore temporal
+→ hashes SHA-256
+→ PostgreSQL 18 temporal aislado
+→ restore de globals.sql
+→ restore de database.dump
+→ validación de roles y estructura
+```
+
+Resultados:
+
+```text
+Roles no-sistema recuperados: 1
+Tablas de usuario: 0
+Secuencias de usuario: 0
+Vistas de usuario: 0
+Red del contenedor temporal: none
+Puertos publicados: ninguno
+Entorno temporal eliminado: OK
+PostgreSQL productivo final: Running=false / ExitCode=0
+Residuos temporales: ninguno
+```
+
+PostgreSQL queda funcionalmente recuperable desde el snapshot Restic. TD-021 continúa abierto hasta completar las validaciones funcionales restantes y el cierre documental/sincronización del backup.
