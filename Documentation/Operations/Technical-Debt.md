@@ -25,7 +25,7 @@ Este documento registra únicamente deuda vigente.
 | TD-018 | Alta | Seguridad | Ejecutar validación final asistida por agente después de cerrar hardening y DR |
 | TD-019 | Media | Stirling PDF | Revisar permisos de `/configs` al actualizar desde 2.14.3; la versión actual restablece archivos sensibles a 755 al arrancar |
 | TD-021 | Alta | Backups | Implementar backup externo certificado en `SineOsBackups` con Restic + restore de prueba |
-| TD-022 | Media | Mantenimiento | Validar persistencia de SineOS · Mantenimiento tras nueva sesión/reinicio antes del cierre |
+| TD-022 | Media | Mantenimiento | Validar desbloqueo SSH seguro para el gate GitHub de la GUI después de iniciar sesión |
 
 ## Decisiones cerradas
 
