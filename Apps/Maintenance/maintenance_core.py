@@ -33,6 +33,7 @@ DEFAULT_STATE = {
         "event_commit": None,
         "sync_commit": None,
         "tag": None,
+        "pending_registration": None,
     },
 }
 
@@ -429,6 +430,44 @@ def backup_event_metadata(result):
     }
 
 
+def pending_backup_registration():
+    state = load_state()
+    pending = state["backup"].get("pending_registration")
+
+    if not isinstance(pending, dict):
+        return None
+
+    tag = str(pending.get("tag") or "").strip()
+    snapshot_id = str(
+        pending.get("snapshot_id") or ""
+    ).strip()
+
+    if not tag or not snapshot_id:
+        return None
+
+    return {
+        "date": pending.get("date"),
+        "tag": tag,
+        "snapshot_id": snapshot_id,
+    }
+
+
+def remember_pending_backup_registration(result):
+    event = backup_event_metadata(result)
+
+    pending = {
+        "date": event["date"].isoformat(),
+        "tag": event["tag"],
+        "snapshot_id": event["snapshot_id"],
+    }
+
+    state = load_state()
+    state["backup"]["pending_registration"] = pending
+    save_state(state)
+
+    return pending
+
+
 def backup_status_block_pending(event):
     return """Estado: VALIDADO TÉCNICAMENTE / CIERRE GIT PENDIENTE
 Fecha: {date}
@@ -778,6 +817,7 @@ def finalize_backup_state(commit_b_result):
         "event_commit": event_commit,
         "sync_commit": sync_commit,
         "tag": event["tag"],
+        "pending_registration": None,
     })
 
     save_state(state)
@@ -800,7 +840,18 @@ def register_certified_backup(result):
 
 
 def run_and_register_backup():
+    pending = pending_backup_registration()
+
+    if pending:
+        raise MaintenanceError(
+            "Existe un respaldo certificado pendiente de registrar: "
+            f"{pending['tag']} ({pending['snapshot_id'][:8]}). "
+            "No se creará otro snapshot hasta resolverlo."
+        )
+
     result = run_backup_engine()
+    remember_pending_backup_registration(result)
+
     registration = register_certified_backup(result)
 
     return {
