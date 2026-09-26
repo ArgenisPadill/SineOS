@@ -144,6 +144,7 @@ class MaintenanceWindow(Gtk.Window):
         page.pack_start(self.backup_row, False, False, 0)
 
         self.backup_button = Gtk.Button(label="Ejecutar respaldo externo")
+        self.backup_button.connect("clicked", self.on_run_backup)
         page.pack_start(self.backup_button, False, False, 0)
 
         self.details = Gtk.Expander(label="Detalles técnicos")
@@ -288,6 +289,23 @@ class MaintenanceWindow(Gtk.Window):
         self.report_detail.set_text(
             "Último reporte: " + (str(report["path"]) if report else "—")
         )
+
+    def on_run_backup(self, _button):
+        if not self.confirm(
+            "Ejecutar respaldo externo",
+            "SineOS realizará un respaldo completo, lo restaurará para "
+            "validarlo y, si todo es correcto, sincronizará la evidencia "
+            "con GitHub.",
+            "Ejecutar respaldo",
+        ):
+            return
+
+        self.message(
+            "Prueba de confirmación",
+            "Confirmación recibida correctamente. "
+            "Todavía no se ejecutó ningún respaldo.",
+        )
+
 
     def on_run_audit(self, _button):
         if not core.INTERACTIVE_AUDIT.exists():
