@@ -1940,6 +1940,35 @@ def validate_stirling_restore_functional(restored_repo):
     }
 
 
+def validate_functional_restore_suite(restored_repo, restored_staging):
+    validate_stateful_containers_stopped()
+
+    postgres = validate_postgres_restore_functional(
+        restored_staging
+    )
+
+    uptime = validate_uptime_restore_functional(
+        restored_repo
+    )
+
+    openwebui = validate_openwebui_restore_functional(
+        restored_repo
+    )
+
+    stirling = validate_stirling_restore_functional(
+        restored_repo
+    )
+
+    validate_stateful_containers_stopped()
+
+    return {
+        "postgres": postgres,
+        "uptime_kuma": uptime,
+        "open_webui": openwebui,
+        "stirling_pdf": stirling,
+    }
+
+
 STATEFUL_CONTAINERS = (
     "sineos-postgres",
     "sineos-open-webui",
