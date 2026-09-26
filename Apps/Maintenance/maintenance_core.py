@@ -456,6 +456,44 @@ Sincronización GitHub: VALIDADA""".format(
     )
 
 
+def write_backup_status(
+    event,
+    event_commit=None,
+    path=BACKUP_STATUS_FILE,
+):
+    target = Path(path)
+    content = target.read_text(encoding="utf-8")
+
+    status = (
+        backup_status_block_final(event, event_commit)
+        if event_commit
+        else backup_status_block_pending(event)
+    )
+
+    pattern = (
+        r"(## Último respaldo validado\s*\n\s*```text\n)"
+        r".*?"
+        r"(\n```)"
+    )
+
+    updated, count = re.subn(
+        pattern,
+        lambda match: match.group(1) + status + match.group(2),
+        content,
+        count=1,
+        flags=re.DOTALL,
+    )
+
+    if count != 1:
+        raise MaintenanceError(
+            "No se pudo localizar de forma única el bloque "
+            "Último respaldo validado."
+        )
+
+    target.write_text(updated, encoding="utf-8")
+    return target
+
+
 def run_backup_engine():
     cfg = backup_configuration()
 
