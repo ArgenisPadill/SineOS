@@ -340,7 +340,7 @@ class MaintenanceWindow(Gtk.Window):
     def backup_worker(self):
         try:
             result = core.run_and_register_backup()
-        except core.MaintenanceError as exc:
+        except Exception as exc:
             GLib.idle_add(
                 self.backup_finished_error,
                 str(exc),
@@ -363,11 +363,7 @@ class MaintenanceWindow(Gtk.Window):
         ):
             return
 
-        self.message(
-            "Prueba de confirmación",
-            "Confirmación recibida correctamente. "
-            "Todavía no se ejecutó ningún respaldo.",
-        )
+        self.start_backup_background()
 
 
     def on_run_audit(self, _button):
