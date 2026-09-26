@@ -811,6 +811,70 @@ def validate_restored_layout(restore_target, postgres_staging=None):
     }
 
 
+STATEFUL_CONTAINERS = (
+    "sineos-postgres",
+    "sineos-open-webui",
+    "sineos-uptime-kuma",
+    "sineos-stirling-pdf",
+)
+
+
+def inspect_container_state(container):
+    result = run([
+        "podman",
+        "inspect",
+        container,
+        "--format",
+        "{{.State.Status}}|{{.State.ExitCode}}|{{.ImageName}}",
+    ])
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or f"No se pudo inspeccionar el contenedor {container}."
+        )
+
+    parts = result.stdout.strip().split("|", 2)
+
+    if len(parts) != 3:
+        raise BackupError(
+            f"Estado inesperado para el contenedor {container}."
+        )
+
+    status, exit_code, image = parts
+
+    try:
+        exit_code = int(exit_code)
+    except ValueError as exc:
+        raise BackupError(
+            f"ExitCode inválido para el contenedor {container}."
+        ) from exc
+
+    return {
+        "container": container,
+        "status": status,
+        "exit_code": exit_code,
+        "image": image,
+    }
+
+
+def validate_stateful_containers_stopped():
+    states = {}
+
+    for container in STATEFUL_CONTAINERS:
+        state = inspect_container_state(container)
+        states[container] = state
+
+        if state["status"] != "exited" or state["exit_code"] != 0:
+            raise BackupError(
+                f"{container} debe estar detenido limpiamente "
+                f"antes del backup; estado={state.get("status")} "
+                f"ExitCode={state.get("exit_code")}."
+            )
+
+    return states
+
+
 def validate_git_state(repo_root):
     repo = Path(repo_root)
 
