@@ -9,15 +9,36 @@ from datetime import datetime
 from pathlib import Path
 
 
+APP_FILE = Path(__file__).resolve()
+REPO_ROOT = APP_FILE.parents[2]
+
+
 class BackupError(RuntimeError):
     pass
 
 
-def run(command, timeout=30):
+def run(command, timeout=30, cwd=None, env=None):
     try:
-        return subprocess.run(command, capture_output=True, text=True, timeout=timeout, check=False)
+        return subprocess.run(command, capture_output=True, text=True, timeout=timeout, check=False, cwd=str(cwd) if cwd else None, env=env)
     except (OSError, subprocess.TimeoutExpired) as exc:
         raise BackupError(str(exc)) from exc
+
+
+def git_remote_env():
+    env = dict(os.environ)
+    runtime_dir = Path(
+        env.get("XDG_RUNTIME_DIR") or f"/run/user/{os.getuid()}"
+    )
+    gcr_socket = runtime_dir / "gcr" / "ssh"
+
+    if gcr_socket.exists():
+        env["SSH_AUTH_SOCK"] = str(gcr_socket)
+
+    env["GIT_TERMINAL_PROMPT"] = "0"
+    env["SSH_ASKPASS_REQUIRE"] = "never"
+    env["GIT_SSH_COMMAND"] = "ssh -o BatchMode=yes"
+
+    return env
 
 
 def build_tag(moment=None):
@@ -215,7 +236,52 @@ def preflight(*, root, expected_uuid=None, expected_serial=None, expected_reposi
     }
 
 
+def validate_git_state(repo_root):
+    repo = Path(repo_root)
+
+    branch = run(["git", "branch", "--show-current"], cwd=repo)
+    if branch.returncode != 0 or branch.stdout.strip() != "main":
+        raise BackupError("La rama activa debe ser main.")
+
+    status = run(["git", "status", "--porcelain"], cwd=repo)
+    if status.returncode != 0:
+        raise BackupError("No se pudo consultar el estado Git.")
+    if status.stdout.strip():
+        raise BackupError("Git contiene cambios locales; el backup no comenzará.")
+
+    local = run(["git", "rev-parse", "HEAD"], cwd=repo)
+    if local.returncode != 0 or not local.stdout.strip():
+        raise BackupError("No se pudo identificar HEAD local.")
+
+    remote = run(
+        ["git", "ls-remote", "origin", "refs/heads/main"],
+        timeout=30,
+        cwd=repo,
+        env=git_remote_env(),
+    )
+    if remote.returncode != 0 or not remote.stdout.strip():
+        raise BackupError(
+            remote.stderr.strip()
+            or "No se pudo consultar origin/main."
+        )
+
+    local_head = local.stdout.strip()
+    remote_head = remote.stdout.split()[0]
+
+    if local_head != remote_head:
+        raise BackupError("HEAD local no coincide con origin/main.")
+
+    return {
+        "branch": "main",
+        "clean": True,
+        "local_head": local_head,
+        "remote_head": remote_head,
+        "synced": True,
+    }
+
+
 def execute_backup(*, root, expected_uuid=None, expected_serial=None, expected_repository_id=None):
+    validate_git_state(REPO_ROOT)
     preflight(
         root=root,
         expected_uuid=expected_uuid,
