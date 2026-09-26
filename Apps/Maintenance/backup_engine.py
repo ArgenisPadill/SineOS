@@ -2243,21 +2243,31 @@ def create_and_certify_backup(
         tag=tag,
     )
 
-    validate_git_state(REPO_ROOT)
+    snapshot_id = snapshot["snapshot_id"]
 
-    if current_git_head() != expected_head:
-        raise BackupError(
-            "El HEAD de SineOS cambió durante el backup; "
-            "el snapshot no será certificado."
+    try:
+        validate_git_state(REPO_ROOT)
+
+        if current_git_head() != expected_head:
+            raise BackupError(
+                "El HEAD de SineOS cambió durante el backup."
+            )
+
+        certification = certify_restic_snapshot(
+            root=final["root"],
+            password_file=final["password_file"],
+            snapshot_id=snapshot_id,
+            postgres_staging=staging,
+            expected_head=expected_head,
         )
 
-    certification = certify_restic_snapshot(
-        root=final["root"],
-        password_file=final["password_file"],
-        snapshot_id=snapshot["snapshot_id"],
-        postgres_staging=staging,
-        expected_head=expected_head,
-    )
+    except Exception as exc:
+        raise BackupError(
+            "Snapshot creado pero NO certificado. "
+            f"tag={tag} snapshot_id={snapshot_id}. "
+            "No borrar ni volver a ejecutar automáticamente. "
+            f"Error: {exc}"
+        ) from exc
 
     return {
         "tag": tag,
