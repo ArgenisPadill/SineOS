@@ -921,6 +921,7 @@ def validate_git_state(repo_root):
 
 def execute_backup(*, root, expected_uuid=None, expected_serial=None, expected_repository_id=None):
     validate_git_state(REPO_ROOT)
+    validate_stateful_containers_stopped()
     preflight(
         root=root,
         expected_uuid=expected_uuid,
