@@ -569,6 +569,123 @@ def validate_backup_git_gate():
     return git
 
 
+def commit_and_push_backup_files(paths, message):
+    git = git_sync_state()
+
+    if git["branch"] != "main":
+        raise MaintenanceError(
+            "La rama activa no es main."
+        )
+
+    if not git["synced"]:
+        raise MaintenanceError(
+            "HEAD local no coincide con origin/main."
+        )
+
+    expected = []
+
+    for item in paths:
+        path = Path(item).resolve()
+
+        try:
+            relative = path.relative_to(REPO_ROOT)
+        except ValueError as exc:
+            raise MaintenanceError(
+                "Se intentó registrar un archivo fuera del repositorio."
+            ) from exc
+
+        expected.append(str(relative))
+
+    expected_set = set(expected)
+
+    tracked = set(
+        run(["git", "diff", "--name-only"]).stdout.splitlines()
+    )
+
+    staged_before = set(
+        run([
+            "git", "diff", "--cached", "--name-only"
+        ]).stdout.splitlines()
+    )
+
+    untracked = set(
+        run([
+            "git", "ls-files",
+            "--others",
+            "--exclude-standard",
+        ]).stdout.splitlines()
+    )
+
+    current_changes = tracked | staged_before | untracked
+
+    if current_changes != expected_set:
+        raise MaintenanceError(
+            "Git contiene cambios distintos a los archivos "
+            "esperados del backup."
+        )
+
+    add = run(["git", "add", "--", *expected])
+
+    if add.returncode != 0:
+        raise MaintenanceError(
+            add.stderr.strip()
+            or "No se pudieron preparar los archivos del backup."
+        )
+
+    staged = set(
+        run([
+            "git", "diff", "--cached", "--name-only"
+        ]).stdout.splitlines()
+    )
+
+    if staged != expected_set:
+        run(["git", "reset", "--", *expected])
+        raise MaintenanceError(
+            "El área staged contiene archivos inesperados."
+        )
+
+    commit = run([
+        "git", "commit", "-m", message
+    ], timeout=60)
+
+    if commit.returncode != 0:
+        raise MaintenanceError(
+            commit.stderr.strip()
+            or commit.stdout.strip()
+            or "Falló git commit."
+        )
+
+    new_head = run([
+        "git", "rev-parse", "HEAD"
+    ]).stdout.strip()
+
+    push = run(
+        ["git", "push", "origin", "main"],
+        timeout=90,
+        env=git_remote_env(),
+    )
+
+    if push.returncode != 0:
+        raise MaintenanceError(
+            "El commit fue creado, pero el push falló. "
+            + (push.stderr.strip() or push.stdout.strip())
+        )
+
+    after = git_sync_state()
+
+    if (
+        not after["synced"]
+        or not after["clean"]
+        or after["local_head"] != new_head
+    ):
+        raise MaintenanceError(
+            "El push terminó, pero no se pudo certificar "
+            "Git limpio y sincronizado."
+        )
+
+    return new_head
+
+
 def run_backup_engine():
     cfg = backup_configuration()
 
