@@ -143,8 +143,7 @@ class MaintenanceWindow(Gtk.Window):
         self.backup_row.get_style_context().add_class("status-row")
         page.pack_start(self.backup_row, False, False, 0)
 
-        self.backup_button = Gtk.Button(label="Automatización pendiente TD-023")
-        self.backup_button.set_sensitive(False)
+        self.backup_button = Gtk.Button(label="Ejecutar respaldo externo")
         page.pack_start(self.backup_button, False, False, 0)
 
         self.details = Gtk.Expander(label="Detalles técnicos")
