@@ -686,6 +686,24 @@ def commit_and_push_backup_files(paths, message):
     return new_head
 
 
+def register_backup_event_commit_a(result):
+    validate_backup_git_gate()
+
+    event = backup_event_metadata(result)
+
+    write_backup_status(event)
+
+    event_commit = commit_and_push_backup_files(
+        [BACKUP_STATUS_FILE],
+        "backup: register certified external snapshot",
+    )
+
+    return {
+        "event": event,
+        "event_commit": event_commit,
+    }
+
+
 def run_backup_engine():
     cfg = backup_configuration()
 
