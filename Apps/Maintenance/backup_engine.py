@@ -524,6 +524,98 @@ def restic_backup_command(
     return command
 
 
+def create_restic_snapshot_command(
+    root,
+    password_file,
+    tag,
+    sources,
+    excludes,
+):
+    return restic_backup_command(
+        root,
+        password_file,
+        tag,
+        sources,
+        excludes,
+        dry_run=False,
+    )
+
+
+def create_restic_snapshot(
+    *,
+    root,
+    password_file,
+    postgres_staging,
+    tag,
+):
+    target = Path(root)
+    password = Path(password_file)
+    sources = backup_sources(postgres_staging)
+    excludes = backup_excludes()
+
+    before = restic_snapshot_count(target, password)
+
+    result = run(
+        create_restic_snapshot_command(
+            target,
+            password,
+            tag,
+            sources,
+            excludes,
+        ),
+        timeout=900,
+    )
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or result.stdout.strip()
+            or "Falló la creación del snapshot Restic."
+        )
+
+    after = restic_snapshot_count(target, password)
+
+    if after != before + 1:
+        raise BackupError(
+            f"Se esperaba exactamente un snapshot nuevo: {before} -> {after}."
+        )
+
+    snapshots = run([
+        "restic",
+        "-r", str(target),
+        "--password-file", str(password),
+        "--no-lock",
+        "snapshots",
+        "--json",
+        "--tag", tag,
+    ], timeout=120)
+
+    if snapshots.returncode != 0:
+        raise BackupError("No se pudo localizar el snapshot recién creado.")
+
+    try:
+        matches = json.loads(snapshots.stdout)
+    except json.JSONDecodeError as exc:
+        raise BackupError("Restic devolvió JSON inválido al buscar el snapshot.") from exc
+
+    if len(matches) != 1:
+        raise BackupError(
+            f"El tag {tag} debe identificar exactamente un snapshot."
+        )
+
+    snapshot_id = matches[0].get("id")
+    if not snapshot_id:
+        raise BackupError("El snapshot recién creado no tiene ID.")
+
+    return {
+        "snapshot_id": snapshot_id,
+        "tag": tag,
+        "snapshots_before": before,
+        "snapshots_after": after,
+        "output": result.stdout.strip(),
+    }
+
+
 def dry_run_backup(
     *,
     root,
