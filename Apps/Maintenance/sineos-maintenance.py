@@ -293,6 +293,7 @@ class MaintenanceWindow(Gtk.Window):
 
     def backup_finished_ok(self, result):
         self.backup_button.set_sensitive(True)
+        self.backup_button.set_label("Ejecutar respaldo externo")
 
         registration = result["registration"]
 
@@ -312,6 +313,7 @@ class MaintenanceWindow(Gtk.Window):
 
     def backup_finished_error(self, detail):
         self.backup_button.set_sensitive(True)
+        self.backup_button.set_label("Ejecutar respaldo externo")
 
         self.message(
             "El respaldo no se completó",
@@ -321,6 +323,18 @@ class MaintenanceWindow(Gtk.Window):
 
         self.refresh()
         return False
+
+
+    def start_backup_background(self):
+        self.backup_button.set_sensitive(False)
+        self.backup_button.set_label("Respaldo en progreso...")
+
+        worker = threading.Thread(
+            target=self.backup_worker,
+            name="sineos-backup",
+            daemon=False,
+        )
+        worker.start()
 
 
     def backup_worker(self):
