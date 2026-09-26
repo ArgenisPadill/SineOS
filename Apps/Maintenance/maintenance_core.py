@@ -744,6 +744,47 @@ def register_backup_event_commit_b(commit_a_result):
     }
 
 
+def finalize_backup_state(commit_b_result):
+    event = commit_b_result["event"]
+    event_commit = str(
+        commit_b_result["event_commit"]
+    ).strip()
+    sync_commit = str(
+        commit_b_result["sync_commit"]
+    ).strip()
+
+    if not re.fullmatch(r"[0-9a-f]{40}", event_commit):
+        raise MaintenanceError(
+            "El commit A no tiene un hash Git válido."
+        )
+
+    if not re.fullmatch(r"[0-9a-f]{40}", sync_commit):
+        raise MaintenanceError(
+            "El commit B no tiene un hash Git válido."
+        )
+
+    git = validate_backup_git_gate()
+
+    if git["local_head"] != sync_commit:
+        raise MaintenanceError(
+            "HEAD sincronizado no coincide con el commit B."
+        )
+
+    state = load_state()
+
+    state["backup"].update({
+        "enabled": True,
+        "last_validated": event["date"].isoformat(),
+        "event_commit": event_commit,
+        "sync_commit": sync_commit,
+        "tag": event["tag"],
+    })
+
+    save_state(state)
+
+    return state["backup"]
+
+
 def run_backup_engine():
     cfg = backup_configuration()
 
