@@ -54,6 +54,7 @@ class StatusRow(Gtk.Box):
 class MaintenanceWindow(Gtk.Window):
     def __init__(self):
         super().__init__(title=APP_TITLE)
+        self.backup_running = False
         self.set_default_size(680, 570)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_resizable(False)
@@ -256,15 +257,73 @@ class MaintenanceWindow(Gtk.Window):
 
         backup = info["backup"]
         cfg = backup["config"]
-        if not backup["enabled"]:
+        pending_backup = core.pending_backup_registration()
+
+        backup_ready = bool(
+            backup["enabled"]
+            and cfg["valid_name"]
+            and cfg["exists"]
+            and cfg["uuid"]
+            and cfg["serial"]
+            and cfg["repository_id"]
+            and git["clean"]
+            and git["synced"]
+            and not pending_backup
+            and not self.backup_running
+        )
+
+        self.backup_button.set_sensitive(backup_ready)
+
+        if self.backup_running:
+            self.backup_button.set_label("Respaldo en progreso...")
+        else:
+            self.backup_button.set_label("Ejecutar respaldo externo")
+
+        if self.backup_running:
             self.backup_row.set_state(
-                "El respaldo externo no está habilitado en esta instalación. Automatización pendiente en TD-023.",
-                "PENDIENTE TD-023", "badge-neutral"
+                "El respaldo externo se está ejecutando y validando.",
+                "EN PROGRESO", "badge-pending"
+            )
+        elif pending_backup:
+            self.backup_row.set_state(
+                "Existe un respaldo certificado pendiente de registrar: "
+                f"{pending_backup['tag']} "
+                f"({pending_backup['snapshot_id'][:8]}).",
+                "CIERRE PENDIENTE", "badge-warn"
+            )
+        elif not backup["enabled"]:
+            self.backup_row.set_state(
+                "El respaldo externo no está habilitado en esta instalación.",
+                "DESHABILITADO", "badge-neutral"
             )
         elif not cfg["valid_name"]:
             self.backup_row.set_state(
                 "SINEOS_BACKUP_ROOT debe terminar exactamente en SineOsBackups.",
                 "CONFIGURACIÓN", "badge-warn"
+            )
+        elif not cfg["exists"]:
+            self.backup_row.set_state(
+                "El destino SineOsBackups no está disponible.",
+                "SIN DESTINO", "badge-warn"
+            )
+        elif not (
+            cfg["uuid"]
+            and cfg["serial"]
+            and cfg["repository_id"]
+        ):
+            self.backup_row.set_state(
+                "Faltan identificadores de seguridad del respaldo externo.",
+                "CONFIGURACIÓN", "badge-warn"
+            )
+        elif not git["clean"]:
+            self.backup_row.set_state(
+                "Git contiene cambios sin registrar. El respaldo está bloqueado.",
+                "GIT PENDIENTE", "badge-warn"
+            )
+        elif not git["synced"]:
+            self.backup_row.set_state(
+                "Git local y GitHub no están sincronizados.",
+                "GIT PENDIENTE", "badge-warn"
             )
         elif backup["overdue"]:
             self.backup_row.set_state(
@@ -292,6 +351,7 @@ class MaintenanceWindow(Gtk.Window):
         )
 
     def backup_finished_ok(self, result):
+        self.backup_running = False
         self.backup_button.set_sensitive(True)
         self.backup_button.set_label("Ejecutar respaldo externo")
 
@@ -312,6 +372,7 @@ class MaintenanceWindow(Gtk.Window):
 
 
     def backup_finished_error(self, detail):
+        self.backup_running = False
         self.backup_button.set_sensitive(True)
         self.backup_button.set_label("Ejecutar respaldo externo")
 
@@ -326,6 +387,7 @@ class MaintenanceWindow(Gtk.Window):
 
 
     def start_backup_background(self):
+        self.backup_running = True
         self.backup_button.set_sensitive(False)
         self.backup_button.set_label("Respaldo en progreso...")
 
