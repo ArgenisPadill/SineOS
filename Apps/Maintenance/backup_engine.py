@@ -466,6 +466,113 @@ def backup_excludes():
     ]
 
 
+def restic_snapshot_count(root, password_file):
+    result = run([
+        "restic",
+        "-r", str(root),
+        "--password-file", str(password_file),
+        "--no-lock",
+        "snapshots",
+        "--json",
+    ], timeout=120)
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or "No se pudo consultar los snapshots Restic."
+        )
+
+    try:
+        snapshots = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise BackupError("Restic devolvió JSON inválido.") from exc
+
+    return len(snapshots)
+
+
+def restic_backup_command(
+    root,
+    password_file,
+    tag,
+    sources,
+    excludes,
+    dry_run=False,
+):
+    command = [
+        "podman", "unshare",
+        "restic",
+        "-r", str(root),
+        "--password-file", str(password_file),
+    ]
+
+    if dry_run:
+        command.append("--no-lock")
+
+    command.extend([
+        "backup",
+        "--host", "sineos",
+        "--tag", tag,
+    ])
+
+    if dry_run:
+        command.append("--dry-run")
+
+    for excluded in excludes:
+        command.extend(["--exclude", str(excluded)])
+
+    command.extend(str(source) for source in sources)
+    return command
+
+
+def dry_run_backup(
+    *,
+    root,
+    password_file,
+    postgres_staging,
+    tag=None,
+):
+    target = Path(root)
+    password = Path(password_file)
+    sources = backup_sources(postgres_staging)
+    excludes = backup_excludes()
+    tag = tag or ("SineOsBackups-DRYRUN-" + datetime.now().strftime("%d%m%y-%H%M"))
+
+    before = restic_snapshot_count(target, password)
+
+    result = run(
+        restic_backup_command(
+            target,
+            password,
+            tag,
+            sources,
+            excludes,
+            dry_run=True,
+        ),
+        timeout=600,
+    )
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or result.stdout.strip()
+            or "Falló Restic dry-run."
+        )
+
+    after = restic_snapshot_count(target, password)
+
+    if before != after:
+        raise BackupError(
+            "El dry-run alteró inesperadamente el número de snapshots."
+        )
+
+    return {
+        "tag": tag,
+        "snapshots_before": before,
+        "snapshots_after": after,
+        "output": result.stdout.strip(),
+    }
+
+
 def validate_git_state(repo_root):
     repo = Path(repo_root)
 
