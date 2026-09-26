@@ -573,6 +573,152 @@ def dry_run_backup(
     }
 
 
+def restic_check(root, password_file):
+    result = run([
+        "restic",
+        "-r", str(root),
+        "--password-file", str(password_file),
+        "--no-lock",
+        "check",
+    ], timeout=600)
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or result.stdout.strip()
+            or "Falló restic check."
+        )
+
+    return {
+        "ok": True,
+        "output": (result.stdout + result.stderr).strip(),
+    }
+
+
+def create_restore_target(base=None):
+    restore_root = Path(
+        base
+        or "~/.local/state/sineos/backup/restore-tests"
+    ).expanduser()
+
+    restore_root.mkdir(parents=True, exist_ok=True)
+    os.chmod(restore_root, 0o700)
+
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    target = restore_root / f"td023-{stamp}"
+
+    if target.exists():
+        raise BackupError("El destino temporal de restore ya existe.")
+
+    target.mkdir(mode=0o700)
+    return target
+
+
+def restore_snapshot(
+    *,
+    root,
+    password_file,
+    snapshot_id,
+    restore_target=None,
+):
+    target = (
+        Path(restore_target).expanduser()
+        if restore_target
+        else create_restore_target()
+    )
+
+    result = run([
+        "podman", "unshare",
+        "restic",
+        "-r", str(root),
+        "--password-file", str(password_file),
+        "--no-lock",
+        "restore", snapshot_id,
+        "--target", str(target),
+        "--verify",
+    ], timeout=900)
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or result.stdout.strip()
+            or "Falló el restore de verificación."
+        )
+
+    return {
+        "snapshot": snapshot_id,
+        "target": str(target),
+        "output": (result.stdout + result.stderr).strip(),
+    }
+
+
+def validate_restored_layout(restore_target, postgres_staging=None):
+    target = Path(restore_target).expanduser()
+    live_home = Path.home().resolve()
+    restored_home = target / "home" / live_home.name
+
+    required = [
+        restored_home / "Workspace" / "SineOS",
+        restored_home / "Obsidian" / "SineOS",
+        restored_home / ".config" / "sineos",
+        restored_home / ".local" / "state" / "sineos-maintenance",
+    ]
+
+    missing = [str(item) for item in required if not item.exists()]
+    if missing:
+        raise BackupError(
+            "Restore incompleto. Faltan: " + ", ".join(missing)
+        )
+
+    forbidden = [
+        restored_home / ".config" / "sineos" / "restic-password",
+        restored_home / "Workspace" / "SineOS"
+        / "Containers" / "volumes" / "postgres" / "data",
+    ]
+
+    present = [str(item) for item in forbidden if item.exists()]
+    if present:
+        raise BackupError(
+            "El restore contiene rutas que debían estar excluidas: "
+            + ", ".join(present)
+        )
+
+    restored_staging = None
+
+    if postgres_staging:
+        staging = Path(postgres_staging).expanduser().resolve()
+
+        try:
+            relative = staging.relative_to(live_home)
+        except ValueError as exc:
+            raise BackupError(
+                "El staging PostgreSQL no pertenece al HOME actual."
+            ) from exc
+
+        restored_staging = restored_home / relative
+
+        for name in ("database.dump", "globals.sql", "SHA256SUMS"):
+            if not (restored_staging / name).is_file():
+                raise BackupError(
+                    f"Falta {name} en el staging PostgreSQL restaurado."
+                )
+
+    return {
+        "target": str(target),
+        "repository": str(required[0]),
+        "vault": str(required[1]),
+        "private_config": str(required[2]),
+        "maintenance_state": str(required[3]),
+        "postgres_staging": (
+            str(restored_staging)
+            if restored_staging
+            else None
+        ),
+        "restic_password_excluded": True,
+        "pgdata_excluded": True,
+    }
+
+
 def validate_git_state(repo_root):
     repo = Path(repo_root)
 
