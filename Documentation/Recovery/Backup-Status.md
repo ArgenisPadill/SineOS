@@ -5,12 +5,12 @@ Este archivo es actualizado únicamente por el flujo de respaldo validado.
 ## Último respaldo validado
 
 ```text
-Estado: VALIDADO
-Fecha: 24-09-2026
-Tag: SineOsBackups-240926-2334
-Snapshot Restic: 536d25fd
-Commit del evento: daeb26661a6192512f48c4f6688aa6b0166904f6
-Sincronización GitHub: VALIDADA
+Estado: VALIDADO TÉCNICAMENTE / CIERRE GIT PENDIENTE
+Fecha: 25-09-2026
+Tag: SineOsBackups-250926-2142
+Snapshot Restic: ac035822
+Commit del evento: PENDIENTE DE COMMIT A
+Sincronización GitHub: PENDIENTE DE COMMIT B
 ```
 
 ## Regla de validación
