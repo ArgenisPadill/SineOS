@@ -418,6 +418,54 @@ def validate_postgres_staging(
     }
 
 
+def backup_sources(postgres_staging):
+    home = Path.home()
+    staging = Path(postgres_staging).expanduser().resolve()
+    expected_parent = (
+        home / ".local" / "state" / "sineos" / "backup" / "staging"
+    ).resolve()
+
+    if staging.parent != expected_parent:
+        raise BackupError(
+            "El staging PostgreSQL no pertenece al directorio autorizado."
+        )
+
+    if not staging.name.startswith("postgresql-"):
+        raise BackupError("Nombre de staging PostgreSQL inesperado.")
+
+    sources = [
+        REPO_ROOT,
+        home / "Obsidian" / "SineOS",
+        home / ".config" / "sineos",
+        home / ".local" / "state" / "sineos" / "health",
+        home / ".local" / "state" / "sineos" / "security",
+        home / ".local" / "state" / "sineos-maintenance",
+        staging,
+    ]
+
+    missing = [str(item) for item in sources if not item.exists()]
+    if missing:
+        raise BackupError(
+            "Faltan fuentes de backup: " + ", ".join(missing)
+        )
+
+    return sources
+
+
+def backup_excludes():
+    home = Path.home()
+
+    return [
+        home / ".config" / "sineos" / "restic-password",
+        REPO_ROOT / "Containers" / "volumes" / "postgres" / "data",
+        REPO_ROOT / "Containers" / "volumes" / "open-webui" / "data" / "cache",
+        REPO_ROOT / "Containers" / "volumes" / "stirling-pdf" / "configs" / "cache",
+        REPO_ROOT / "Containers" / "volumes" / "stirling-pdf" / "logs",
+        REPO_ROOT / "Containers" / "volumes" / "stirling-pdf" / "tessdata",
+        home / "Obsidian" / "SineOS" / ".opencode" / "node_modules",
+    ]
+
+
 def validate_git_state(repo_root):
     repo = Path(repo_root)
 
