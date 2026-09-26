@@ -704,6 +704,46 @@ def register_backup_event_commit_a(result):
     }
 
 
+def register_backup_event_commit_b(commit_a_result):
+    validate_backup_git_gate()
+
+    event = commit_a_result["event"]
+    event_commit = str(
+        commit_a_result["event_commit"]
+    ).strip()
+
+    if not re.fullmatch(r"[0-9a-f]{40}", event_commit):
+        raise MaintenanceError(
+            "El commit A no tiene un hash Git válido."
+        )
+
+    write_backup_status(
+        event,
+        event_commit=event_commit,
+    )
+
+    log_path = write_backup_log(
+        event,
+        event_commit,
+        BACKUP_STATUS_FILE.parent / "Backup-Log",
+    )
+
+    sync_commit = commit_and_push_backup_files(
+        [
+            BACKUP_STATUS_FILE,
+            log_path,
+        ],
+        "backup: synchronize certified backup evidence",
+    )
+
+    return {
+        "event": event,
+        "event_commit": event_commit,
+        "sync_commit": sync_commit,
+        "log_path": str(log_path),
+    }
+
+
 def run_backup_engine():
     cfg = backup_configuration()
 
