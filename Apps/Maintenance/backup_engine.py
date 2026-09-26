@@ -1969,6 +1969,159 @@ def validate_functional_restore_suite(restored_repo, restored_staging):
     }
 
 
+def validate_restored_git_head(restored_repo, expected_head):
+    repo = Path(restored_repo).resolve()
+
+    if not repo.is_dir():
+        raise BackupError(
+            "No existe el repositorio SineOS restaurado."
+        )
+
+    result = run([
+        "git", "-C", str(repo),
+        "rev-parse", "HEAD",
+    ])
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or "No se pudo obtener el HEAD del repositorio restaurado."
+        )
+
+    actual = result.stdout.strip()
+
+    if actual != expected_head:
+        raise BackupError(
+            "El HEAD restaurado no coincide con el esperado: "
+            + actual
+        )
+
+    return {
+        "expected": expected_head,
+        "actual": actual,
+        "match": True,
+    }
+
+
+def certify_restic_snapshot(
+    *,
+    root,
+    password_file,
+    snapshot_id,
+    postgres_staging,
+    expected_head,
+):
+    validate_stateful_containers_stopped()
+
+    check = restic_check(
+        root,
+        password_file,
+    )
+
+    restored = restore_snapshot(
+        root=root,
+        password_file=password_file,
+        snapshot_id=snapshot_id,
+    )
+
+    layout = validate_restored_layout(
+        restored["target"],
+        postgres_staging,
+    )
+
+    git_head = validate_restored_git_head(
+        layout["repository"],
+        expected_head,
+    )
+
+    postgres = validate_postgres_staging(
+        layout["postgres_staging"]
+    )
+
+    postgres_match = validate_postgres_restore_matches_source(
+        postgres_staging,
+        layout["postgres_staging"],
+    )
+
+    functional = validate_functional_restore_suite(
+        layout["repository"],
+        layout["postgres_staging"],
+    )
+
+    validate_stateful_containers_stopped()
+
+    return {
+        "snapshot_id": snapshot_id,
+        "restic_check": check["ok"],
+        "restore_target": restored["target"],
+        "layout": layout,
+        "git_head": git_head,
+        "postgres_staging": postgres,
+        "postgres_match": postgres_match,
+        "functional": functional,
+        "certified": True,
+    }
+
+
+def validate_postgres_restore_matches_source(
+    source_staging,
+    restored_staging,
+):
+    source = Path(source_staging).resolve()
+    restored = Path(restored_staging).resolve()
+
+    files = (
+        "database.dump",
+        "globals.sql",
+        "SHA256SUMS",
+    )
+
+    for name in files:
+        original = source / name
+        recovered = restored / name
+
+        if not original.is_file():
+            raise BackupError(
+                f"Falta {name} en el staging PostgreSQL original."
+            )
+
+        if not recovered.is_file():
+            raise BackupError(
+                f"Falta {name} en el staging PostgreSQL restaurado."
+            )
+
+        original_hash = run([
+            "sha256sum", str(original)
+        ])
+
+        recovered_hash = run([
+            "sha256sum", str(recovered)
+        ])
+
+        if original_hash.returncode != 0:
+            raise BackupError(
+                f"No se pudo calcular SHA256 original de {name}."
+            )
+
+        if recovered_hash.returncode != 0:
+            raise BackupError(
+                f"No se pudo calcular SHA256 restaurado de {name}."
+            )
+
+        if (
+            original_hash.stdout.split()[0]
+            != recovered_hash.stdout.split()[0]
+        ):
+            raise BackupError(
+                f"{name} restaurado no coincide con el original."
+            )
+
+    return {
+        "match": True,
+        "files": list(files),
+    }
+
+
 STATEFUL_CONTAINERS = (
     "sineos-postgres",
     "sineos-open-webui",
