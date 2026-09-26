@@ -1568,6 +1568,378 @@ def validate_openwebui_restore_functional(restored_repo):
     }
 
 
+def cleanup_stirling_test_copy(work):
+    result = run(
+        ["podman", "unshare", "rm", "-rf", str(Path(work).resolve())],
+        timeout=120,
+    )
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or "No se pudo eliminar la copia temporal de Stirling PDF."
+        )
+
+
+def prepare_stirling_test_copy(restored_repo):
+    repo = Path(restored_repo).resolve()
+    source = repo / "Containers/volumes/stirling-pdf"
+
+    if not source.is_dir():
+        raise BackupError(
+            "No existen los datos restaurados de Stirling PDF."
+        )
+
+    database = source / "configs/stirling-pdf-DB-2.3.232.mv.db"
+
+    if not database.is_file():
+        raise BackupError(
+            "No existe la base H2 restaurada de Stirling PDF."
+        )
+
+    root = (
+        Path.home()
+        / ".local/state/sineos/backup/functional-tests"
+    )
+    root.mkdir(parents=True, exist_ok=True)
+    root.chmod(0o700)
+
+    work = root / ("stirling-pdf-" + str(time.time_ns()))
+    work.mkdir(mode=0o700)
+
+    copied = run([
+        "podman", "unshare",
+        "cp", "-a",
+        str(source) + "/.",
+        str(work) + "/",
+    ], timeout=120)
+
+    if copied.returncode != 0:
+        cleanup_stirling_test_copy(work)
+        raise BackupError(
+            copied.stderr.strip()
+            or "No se pudieron copiar los datos de Stirling PDF."
+        )
+
+    created = run([
+        "podman", "unshare", "mkdir", "-p",
+        str(work / "configs/cache"),
+        str(work / "logs"),
+        str(work / "tessdata"),
+    ], timeout=60)
+
+    if created.returncode != 0:
+        cleanup_stirling_test_copy(work)
+        raise BackupError(
+            created.stderr.strip()
+            or "No se pudieron recrear los directorios excluidos de Stirling."
+        )
+
+    return {
+        "source": str(source),
+        "work": str(work),
+        "database": str(database),
+    }
+
+
+def cleanup_stirling_test_container(container):
+    result = run(
+        ["podman", "rm", "-f", container],
+        timeout=60,
+    )
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or "No se pudo eliminar el contenedor temporal de Stirling PDF."
+        )
+
+
+def start_stirling_test_container(work):
+    work = Path(work).resolve()
+
+    if not work.is_dir():
+        raise BackupError(
+            "No existe la copia temporal de Stirling PDF."
+        )
+
+    production = inspect_container_state("sineos-stirling-pdf")
+
+    if production["status"] != "exited" or production["exit_code"] != 0:
+        raise BackupError(
+            "sineos-stirling-pdf debe estar detenido limpiamente."
+        )
+
+    container = "sineos-td023-stirling-" + str(time.time_ns())
+
+    started = run([
+        "podman", "run", "-d",
+        "--name", container,
+        "--network", "none",
+        "-e", "FAT_DOCKER=true",
+        "-e", "UMASK=022",
+        "-e", "STIRLING_TEMPFILES_DIRECTORY=/tmp/stirling-pdf",
+        "-e", "STIRLING_AOT_ENABLE=false",
+        "-e", "PUID=1000",
+        "-e", "PGID=1000",
+        "-e", "SECURITY_ENABLELOGIN=false",
+        "-e", "TESS_BASE_PATH=/usr/share/tesseract-ocr/5/tessdata",
+        "-e", "STIRLING_JVM_PROFILE=balanced",
+        "-e", "INSTALL_BOOK_AND_ADVANCED_HTML_OPS=false",
+        "-e", "DISABLE_ADDITIONAL_FEATURES=false",
+        "-e", "SYSTEM_DEFAULTLOCALE=es-ES",
+        "-v", str(work / "customFiles") + ":/customFiles",
+        "-v", str(work / "pipeline") + ":/pipeline",
+        "-v", str(work / "tessdata") + ":/usr/share/tessdata",
+        "-v", str(work / "configs") + ":/configs",
+        "-v", str(work / "logs") + ":/logs",
+        production["image"],
+    ], timeout=120)
+
+    if started.returncode != 0:
+        cleanup_stirling_test_container(container)
+        raise BackupError(
+            started.stderr.strip()
+            or "No se pudo iniciar Stirling PDF temporal."
+        )
+
+    return {
+        "container": container,
+        "image": production["image"],
+    }
+
+
+def wait_stirling_test_http(container, attempts=120):
+    script = (
+        "import socket,sys;"
+        "s=socket.create_connection((sys.argv[1],int(sys.argv[2])),3);"
+        "s.settimeout(3);"
+        "s.sendall(sys.argv[3].encode());"
+        "data=s.recv(256).decode();"
+        "s.close();"
+        "lines=data.splitlines();"
+        "print(lines[0] if lines else sys.argv[4])"
+    )
+
+    request = (
+        "GET / HTTP/1.0\r\n"
+        "Host: localhost\r\n"
+        "Connection: close\r\n\r\n"
+    )
+
+    for _ in range(attempts):
+        probe = run([
+            "podman", "exec", container,
+            "python3", "-c", script,
+            "127.0.0.1",
+            "8080",
+            request,
+            "",
+        ], timeout=10)
+
+        if probe.returncode == 0:
+            lines = probe.stdout.strip().splitlines()
+
+            if lines:
+                status = lines[-1]
+                parts = status.split()
+
+                if (
+                    len(parts) >= 2
+                    and parts[0].startswith("HTTP/")
+                    and parts[1] in (
+                        "200", "301", "302",
+                        "303", "307", "308",
+                    )
+                ):
+                    return status
+
+        state = run([
+            "podman", "inspect", container,
+            "--format", "{{.State.Running}}",
+        ])
+
+        if state.returncode != 0 or state.stdout.strip() != "true":
+            logs = run([
+                "podman", "logs", "--tail", "100", container,
+            ], timeout=30)
+
+            raise BackupError(
+                "Stirling PDF temporal terminó durante el arranque. "
+                + (logs.stdout.strip() or logs.stderr.strip())
+            )
+
+        time.sleep(1)
+
+    raise BackupError(
+        "Stirling PDF temporal no respondió por HTTP a tiempo."
+    )
+
+
+def validate_stirling_test_database(container):
+    result = run([
+        "podman", "exec", container,
+        "test", "-s",
+        "/configs/stirling-pdf-DB-2.3.232.mv.db",
+    ], timeout=30)
+
+    if result.returncode != 0:
+        raise BackupError(
+            "La base H2 restaurada de Stirling PDF no está disponible."
+        )
+
+    return True
+
+
+def stop_stirling_test_container(container):
+    stopped = run(
+        ["podman", "stop", "-t", "30", container],
+        timeout=60,
+    )
+
+    if stopped.returncode != 0:
+        raise BackupError(
+            stopped.stderr.strip()
+            or "Stirling PDF temporal no pudo detenerse limpiamente."
+        )
+
+    state = run([
+        "podman", "inspect", container,
+        "--format", "{{.State.ExitCode}}",
+    ])
+
+    if state.returncode != 0 or state.stdout.strip() != "0":
+        raise BackupError(
+            "Stirling PDF temporal terminó con ExitCode distinto de 0."
+        )
+
+    return 0
+
+
+def validate_stirling_restore_functional(restored_repo):
+    before = inspect_container_state("sineos-stirling-pdf")
+
+    if before["status"] != "exited" or before["exit_code"] != 0:
+        raise BackupError(
+            "sineos-stirling-pdf debe estar detenido limpiamente."
+        )
+
+    copy = None
+    container = None
+
+    try:
+        copy = prepare_stirling_test_copy(restored_repo)
+
+        source = Path(copy["source"]).resolve()
+        source_database = (
+            source / "configs/stirling-pdf-DB-2.3.232.mv.db"
+        )
+
+        files_before = run([
+            "podman", "unshare", "find",
+            str(source), "-type", "f",
+        ])
+
+        if files_before.returncode != 0:
+            raise BackupError(
+                "No se pudo inspeccionar el restore de Stirling PDF."
+            )
+
+        source_files_before = files_before.stdout.splitlines()
+
+        hash_before = run([
+            "podman", "unshare", "sha256sum",
+            str(source_database),
+        ])
+
+        if hash_before.returncode != 0:
+            raise BackupError(
+                "No se pudo calcular el hash de la base H2."
+            )
+
+        database_hash_before = hash_before.stdout.split()[0]
+
+        started = start_stirling_test_container(copy["work"])
+        container = started["container"]
+
+        http_initial = wait_stirling_test_http(
+            container,
+            attempts=120,
+        )
+
+        validate_stirling_test_database(container)
+
+        time.sleep(15)
+
+        http_stable = wait_stirling_test_http(
+            container,
+            attempts=1,
+        )
+
+        exit_code = stop_stirling_test_container(container)
+
+    finally:
+        if container:
+            cleanup_stirling_test_container(container)
+
+        if copy:
+            cleanup_stirling_test_copy(copy["work"])
+
+    files_after = run([
+        "podman", "unshare", "find",
+        str(source), "-type", "f",
+    ])
+
+    if files_after.returncode != 0:
+        raise BackupError(
+            "No se pudo verificar el restore original de Stirling PDF."
+        )
+
+    source_files_after = files_after.stdout.splitlines()
+
+    hash_after = run([
+        "podman", "unshare", "sha256sum",
+        str(source_database),
+    ])
+
+    if hash_after.returncode != 0:
+        raise BackupError(
+            "No se pudo verificar la base H2 original."
+        )
+
+    database_hash_after = hash_after.stdout.split()[0]
+
+    if len(source_files_before) != len(source_files_after):
+        raise BackupError(
+            "Cambió el número de archivos del restore original de Stirling."
+        )
+
+    if database_hash_before != database_hash_after:
+        raise BackupError(
+            "Cambió la base H2 del restore original de Stirling."
+        )
+
+    after = inspect_container_state("sineos-stirling-pdf")
+
+    if (
+        after["status"] != before["status"]
+        or after["exit_code"] != before["exit_code"]
+    ):
+        raise BackupError(
+            "Cambió el estado de Stirling PDF de producción."
+        )
+
+    return {
+        "http_initial": http_initial,
+        "http_stable": http_stable,
+        "h2_database": True,
+        "temporary_exit_code": exit_code,
+        "restored_files": len(source_files_after),
+        "production_before": before["status"],
+        "production_after": after["status"],
+    }
+
+
 STATEFUL_CONTAINERS = (
     "sineos-postgres",
     "sineos-open-webui",
