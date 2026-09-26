@@ -494,6 +494,60 @@ def write_backup_status(
     return target
 
 
+def backup_log_content(event, event_commit):
+    if not re.fullmatch(r"[0-9a-f]{40}", event_commit):
+        raise MaintenanceError(
+            "El commit del evento no tiene un hash Git válido."
+        )
+
+    lines = [
+        "# SineOS — Respaldo externo validado",
+        "",
+        "Fecha: " + event["date"].strftime("%d-%m-%Y"),
+        "",
+        "```text",
+        "Tag SineOS: " + event["tag"],
+        "Snapshot Restic: " + event["snapshot_short"],
+        "Commit del evento: " + event_commit,
+        "Resultado Restic: VALIDADO",
+        "Resultado restic check: sin errores",
+        "Resultado restore: VALIDADO",
+        "Knowledge Vault: VALIDADO",
+        "PostgreSQL: VALIDADO FUNCIONALMENTE",
+        "Uptime Kuma: VALIDADO FUNCIONALMENTE",
+        "Open WebUI: VALIDADO FUNCIONALMENTE",
+        "Stirling PDF: VALIDADO FUNCIONALMENTE",
+        "Estado: VALIDADO",
+        "```",
+        "",
+        "El snapshot fue restaurado a una ubicación temporal y su contenido fue verificado antes de aprobar el respaldo.",
+        "",
+        "El hash del commit que contiene esta bitácora no se escribe dentro del propio archivo para evitar autorreferencia.",
+        "",
+    ]
+
+    return "\n".join(lines)
+
+
+def write_backup_log(event, event_commit, directory):
+    target_dir = Path(directory)
+    target_dir.mkdir(parents=True, exist_ok=True)
+
+    target = target_dir / f"Respaldo-{event_commit}.md"
+
+    if target.exists():
+        raise MaintenanceError(
+            "Ya existe una bitácora para este commit del evento."
+        )
+
+    target.write_text(
+        backup_log_content(event, event_commit),
+        encoding="utf-8",
+    )
+
+    return target
+
+
 def run_backup_engine():
     cfg = backup_configuration()
 
