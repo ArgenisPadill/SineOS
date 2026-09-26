@@ -404,6 +404,58 @@ def update_backup_enabled_from_config():
     return state
 
 
+def backup_event_metadata(result):
+    certification = result.get("certification") or {}
+
+    if certification.get("certified") is not True:
+        raise MaintenanceError(
+            "El resultado del backup no está certificado."
+        )
+
+    tag = str(result.get("tag") or "").strip()
+    snapshot = result.get("snapshot") or {}
+    snapshot_id = str(snapshot.get("snapshot_id") or "").strip()
+
+    if not tag or not snapshot_id:
+        raise MaintenanceError(
+            "El resultado certificado no contiene tag o snapshot."
+        )
+
+    return {
+        "date": date.today(),
+        "tag": tag,
+        "snapshot_id": snapshot_id,
+        "snapshot_short": snapshot_id[:8],
+    }
+
+
+def backup_status_block_pending(event):
+    return """Estado: VALIDADO TÉCNICAMENTE / CIERRE GIT PENDIENTE
+Fecha: {date}
+Tag: {tag}
+Snapshot Restic: {snapshot}
+Commit del evento: PENDIENTE DE COMMIT A
+Sincronización GitHub: PENDIENTE DE COMMIT B""".format(
+        date=event["date"].strftime("%d-%m-%Y"),
+        tag=event["tag"],
+        snapshot=event["snapshot_short"],
+    )
+
+
+def backup_status_block_final(event, event_commit):
+    return """Estado: VALIDADO
+Fecha: {date}
+Tag: {tag}
+Snapshot Restic: {snapshot}
+Commit del evento: {commit}
+Sincronización GitHub: VALIDADA""".format(
+        date=event["date"].strftime("%d-%m-%Y"),
+        tag=event["tag"],
+        snapshot=event["snapshot_short"],
+        commit=event_commit,
+    )
+
+
 def run_backup_engine():
     cfg = backup_configuration()
 
