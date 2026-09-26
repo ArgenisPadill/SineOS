@@ -8,6 +8,8 @@ import subprocess
 from datetime import date, datetime
 from pathlib import Path
 
+import backup_engine
+
 APP_FILE = Path(__file__).resolve()
 REPO_ROOT = APP_FILE.parents[2]
 STATE_DIR = Path.home() / ".local" / "state" / "sineos-maintenance"
@@ -400,6 +402,35 @@ def update_backup_enabled_from_config():
     state["backup"]["enabled"] = backup_configuration()["enabled"]
     save_state(state)
     return state
+
+
+def run_backup_engine():
+    cfg = backup_configuration()
+
+    if not cfg["enabled"]:
+        raise MaintenanceError(
+            "El respaldo externo no está habilitado."
+        )
+
+    if not cfg["root"] or not cfg["valid_name"]:
+        raise MaintenanceError(
+            "SINEOS_BACKUP_ROOT no es válido."
+        )
+
+    if not cfg["exists"]:
+        raise MaintenanceError(
+            "El destino de respaldo no está disponible."
+        )
+
+    try:
+        return backup_engine.execute_backup(
+            root=cfg["root"],
+            expected_uuid=cfg["uuid"],
+            expected_serial=cfg["serial"],
+            expected_repository_id=cfg["repository_id"],
+        )
+    except backup_engine.BackupError as exc:
+        raise MaintenanceError(str(exc)) from exc
 
 
 def notification_message():
