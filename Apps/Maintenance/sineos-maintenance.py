@@ -3,10 +3,11 @@
 import argparse
 import subprocess
 import sys
+import threading
 import gi
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 
 import maintenance_core as core
 
@@ -289,6 +290,54 @@ class MaintenanceWindow(Gtk.Window):
         self.report_detail.set_text(
             "Último reporte: " + (str(report["path"]) if report else "—")
         )
+
+    def backup_finished_ok(self, result):
+        self.backup_button.set_sensitive(True)
+
+        registration = result["registration"]
+
+        self.message(
+            "Respaldo completado",
+            "El respaldo fue creado, restaurado, validado y "
+            "sincronizado con GitHub.\n\n"
+            "Commit del evento: "
+            + registration["event_commit"][:12]
+            + "\nCommit de sincronización: "
+            + registration["sync_commit"][:12],
+        )
+
+        self.refresh()
+        return False
+
+
+    def backup_finished_error(self, detail):
+        self.backup_button.set_sensitive(True)
+
+        self.message(
+            "El respaldo no se completó",
+            detail,
+            error=True,
+        )
+
+        self.refresh()
+        return False
+
+
+    def backup_worker(self):
+        try:
+            result = core.run_and_register_backup()
+        except core.MaintenanceError as exc:
+            GLib.idle_add(
+                self.backup_finished_error,
+                str(exc),
+            )
+            return
+
+        GLib.idle_add(
+            self.backup_finished_ok,
+            result,
+        )
+
 
     def on_run_backup(self, _button):
         if not self.confirm(
