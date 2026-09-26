@@ -5,6 +5,7 @@ import os
 import shutil
 import stat
 import subprocess
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -233,6 +234,187 @@ def preflight(*, root, expected_uuid=None, expected_serial=None, expected_reposi
         "serial": identity["serial"],
         "repository_id": repository_id,
         "password_file": str(password),
+    }
+
+
+def run_to_file(command, destination, timeout=120):
+    try:
+        with destination.open("wb") as handle:
+            result = subprocess.run(
+                command,
+                stdout=handle,
+                stderr=subprocess.PIPE,
+                timeout=timeout,
+                check=False,
+            )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        destination.unlink(missing_ok=True)
+        raise BackupError(str(exc)) from exc
+
+    if result.returncode != 0:
+        destination.unlink(missing_ok=True)
+        message = result.stderr.decode("utf-8", errors="replace").strip()
+        raise BackupError(message or "Falló la generación del archivo.")
+
+    return destination
+
+
+def postgres_state(container):
+    result = run([
+        "podman", "inspect", container,
+        "--format", "{{.State.Status}}",
+    ])
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or f"No se pudo consultar {container}."
+        )
+    return result.stdout.strip()
+
+
+def wait_postgres(container, db_user, db_name, attempts=30):
+    for _ in range(attempts):
+        result = run([
+            "podman", "exec", container,
+            "pg_isready",
+            "-U", db_user,
+            "-d", db_name,
+        ], timeout=5)
+        if result.returncode == 0:
+            return True
+        time.sleep(1)
+
+    raise BackupError("PostgreSQL no quedó disponible a tiempo.")
+
+
+def create_postgres_staging(
+    container="sineos-postgres",
+    db_user="sineos",
+    db_name="sineos",
+    staging_root=None,
+):
+    root = Path(
+        staging_root
+        or "~/.local/state/sineos/backup/staging"
+    ).expanduser()
+
+    root.mkdir(parents=True, exist_ok=True)
+    os.chmod(root, 0o700)
+
+    original_state = postgres_state(container)
+    if original_state not in ("running", "exited"):
+        raise BackupError(
+            f"Estado PostgreSQL no soportado: {original_state}."
+        )
+
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    staging = root / f"postgresql-{stamp}"
+    staging.mkdir(mode=0o700)
+
+    started_by_us = False
+
+    try:
+        if original_state == "exited":
+            result = run(["podman", "start", container], timeout=60)
+            if result.returncode != 0:
+                raise BackupError(
+                    result.stderr.strip()
+                    or "No se pudo iniciar PostgreSQL."
+                )
+            started_by_us = True
+
+        wait_postgres(container, db_user, db_name)
+
+        database_dump = staging / "database.dump"
+        globals_sql = staging / "globals.sql"
+
+        run_to_file([
+            "podman", "exec", container,
+            "pg_dump",
+            "-U", db_user,
+            "-d", db_name,
+            "-Fc",
+        ], database_dump)
+
+        run_to_file([
+            "podman", "exec", container,
+            "pg_dumpall",
+            "-U", db_user,
+            "--globals-only",
+        ], globals_sql)
+
+        os.chmod(database_dump, 0o600)
+        os.chmod(globals_sql, 0o600)
+
+        hashes = run(
+            ["sha256sum", "database.dump", "globals.sql"],
+            cwd=staging,
+        )
+        if hashes.returncode != 0:
+            raise BackupError("No se pudieron generar SHA256SUMS.")
+
+        checksum_file = staging / "SHA256SUMS"
+        checksum_file.write_text(hashes.stdout, encoding="utf-8")
+        os.chmod(checksum_file, 0o600)
+
+    finally:
+        if started_by_us:
+            result = run(
+                ["podman", "stop", "-t", "30", container],
+                timeout=45,
+            )
+            if result.returncode != 0:
+                raise BackupError(
+                    "No se pudo devolver PostgreSQL a estado detenido."
+                )
+
+    final_state = postgres_state(container)
+    if final_state != original_state:
+        raise BackupError(
+            f"PostgreSQL cambió de estado: {original_state} -> {final_state}."
+        )
+
+    return staging
+
+
+def validate_postgres_staging(
+    staging,
+    image="docker.io/library/postgres:18",
+):
+    staging = Path(staging)
+
+    for name in ("database.dump", "globals.sql", "SHA256SUMS"):
+        if not (staging / name).is_file():
+            raise BackupError(f"Falta {name} en el staging PostgreSQL.")
+
+    hashes = run(["sha256sum", "-c", "SHA256SUMS"], cwd=staging)
+    if hashes.returncode != 0:
+        raise BackupError(
+            hashes.stderr.strip()
+            or hashes.stdout.strip()
+            or "Falló la validación SHA256."
+        )
+
+    archive = run([
+        "podman", "run", "--rm",
+        "--network", "none",
+        "--entrypoint", "pg_restore",
+        "-v", f"{staging}:/backup:ro",
+        image,
+        "--list", "/backup/database.dump",
+    ], timeout=120)
+
+    if archive.returncode != 0:
+        raise BackupError(
+            archive.stderr.strip()
+            or "pg_restore no pudo leer database.dump."
+        )
+
+    return {
+        "staging": str(staging),
+        "database_dump": (staging / "database.dump").stat().st_size,
+        "globals_sql": (staging / "globals.sql").stat().st_size,
+        "archive_entries": len(archive.stdout.splitlines()),
     }
 
 
