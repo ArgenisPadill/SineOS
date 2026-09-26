@@ -2388,14 +2388,16 @@ def validate_git_state(repo_root):
     }
 
 
-def execute_backup(*, root, expected_uuid=None, expected_serial=None, expected_repository_id=None):
-    validate_git_state(REPO_ROOT)
-    validate_stateful_containers_stopped()
-    preflight(
+def execute_backup(
+    *,
+    root,
+    expected_uuid=None,
+    expected_serial=None,
+    expected_repository_id=None,
+):
+    return create_and_certify_backup(
         root=root,
         expected_uuid=expected_uuid,
         expected_serial=expected_serial,
         expected_repository_id=expected_repository_id,
-        require_writable=True,
     )
-    raise BackupError("TD-023: ejecución de backup todavía no implementada.")
