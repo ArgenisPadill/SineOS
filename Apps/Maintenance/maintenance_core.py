@@ -376,6 +376,9 @@ def backup_configuration():
     values = dict(os.environ)
     values.update(parse_env_file())
     root = values.get("SINEOS_BACKUP_ROOT", "").strip()
+    expected_uuid = values.get("SINEOS_BACKUP_UUID", "").strip()
+    expected_serial = values.get("SINEOS_BACKUP_SERIAL", "").strip()
+    expected_repository_id = values.get("SINEOS_BACKUP_REPOSITORY_ID", "").strip()
     enabled = values.get("SINEOS_BACKUP_ENABLED", "0").strip().lower() in {
         "1", "true", "yes", "si", "sí"
     }
@@ -384,6 +387,9 @@ def backup_configuration():
     return {
         "enabled": enabled,
         "root": str(path) if path else None,
+        "uuid": expected_uuid or None,
+        "serial": expected_serial or None,
+        "repository_id": expected_repository_id or None,
         "valid_name": valid_name,
         "exists": bool(path and path.is_dir()),
     }
