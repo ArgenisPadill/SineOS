@@ -799,6 +799,16 @@ def register_certified_backup(result):
     }
 
 
+def run_and_register_backup():
+    result = run_backup_engine()
+    registration = register_certified_backup(result)
+
+    return {
+        "backup": result,
+        "registration": registration,
+    }
+
+
 def run_backup_engine():
     cfg = backup_configuration()
 
