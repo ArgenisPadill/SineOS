@@ -1008,6 +1008,249 @@ def validate_postgres_restore_functional(restored_staging):
     }
 
 
+def cleanup_uptime_test_copy(work):
+    result = run(
+        ["podman", "unshare", "rm", "-rf", str(Path(work).resolve())],
+        timeout=120,
+    )
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or "No se pudo eliminar la copia temporal de Uptime Kuma."
+        )
+
+
+def prepare_uptime_test_copy(restored_repo):
+    repo = Path(restored_repo).resolve()
+    source = repo / "Containers/volumes/uptime-kuma/data"
+
+    if not source.is_dir():
+        raise BackupError(
+            "No existen los datos restaurados de Uptime Kuma."
+        )
+
+    root = (
+        Path.home()
+        / ".local/state/sineos/backup/functional-tests"
+    )
+    root.mkdir(parents=True, exist_ok=True)
+    root.chmod(0o700)
+
+    work = root / ("uptime-kuma-" + str(time.time_ns()))
+    work.mkdir(mode=0o700)
+
+    copied = run([
+        "podman", "unshare",
+        "cp", "-a",
+        str(source) + "/.",
+        str(work) + "/",
+    ], timeout=120)
+
+    if copied.returncode != 0:
+        cleanup_uptime_test_copy(work)
+        raise BackupError(
+            copied.stderr.strip()
+            or "No se pudieron copiar los datos de Uptime Kuma."
+        )
+
+    return {
+        "source": str(source),
+        "work": str(work),
+    }
+
+
+def cleanup_uptime_test_container(container):
+    result = run(
+        ["podman", "rm", "-f", container],
+        timeout=60,
+    )
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or "No se pudo eliminar el contenedor temporal de Uptime Kuma."
+        )
+
+
+def start_uptime_test_container(work):
+    work = Path(work).resolve()
+
+    if not work.is_dir():
+        raise BackupError(
+            "No existe la copia temporal de Uptime Kuma."
+        )
+
+    production = inspect_container_state("sineos-uptime-kuma")
+
+    if production["status"] != "exited" or production["exit_code"] != 0:
+        raise BackupError(
+            "sineos-uptime-kuma debe estar detenido limpiamente."
+        )
+
+    container = "sineos-td023-uptime-" + str(time.time_ns())
+
+    started = run([
+        "podman", "run", "-d",
+        "--name", container,
+        "--network", "none",
+        "-v", str(work) + ":/app/data",
+        production["image"],
+    ], timeout=120)
+
+    if started.returncode != 0:
+        cleanup_uptime_test_container(container)
+        raise BackupError(
+            started.stderr.strip()
+            or "No se pudo iniciar Uptime Kuma temporal."
+        )
+
+    return {
+        "container": container,
+        "image": production["image"],
+    }
+
+
+def wait_uptime_test_http(container, attempts=60):
+    script = (
+        "fetch(process.argv[1]).then(r=>{"
+        "console.log(r.status);"
+        "process.exit(r.status>=200&&r.status<400?0:1);"
+        "}).catch(()=>process.exit(1));"
+    )
+
+    for _ in range(attempts):
+        probe = run([
+            "podman", "exec", container,
+            "node", "-e", script,
+            "http://127.0.0.1:3001/",
+        ], timeout=10)
+
+        if probe.returncode == 0:
+            lines = probe.stdout.strip().splitlines()
+
+            try:
+                status = int(lines[-1]) if lines else 0
+            except ValueError:
+                status = 0
+
+            if 200 <= status < 400:
+                return status
+
+        state = run([
+            "podman", "inspect", container,
+            "--format", "{{.State.Running}}",
+        ])
+
+        if state.returncode != 0 or state.stdout.strip() != "true":
+            logs = run([
+                "podman", "logs", "--tail", "80", container,
+            ], timeout=30)
+
+            raise BackupError(
+                "Uptime Kuma temporal terminó durante el arranque. "
+                + (logs.stdout.strip() or logs.stderr.strip())
+            )
+
+        time.sleep(1)
+
+    raise BackupError(
+        "Uptime Kuma temporal no respondió por HTTP a tiempo."
+    )
+
+
+def stop_uptime_test_container(container):
+    stopped = run(
+        ["podman", "stop", "-t", "30", container],
+        timeout=60,
+    )
+
+    if stopped.returncode != 0:
+        raise BackupError(
+            stopped.stderr.strip()
+            or "Uptime Kuma temporal no pudo detenerse limpiamente."
+        )
+
+    state = run([
+        "podman", "inspect", container,
+        "--format", "{{.State.ExitCode}}",
+    ])
+
+    if state.returncode != 0 or state.stdout.strip() != "0":
+        raise BackupError(
+            "Uptime Kuma temporal terminó con ExitCode distinto de 0."
+        )
+
+    return 0
+
+
+def validate_uptime_restore_functional(restored_repo):
+    before = inspect_container_state("sineos-uptime-kuma")
+
+    if before["status"] != "exited" or before["exit_code"] != 0:
+        raise BackupError(
+            "sineos-uptime-kuma debe estar detenido limpiamente."
+        )
+
+    copy = None
+    container = None
+
+    try:
+        copy = prepare_uptime_test_copy(restored_repo)
+
+        source_before = run([
+            "podman", "unshare", "find",
+            copy["source"], "-type", "f",
+        ]).stdout.splitlines()
+
+        started = start_uptime_test_container(copy["work"])
+        container = started["container"]
+
+        http_initial = wait_uptime_test_http(container, attempts=60)
+
+        time.sleep(15)
+
+        http_stable = wait_uptime_test_http(container, attempts=1)
+
+        exit_code = stop_uptime_test_container(container)
+
+    finally:
+        if container:
+            cleanup_uptime_test_container(container)
+
+        if copy:
+            cleanup_uptime_test_copy(copy["work"])
+
+    source_after = run([
+        "podman", "unshare", "find",
+        copy["source"], "-type", "f",
+    ]).stdout.splitlines()
+
+    if len(source_before) != len(source_after):
+        raise BackupError(
+            "Cambió el restore original de Uptime Kuma."
+        )
+
+    after = inspect_container_state("sineos-uptime-kuma")
+
+    if (
+        after["status"] != before["status"]
+        or after["exit_code"] != before["exit_code"]
+    ):
+        raise BackupError(
+            "Cambió el estado de Uptime Kuma de producción."
+        )
+
+    return {
+        "http_initial": http_initial,
+        "http_stable": http_stable,
+        "temporary_exit_code": exit_code,
+        "restored_files": len(source_after),
+        "production_before": before["status"],
+        "production_after": after["status"],
+    }
+
+
 STATEFUL_CONTAINERS = (
     "sineos-postgres",
     "sineos-open-webui",
