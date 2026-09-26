@@ -1,6 +1,6 @@
 # SineOS — Deuda técnica
 
-Última revisión: 24-09-2026
+Última revisión: 26-09-2026
 
 Este documento registra únicamente deuda vigente.
 
@@ -23,7 +23,6 @@ Este documento registra únicamente deuda vigente.
 | TD-017 | Media | Vault | Templates Incidencia/Procedimiento/ADR |
 | TD-018 | Alta | Seguridad | Ejecutar validación final asistida por agente después de cerrar hardening y DR |
 | TD-019 | Media | Stirling PDF | Revisar permisos de `/configs` al actualizar desde 2.14.3; la versión actual restablece archivos sensibles a 755 al arrancar |
-| TD-023 | Media | Backups | Automatizar e integrar el flujo trimestral de backup en SineOS Mantenimiento, incluyendo ejecución, validación, bitácora y gate GitHub |
 
 ## Decisiones cerradas
 
@@ -43,7 +42,9 @@ Este documento registra únicamente deuda vigente.
 
 **Mantenimiento trimestral (TD-022):** cerrado. La aplicación GTK3, el timer, la persistencia, rollback/reinstalación y el gate GitHub no interactivo mediante GCR fueron validados el 24-09-2026. El push real del siguiente ciclo utilizará el mismo entorno GCR ya probado para operaciones remotas.
 
-**Primer respaldo externo certificado (TD-021):** cerrado. El 24-09-2026 se creó el snapshot Restic `536d25fd` con tag `SineOsBackups-240926-2334`, se ejecutó `restic check` sin errores y se validó una restauración real. PostgreSQL, Uptime Kuma, Open WebUI y Stirling PDF fueron probados funcionalmente desde los datos restaurados; el Knowledge Vault también fue restaurado y verificado. La automatización del flujo queda separada como TD-023.
+**Primer respaldo externo certificado (TD-021):** cerrado. El 24-09-2026 se creó el snapshot Restic `536d25fd` con tag `SineOsBackups-240926-2334`, se ejecutó `restic check` sin errores y se validó una restauración real. PostgreSQL, Uptime Kuma, Open WebUI y Stirling PDF fueron probados funcionalmente desde los datos restaurados; el Knowledge Vault también fue restaurado y verificado.
+
+**Automatización del respaldo externo (TD-023):** cerrada. El flujo completo quedó integrado en SineOS Mantenimiento: creación del snapshot, `restic check`, restauración temporal verificada, validación de Git y PostgreSQL, validaciones funcionales de Uptime Kuma, Open WebUI y Stirling PDF, registro documental mediante Commit A + Commit B y sincronización con GitHub. El 25-09-2026 se validó de extremo a extremo el snapshot `ac035822` con tag `SineOsBackups-250926-2142`. La GUI ejecuta el proceso en segundo plano, muestra el estado real del destino y bloquea la creación de otro snapshot si existe un respaldo certificado pendiente de registrar.
 
 **DNSCrypt/Proton:** DNSCrypt por perfil y el ciclo Proton VPN/DNS fueron implementados y validados mediante NetworkPrivacy.
 
@@ -67,7 +68,7 @@ Gitleaks historial Git          -> 0 hallazgos
 TD-001 cerrado el 23-09-2026. El auditor recurrente v1.1.0 fue validado con 12 controles OK, 0 advertencias y 0 errores; la rotación quedó documentada en `Documentation/Security/Secrets-Rotation.md`.
 
 ### Backups y recuperación
-La política general está definida en `Documentation/Recovery/Backup-Policy.md`. Falta seleccionar un destino físico separado e implementar/probar backup y restore de Knowledge Vault y PostgreSQL. Snapshot Btrfs no equivale a backup.
+La política general está definida en `Documentation/Recovery/Backup-Policy.md`. El destino físico separado, el repositorio Restic y el flujo certificado de backup/restore ya están implementados y validados, incluyendo PostgreSQL y la recuperación del Knowledge Vault dentro del respaldo externo. Permanecen como deuda independiente TD-004 para el backup propio del Knowledge Vault y TD-016 para la prueba formal de Disaster Recovery. Snapshot Btrfs no equivale a backup.
 
 ### Open WebUI
 El secret persistente ya quedó validado y TD-005 está cerrado. Permanecen como deuda fijar la imagen y retirar `restart: unless-stopped` mediante recreación controlada preservando datos.

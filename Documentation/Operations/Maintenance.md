@@ -27,9 +27,9 @@ SineOS · Mantenimiento
         │
         └── respaldo externo
                ↓
-             TD-021
+        motor de backup certificado
                ↓
-        SineOsBackups + Restic + restore
+        SineOsBackups + Restic + restore + validación + GitHub
 ```
 
 ## Código
@@ -156,13 +156,13 @@ SINEOS_BACKUP_ENABLED=0
 # SINEOS_BACKUP_ROOT=/ruta/del/disco/SineOsBackups
 ```
 
-El backup queda deliberadamente deshabilitado hasta terminar TD-021.
+El backup permanece deshabilitado hasta que se configure y valide explícitamente el destino externo.
 
 ## Backup externo
 
-La interfaz reserva el bloque de respaldo, pero en esta versión el motor externo está **deshabilitado**. No ejecuta Restic, no monta discos y no escribe en `SineOsBackups`.
+La interfaz integra el motor de respaldo externo certificado. El flujo crea el snapshot Restic, ejecuta `restic check`, restaura temporalmente el respaldo, valida su contenido y registra la evidencia mediante el protocolo Git de dos commits.
 
-TD-021 debe implementar y validar primero detección del disco externo, `SINEOS_BACKUP_ROOT`, PostgreSQL, Vault, volúmenes seleccionados, Restic, `restic check`, restore temporal, comparación y bitácora `Respaldo-<commit>.md`.
+El flujo valida `SINEOS_BACKUP_ROOT`, UUID y serial del disco, identidad del repositorio Restic, estado Git, PostgreSQL, Knowledge Vault y los volúmenes seleccionados. PostgreSQL, Uptime Kuma, Open WebUI y Stirling PDF se validan funcionalmente desde la restauración temporal. La evidencia se registra en `Backup-Status.md` y `Backup-Log/Respaldo-<commit>.md`.
 
 ## Instalación
 
@@ -314,7 +314,7 @@ Commit mostrado                62d725c17f4a…
 Adoptar validación actual      deshabilitado
 Registrar/sincronizar GitHub   deshabilitado
 Ejecutar auditoría             habilitado
-Backup externo                 PENDIENTE TD-021
+Backup externo                 VALIDADO / OPERATIVO
 Git                            limpio
 GitHub                         sincronizado
 ```

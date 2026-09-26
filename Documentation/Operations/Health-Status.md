@@ -36,7 +36,7 @@ Resultado: OK
 - paquetes instalados localmente se inventarían, no se eliminan automáticamente;
 - Open WebUI continúa en tag `:main` y permanece registrado como TD-006;
 - eventos históricos recuperados del journal se conservan como INFO;
-- el primer respaldo externo certificado continúa pendiente de TD-021.
+- el respaldo externo certificado está operativo; el último ciclo validado corresponde al snapshot `ac035822` con tag `SineOsBackups-250926-2142`.
 
 ## Gate GitHub
 

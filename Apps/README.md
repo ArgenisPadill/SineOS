@@ -9,7 +9,7 @@ Un programa propio no es equivalente a un script auxiliar. Puede tener interfaz,
 | Programa | Tecnología | Estado | Propósito | Documentación |
 |---|---|---|---|---|
 | NetworkPrivacy | Python 3 + GTK3/PyGObject | Operativo | Administrar DNSCrypt por perfil, detectar Proton VPN y restaurar DNS original | `Documentation/Operations/NetworkPrivacy.md` |
-| Maintenance | Python 3 + GTK3/PyGObject | Pendiente de validación local | Coordinar salud trimestral, recordatorios y gate GitHub; backup externo reservado para TD-021 | `Documentation/Operations/Maintenance.md` |
+| Maintenance | Python 3 + GTK3/PyGObject | Operativo | Coordinar salud trimestral, respaldo externo certificado, validaciones, recordatorios y sincronización segura con GitHub | `Documentation/Operations/Maintenance.md` |
 
 ## NetworkPrivacy
 

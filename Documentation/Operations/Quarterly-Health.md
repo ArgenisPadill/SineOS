@@ -152,7 +152,8 @@ TD-020 se considera cerrado.
 
 ```text
 Auditor profundo          v1.2.3 / VALIDADO
-Aplicación nativa         EN IMPLEMENTACIÓN (TD-022)
-Servicio/timer            EN IMPLEMENTACIÓN (TD-022)
-Primer backup externo     PENDIENTE (TD-021)
+Aplicación nativa         VALIDADA (TD-022 cerrado)
+Servicio/timer            VALIDADO (TD-022 cerrado)
+Primer backup externo     VALIDADO (TD-021 cerrado)
+Backup automatizado       VALIDADO (TD-023 cerrado)
 ```
