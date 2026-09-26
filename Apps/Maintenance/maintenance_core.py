@@ -785,6 +785,20 @@ def finalize_backup_state(commit_b_result):
     return state["backup"]
 
 
+def register_certified_backup(result):
+    commit_a = register_backup_event_commit_a(result)
+    commit_b = register_backup_event_commit_b(commit_a)
+    backup_state = finalize_backup_state(commit_b)
+
+    return {
+        "event": commit_b["event"],
+        "event_commit": commit_b["event_commit"],
+        "sync_commit": commit_b["sync_commit"],
+        "log_path": commit_b["log_path"],
+        "state": backup_state,
+    }
+
+
 def run_backup_engine():
     cfg = backup_configuration()
 
