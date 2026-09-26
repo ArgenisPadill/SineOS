@@ -2,6 +2,7 @@
 
 import json
 import os
+import sqlite3
 import shutil
 import stat
 import subprocess
@@ -1242,6 +1243,322 @@ def validate_uptime_restore_functional(restored_repo):
         )
 
     return {
+        "http_initial": http_initial,
+        "http_stable": http_stable,
+        "temporary_exit_code": exit_code,
+        "restored_files": len(source_after),
+        "production_before": before["status"],
+        "production_after": after["status"],
+    }
+
+
+def cleanup_openwebui_test_copy(work):
+    result = run(
+        ["podman", "unshare", "rm", "-rf", str(Path(work).resolve())],
+        timeout=120,
+    )
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or "No se pudo eliminar la copia temporal de Open WebUI."
+        )
+
+
+def prepare_openwebui_test_copy(restored_repo):
+    repo = Path(restored_repo).resolve()
+    source = repo / "Containers/volumes/open-webui/data"
+
+    if not source.is_dir():
+        raise BackupError(
+            "No existen los datos restaurados de Open WebUI."
+        )
+
+    database = source / "webui.db"
+
+    if not database.is_file():
+        raise BackupError(
+            "No existe webui.db en el restore de Open WebUI."
+        )
+
+    root = (
+        Path.home()
+        / ".local/state/sineos/backup/functional-tests"
+    )
+    root.mkdir(parents=True, exist_ok=True)
+    root.chmod(0o700)
+
+    work = root / ("open-webui-" + str(time.time_ns()))
+    work.mkdir(mode=0o700)
+
+    copied = run([
+        "podman", "unshare",
+        "cp", "-a",
+        str(source) + "/.",
+        str(work) + "/",
+    ], timeout=120)
+
+    if copied.returncode != 0:
+        cleanup_openwebui_test_copy(work)
+        raise BackupError(
+            copied.stderr.strip()
+            or "No se pudieron copiar los datos de Open WebUI."
+        )
+
+    return {
+        "source": str(source),
+        "work": str(work),
+    }
+
+
+def validate_openwebui_sqlite(work):
+    database = Path(work).resolve() / "webui.db"
+
+    if not database.is_file():
+        raise BackupError(
+            "No existe webui.db en la copia temporal."
+        )
+
+    connection = None
+
+    try:
+        connection = sqlite3.connect(
+            "file:{}?mode=ro".format(database),
+            uri=True,
+        )
+
+        integrity = connection.execute(
+            "PRAGMA integrity_check"
+        ).fetchone()[0]
+
+        tables = connection.execute(
+            "SELECT count(*) FROM sqlite_master WHERE type=?",
+            ("table",),
+        ).fetchone()[0]
+
+    except sqlite3.Error as exc:
+        raise BackupError(
+            "No se pudo validar webui.db: {}".format(exc)
+        ) from exc
+
+    finally:
+        if connection is not None:
+            connection.close()
+
+    if integrity != "ok":
+        raise BackupError(
+            "webui.db no pasó PRAGMA integrity_check."
+        )
+
+    if tables <= 0:
+        raise BackupError(
+            "webui.db no contiene tablas."
+        )
+
+    return {
+        "integrity": integrity,
+        "tables": tables,
+    }
+
+
+def cleanup_openwebui_test_container(container):
+    result = run(
+        ["podman", "rm", "-f", container],
+        timeout=60,
+    )
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or "No se pudo eliminar el contenedor temporal de Open WebUI."
+        )
+
+
+def start_openwebui_test_container(work):
+    work = Path(work).resolve()
+
+    if not work.is_dir():
+        raise BackupError(
+            "No existe la copia temporal de Open WebUI."
+        )
+
+    production = inspect_container_state("sineos-open-webui")
+
+    if production["status"] != "exited" or production["exit_code"] != 0:
+        raise BackupError(
+            "sineos-open-webui debe estar detenido limpiamente."
+        )
+
+    container = "sineos-td023-openwebui-" + str(time.time_ns())
+
+    started = run([
+        "podman", "run", "-d",
+        "--name", container,
+        "--network", "none",
+        "-v", str(work) + ":/app/backend/data",
+        production["image"],
+    ], timeout=120)
+
+    if started.returncode != 0:
+        cleanup_openwebui_test_container(container)
+        raise BackupError(
+            started.stderr.strip()
+            or "No se pudo iniciar Open WebUI temporal."
+        )
+
+    return {
+        "container": container,
+        "image": production["image"],
+    }
+
+
+def wait_openwebui_test_http(container, attempts=90):
+    script = (
+        "import urllib.request,sys; "
+        "r=urllib.request.urlopen(sys.argv[1],timeout=5); "
+        "print(r.status)"
+    )
+
+    for _ in range(attempts):
+        probe = run([
+            "podman", "exec", container,
+            "python", "-c", script,
+            "http://127.0.0.1:8080/",
+        ], timeout=10)
+
+        if probe.returncode == 0:
+            lines = probe.stdout.strip().splitlines()
+
+            try:
+                status = int(lines[-1]) if lines else 0
+            except ValueError:
+                status = 0
+
+            if 200 <= status < 400:
+                return status
+
+        state = run([
+            "podman", "inspect", container,
+            "--format", "{{.State.Running}}",
+        ])
+
+        if state.returncode != 0 or state.stdout.strip() != "true":
+            logs = run([
+                "podman", "logs", "--tail", "80", container,
+            ], timeout=30)
+
+            raise BackupError(
+                "Open WebUI temporal terminó durante el arranque. "
+                + (logs.stdout.strip() or logs.stderr.strip())
+            )
+
+        time.sleep(1)
+
+    raise BackupError(
+        "Open WebUI temporal no respondió por HTTP a tiempo."
+    )
+
+
+def stop_openwebui_test_container(container):
+    stopped = run(
+        ["podman", "stop", "-t", "30", container],
+        timeout=60,
+    )
+
+    if stopped.returncode != 0:
+        raise BackupError(
+            stopped.stderr.strip()
+            or "Open WebUI temporal no pudo detenerse limpiamente."
+        )
+
+    state = run([
+        "podman", "inspect", container,
+        "--format", "{{.State.ExitCode}}",
+    ])
+
+    if state.returncode != 0 or state.stdout.strip() != "0":
+        raise BackupError(
+            "Open WebUI temporal terminó con ExitCode distinto de 0."
+        )
+
+    return 0
+
+
+def validate_openwebui_restore_functional(restored_repo):
+    before = inspect_container_state("sineos-open-webui")
+
+    if before["status"] != "exited" or before["exit_code"] != 0:
+        raise BackupError(
+            "sineos-open-webui debe estar detenido limpiamente."
+        )
+
+    copy = None
+    container = None
+
+    try:
+        copy = prepare_openwebui_test_copy(restored_repo)
+
+        source_before = run([
+            "podman", "unshare", "find",
+            copy["source"], "-type", "f",
+        ]).stdout.splitlines()
+
+        sqlite_before = validate_openwebui_sqlite(copy["work"])
+
+        started = start_openwebui_test_container(copy["work"])
+        container = started["container"]
+
+        http_initial = wait_openwebui_test_http(container, attempts=90)
+
+        time.sleep(15)
+
+        http_stable = wait_openwebui_test_http(container, attempts=1)
+
+        exit_code = stop_openwebui_test_container(container)
+
+        sqlite_after = validate_openwebui_sqlite(copy["work"])
+
+        if sqlite_before["integrity"] != "ok":
+            raise BackupError("SQLite inicial de Open WebUI no es íntegro.")
+
+        if sqlite_after["integrity"] != "ok":
+            raise BackupError("SQLite final de Open WebUI no es íntegro.")
+
+        if sqlite_before["tables"] != sqlite_after["tables"]:
+            raise BackupError(
+                "Cambió el número de tablas de Open WebUI durante la prueba."
+            )
+
+    finally:
+        if container:
+            cleanup_openwebui_test_container(container)
+
+        if copy:
+            cleanup_openwebui_test_copy(copy["work"])
+
+    source_after = run([
+        "podman", "unshare", "find",
+        copy["source"], "-type", "f",
+    ]).stdout.splitlines()
+
+    if len(source_before) != len(source_after):
+        raise BackupError(
+            "Cambió el restore original de Open WebUI."
+        )
+
+    after = inspect_container_state("sineos-open-webui")
+
+    if (
+        after["status"] != before["status"]
+        or after["exit_code"] != before["exit_code"]
+    ):
+        raise BackupError(
+            "Cambió el estado de Open WebUI de producción."
+        )
+
+    return {
+        "sqlite_integrity": sqlite_after["integrity"],
+        "sqlite_tables": sqlite_after["tables"],
         "http_initial": http_initial,
         "http_stable": http_stable,
         "temporary_exit_code": exit_code,
