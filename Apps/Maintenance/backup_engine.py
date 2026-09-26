@@ -2122,6 +2122,154 @@ def validate_postgres_restore_matches_source(
     }
 
 
+def current_git_head(repo_root=REPO_ROOT):
+    repo = Path(repo_root).resolve()
+
+    result = run([
+        "git", "rev-parse", "HEAD",
+    ], cwd=repo)
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or "No se pudo obtener el HEAD actual de SineOS."
+        )
+
+    head = result.stdout.strip()
+
+    if len(head) != 40:
+        raise BackupError(
+            "Git devolvió un HEAD inesperado."
+        )
+
+    return head
+
+
+def validate_backup_tag_available(root, password_file, tag):
+    result = run([
+        "restic",
+        "-r", str(root),
+        "--password-file", str(password_file),
+        "--no-lock",
+        "snapshots",
+        "--json",
+        "--tag", tag,
+    ], timeout=120)
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or "No se pudo comprobar la disponibilidad del tag."
+        )
+
+    try:
+        snapshots = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise BackupError(
+            "Restic devolvió JSON inválido al comprobar el tag."
+        ) from exc
+
+    if snapshots:
+        raise BackupError(
+            "El tag de backup ya existe: " + tag
+        )
+
+    return True
+
+
+def create_and_certify_backup(
+    *,
+    root,
+    expected_uuid=None,
+    expected_serial=None,
+    expected_repository_id=None,
+):
+    validate_git_state(REPO_ROOT)
+    validate_stateful_containers_stopped()
+
+    first = preflight(
+        root=root,
+        expected_uuid=expected_uuid,
+        expected_serial=expected_serial,
+        expected_repository_id=expected_repository_id,
+        require_writable=True,
+    )
+
+    expected_head = current_git_head()
+
+    staging = create_postgres_staging()
+    staging_validation = validate_postgres_staging(staging)
+
+    dry_run = dry_run_backup(
+        root=first["root"],
+        password_file=first["password_file"],
+        postgres_staging=staging,
+    )
+
+    tag = build_tag()
+
+    validate_backup_tag_available(
+        first["root"],
+        first["password_file"],
+        tag,
+    )
+
+    validate_git_state(REPO_ROOT)
+    validate_stateful_containers_stopped()
+
+    if current_git_head() != expected_head:
+        raise BackupError(
+            "El HEAD de SineOS cambió antes de crear el snapshot."
+        )
+
+    final = preflight(
+        root=root,
+        expected_uuid=expected_uuid,
+        expected_serial=expected_serial,
+        expected_repository_id=expected_repository_id,
+        require_writable=True,
+    )
+
+    validate_backup_tag_available(
+        final["root"],
+        final["password_file"],
+        tag,
+    )
+
+    snapshot = create_restic_snapshot(
+        root=final["root"],
+        password_file=final["password_file"],
+        postgres_staging=staging,
+        tag=tag,
+    )
+
+    validate_git_state(REPO_ROOT)
+
+    if current_git_head() != expected_head:
+        raise BackupError(
+            "El HEAD de SineOS cambió durante el backup; "
+            "el snapshot no será certificado."
+        )
+
+    certification = certify_restic_snapshot(
+        root=final["root"],
+        password_file=final["password_file"],
+        snapshot_id=snapshot["snapshot_id"],
+        postgres_staging=staging,
+        expected_head=expected_head,
+    )
+
+    return {
+        "tag": tag,
+        "expected_head": expected_head,
+        "postgres_staging": staging,
+        "staging_validation": staging_validation,
+        "dry_run": dry_run,
+        "snapshot": snapshot,
+        "certification": certification,
+    }
+
+
 STATEFUL_CONTAINERS = (
     "sineos-postgres",
     "sineos-open-webui",
