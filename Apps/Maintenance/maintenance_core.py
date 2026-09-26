@@ -548,6 +548,27 @@ def write_backup_log(event, event_commit, directory):
     return target
 
 
+def validate_backup_git_gate():
+    git = git_sync_state()
+
+    if git["branch"] != "main":
+        raise MaintenanceError(
+            "La rama activa no es main."
+        )
+
+    if not git["clean"]:
+        raise MaintenanceError(
+            "Git tiene cambios locales."
+        )
+
+    if not git["synced"]:
+        raise MaintenanceError(
+            "HEAD local no coincide con origin/main."
+        )
+
+    return git
+
+
 def run_backup_engine():
     cfg = backup_configuration()
 
