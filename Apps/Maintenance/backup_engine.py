@@ -811,6 +811,203 @@ def validate_restored_layout(restore_target, postgres_staging=None):
     }
 
 
+def cleanup_postgres_test_resources(container, volume):
+    run(["podman", "rm", "-f", container], timeout=60)
+    run(["podman", "volume", "rm", "-f", volume], timeout=60)
+
+
+def start_postgres_test_container(staging):
+    staging = Path(staging).resolve()
+
+    if not staging.is_dir():
+        raise BackupError("No existe el staging PostgreSQL restaurado.")
+
+    token = str(time.time_ns())
+    container = "sineos-td023-pg-" + token
+    volume = "sineos-td023-pg-" + token
+
+    created = run(["podman", "volume", "create", volume], timeout=60)
+
+    if created.returncode != 0:
+        raise BackupError("No se pudo crear el volumen temporal PostgreSQL.")
+
+    started = run([
+        "podman", "run", "-d",
+        "--name", container,
+        "--network", "none",
+        "-e", "POSTGRES_HOST_AUTH_METHOD=trust",
+        "-v", volume + ":/var/lib/postgresql",
+        "-v", str(staging) + ":/backup:ro",
+        "docker.io/library/postgres:18",
+    ], timeout=120)
+
+    if started.returncode != 0:
+        cleanup_postgres_test_resources(container, volume)
+        raise BackupError(
+            started.stderr.strip()
+            or "No se pudo iniciar PostgreSQL temporal."
+        )
+
+    return {
+        "container": container,
+        "volume": volume,
+    }
+
+
+def restore_postgres_test_globals(container):
+    wait_postgres(container, "postgres", "postgres", attempts=60)
+
+    result = run([
+        "podman", "exec", container,
+        "psql",
+        "-U", "postgres",
+        "-d", "postgres",
+        "-v", "ON_ERROR_STOP=1",
+        "-f", "/backup/globals.sql",
+    ], timeout=120)
+
+    if result.returncode != 0:
+        raise BackupError(
+            result.stderr.strip()
+            or "Falló la restauración de globals.sql."
+        )
+
+    role = run([
+        "podman", "exec", container,
+        "psql",
+        "-U", "postgres",
+        "-d", "postgres",
+        "-Atqc",
+        "SELECT count(*) FROM pg_roles WHERE rolname=$$sineos$$;",
+    ], timeout=30)
+
+    if role.returncode != 0 or role.stdout.strip() != "1":
+        raise BackupError("El rol sineos no fue restaurado.")
+
+    return True
+
+
+def restore_postgres_test_database(container):
+    created = run([
+        "podman", "exec", container,
+        "createdb",
+        "-U", "postgres",
+        "-O", "sineos",
+        "sineos",
+    ], timeout=60)
+
+    if created.returncode != 0:
+        raise BackupError(
+            created.stderr.strip()
+            or "No se pudo crear la base sineos temporal."
+        )
+
+    restored = run([
+        "podman", "exec", container,
+        "pg_restore",
+        "-U", "postgres",
+        "-d", "sineos",
+        "--exit-on-error",
+        "/backup/database.dump",
+    ], timeout=300)
+
+    if restored.returncode != 0:
+        raise BackupError(
+            restored.stderr.strip()
+            or "Falló la restauración de database.dump."
+        )
+
+    check = run([
+        "podman", "exec", container,
+        "psql",
+        "-U", "sineos",
+        "-d", "sineos",
+        "-Atqc",
+        "SELECT current_database() || chr(124) || current_user;",
+    ], timeout=30)
+
+    if check.returncode != 0 or check.stdout.strip() != "sineos|sineos":
+        raise BackupError(
+            "La base restaurada no es utilizable por el rol sineos."
+        )
+
+    return True
+
+
+def stop_postgres_test_container(container):
+    stopped = run(
+        ["podman", "stop", "-t", "30", container],
+        timeout=60,
+    )
+
+    if stopped.returncode != 0:
+        raise BackupError(
+            stopped.stderr.strip()
+            or "PostgreSQL temporal no pudo detenerse limpiamente."
+        )
+
+    state = run([
+        "podman", "inspect", container,
+        "--format", "{{.State.ExitCode}}",
+    ])
+
+    if state.returncode != 0 or state.stdout.strip() != "0":
+        raise BackupError(
+            "PostgreSQL temporal terminó con ExitCode distinto de 0."
+        )
+
+    return 0
+
+
+def validate_postgres_restore_functional(restored_staging):
+    staging = Path(restored_staging).resolve()
+    validate_postgres_staging(staging)
+
+    before = inspect_container_state("sineos-postgres")
+
+    if before["status"] != "exited" or before["exit_code"] != 0:
+        raise BackupError(
+            "sineos-postgres debe estar detenido limpiamente."
+        )
+
+    resources = None
+
+    try:
+        resources = start_postgres_test_container(staging)
+        container = resources["container"]
+
+        restore_postgres_test_globals(container)
+        restore_postgres_test_database(container)
+        exit_code = stop_postgres_test_container(container)
+
+    finally:
+        if resources:
+            cleanup_postgres_test_resources(
+                resources["container"],
+                resources["volume"],
+            )
+
+    after = inspect_container_state("sineos-postgres")
+
+    if (
+        after["status"] != before["status"]
+        or after["exit_code"] != before["exit_code"]
+    ):
+        raise BackupError(
+            "Cambió el estado de PostgreSQL de producción."
+        )
+
+    return {
+        "staging": str(staging),
+        "database": "sineos",
+        "role": "sineos",
+        "connection": "sineos|sineos",
+        "temporary_exit_code": exit_code,
+        "production_before": before["status"],
+        "production_after": after["status"],
+    }
+
+
 STATEFUL_CONTAINERS = (
     "sineos-postgres",
     "sineos-open-webui",
