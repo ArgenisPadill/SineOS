@@ -154,6 +154,9 @@ Estado inicial:
 ```text
 SINEOS_BACKUP_ENABLED=0
 # SINEOS_BACKUP_ROOT=/ruta/del/disco/SineOsBackups
+# SINEOS_BACKUP_UUID=UUID_DEL_DISCO
+# SINEOS_BACKUP_SERIAL=SERIAL_DEL_DISCO
+# SINEOS_BACKUP_REPOSITORY_ID=ID_DEL_REPOSITORIO_RESTIC
 ```
 
 El backup permanece deshabilitado hasta que se configure y valide explícitamente el destino externo.

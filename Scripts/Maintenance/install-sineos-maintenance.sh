@@ -64,6 +64,9 @@ EOF
 # El backup permanece deshabilitado por defecto hasta configurar y validar un destino externo.
 SINEOS_BACKUP_ENABLED=0
 # SINEOS_BACKUP_ROOT=/ruta/del/disco/SineOsBackups
+# SINEOS_BACKUP_UUID=UUID_DEL_DISCO
+# SINEOS_BACKUP_SERIAL=SERIAL_DEL_DISCO
+# SINEOS_BACKUP_REPOSITORY_ID=ID_DEL_REPOSITORIO_RESTIC
 EOF
         chmod 600 "$CONFIG_FILE"
     fi

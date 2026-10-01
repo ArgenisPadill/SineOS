@@ -237,6 +237,28 @@ Ejemplo conceptual:
 
 El flujo debe rechazar como respaldo oficial una ruta ubicada en el mismo filesystem físico principal del equipo.
 
+### Identidad del destino autorizado
+
+La ruta por sí sola no es suficiente para considerar válido un destino de respaldo. Antes de crear, validar o certificar un backup, SineOS debe comprobar la identidad del destino mediante la configuración local:
+
+```text
+SINEOS_BACKUP_ROOT
+SINEOS_BACKUP_UUID
+SINEOS_BACKUP_SERIAL
+SINEOS_BACKUP_REPOSITORY_ID
+```
+
+Cada valor cumple una función distinta:
+
+- `SINEOS_BACKUP_ROOT` define la ubicación esperada del repositorio `SineOsBackups`.
+- `SINEOS_BACKUP_UUID` identifica el filesystem esperado.
+- `SINEOS_BACKUP_SERIAL` identifica el disco físico autorizado.
+- `SINEOS_BACKUP_REPOSITORY_ID` identifica el repositorio Restic esperado.
+
+El flujo debe rechazar el respaldo si falta alguno de los identificadores requeridos o si el UUID, el serial del disco o el ID del repositorio Restic no coinciden con los valores configurados.
+
+Estos identificadores forman parte de la configuración local de la instalación. No se deben codificar valores específicos de un equipo o disco dentro de los scripts versionados.
+
 ## Identificador de cada respaldo
 
 Cada ejecución utiliza el formato:
