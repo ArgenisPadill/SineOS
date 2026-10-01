@@ -8,7 +8,6 @@ Este documento registra únicamente deuda vigente.
 
 | ID | Prioridad | Área | Pendiente |
 |---|---|---|---|
-| TD-004 | Alta | Vault | Backup independiente del Knowledge Vault |
 | TD-006 | Media | Open WebUI | Fijar imagen por versión/digest |
 | TD-007 | Media | Open WebUI | Retirar restart automático y recrear |
 | TD-008 | Media | Red | Revisar nftables + Podman/netavark |
@@ -34,9 +33,11 @@ Este documento registra únicamente deuda vigente.
 
 **Gestión de secretos (TD-001):** cerrada. Política, inventario, permisos, Gitleaks, secret persistente de Open WebUI, auditor recurrente y procedimientos de rotación quedaron documentados y validados.
 
-**Política general de backup (TD-002):** cerrada. SineOS adopta Restic como motor preferente para backup cifrado/versionado y Btrfs/Snapper únicamente como rollback local. La implementación queda dividida en TD-003, TD-004 y TD-016.
+**Política general de backup (TD-002):** cerrada. SineOS adopta Restic como motor preferente para backup cifrado/versionado y Btrfs/Snapper únicamente como rollback local. La implementación se dividió en TD-003, TD-004 y TD-016; TD-003 y TD-004 están cerradas y TD-016 permanece vigente.
 
 **PostgreSQL backup/restore (TD-003):** cerrado. El 24-09-2026 se generó un dump lógico con `pg_dump`/ `pg_dumpall`, se validaron hashes SHA-256 y se restauró realmente en una instancia PostgreSQL 18 temporal, aislada, sin red ni puertos publicados. Se verificaron roles y estructura, se eliminó el entorno de prueba y el contenedor productivo permaneció detenido e intacto.
+
+**Knowledge Vault backup independiente (TD-004):** cerrado. El 01-10-2026 se validó de extremo a extremo el snapshot Restic `9ec723e9` con tag `SineOsBackups-011026-0101`. El Vault restaurado coincidió con el manifiesto previo al snapshot: 70 archivos, 27 notas Markdown, 43 archivos adicionales, 33 symlinks y 99 directorios. `.obsidian` fue validado, `.opencode/node_modules` permaneció excluido y el Vault vivo no cambió durante el proceso. La evidencia quedó registrada mediante los commits `01302b9` y `ae3886f`.
 
 **Salud trimestral (TD-020):** cerrada. `sineos-health-audit.sh` v1.2.3 fue validado el 24-09-2026 con 21 controles OK, 0 advertencias, 0 errores y `RESULTADO: OK`; Git quedó limpio y sincronizado con GitHub.
 
@@ -68,11 +69,9 @@ Gitleaks historial Git          -> 0 hallazgos
 TD-001 cerrado el 23-09-2026. El auditor recurrente v1.1.0 fue validado con 12 controles OK, 0 advertencias y 0 errores; la rotación quedó documentada en `Documentation/Security/Secrets-Rotation.md`.
 
 ### Backups y recuperación
-La política general está definida en `Documentation/Recovery/Backup-Policy.md`. El destino físico separado, el repositorio Restic y el flujo certificado de backup/restore ya están implementados y validados.
+La política general está definida en `Documentation/Recovery/Backup-Policy.md`. El destino físico separado, el repositorio Restic y el flujo certificado de backup/restore están implementados y validados.
 
-Para TD-004 se implementó validación específica del Knowledge Vault mediante manifiesto de archivos, SHA-256, estructura de directorios, symlinks sin seguimiento, `.obsidian`, exclusiones y comparación origen/restore.
-
-Las pruebas simuladas positiva y negativa fueron validadas el 01-10-2026. TD-004 permanece abierta hasta completar un nuevo backup Restic real con restore temporal y comparación satisfactoria del Vault.
+TD-003 y TD-004 están cerradas. El Knowledge Vault cuenta con validación por manifiesto, SHA-256, estructura de directorios, symlinks sin seguimiento, `.obsidian`, exclusiones y comparación real origen/restore.
 
 TD-016 permanece pendiente para la prueba formal de Disaster Recovery. Snapshot Btrfs no equivale a backup.
 

@@ -335,7 +335,7 @@ TD-004 debe identificar su ruta real y validar:
 - integridad de notas y adjuntos;
 - recuperación de estructura Obsidian.
 
-### Estado de implementación TD-004 — 01-10-2026
+### Cierre TD-004 — 01-10-2026
 
 La validación específica del Knowledge Vault quedó integrada al flujo certificado de respaldo.
 
@@ -359,12 +359,12 @@ Estado:
 IMPLEMENTACIÓN                         LISTA
 PRUEBA SIMULADA POSITIVA              VALIDADA
 PRUEBA SIMULADA NEGATIVA              VALIDADA
-BACKUP RESTIC REAL                    PENDIENTE
-RESTORE REAL CON COMPARACIÓN VAULT    PENDIENTE
-TD-004                                ABIERTA
+BACKUP RESTIC REAL                    VALIDADO
+RESTORE REAL CON COMPARACIÓN VAULT    VALIDADO
+TD-004                                CERRADA
 ```
 
-TD-004 solo podrá cerrarse después de ejecutar un nuevo ciclo real de backup certificado y comprobar que el Vault restaurado coincide con el estado capturado antes del snapshot.
+TD-004 quedó cerrada el 01-10-2026 tras validar el snapshot Restic `9ec723e9` con tag `SineOsBackups-011026-0101`. El restore temporal coincidió con el manifiesto previo al snapshot: 70 archivos, 27 notas Markdown, 43 archivos adicionales, 33 symlinks y 99 directorios; `.obsidian` fue validado, `.opencode/node_modules` permaneció excluido y el Vault vivo no cambió durante el backup.
 
 ## Secretos
 
@@ -581,26 +581,26 @@ La prueba de DR debe asumir que:
 Un componente solo puede declararse cubierto por backup cuando:
 
 ```text
-[ ] datos incluidos definidos
-[ ] exclusiones definidas
-[ ] destino separado validado
-[ ] backup ejecutado
-[ ] integridad comprobada
-[ ] restore a ubicación temporal ejecutado
-[ ] resultado comparado
-[ ] credenciales de recuperación disponibles
-[ ] documentación actualizada
+[x] datos incluidos definidos
+[x] exclusiones definidas
+[x] destino separado validado
+[x] backup ejecutado
+[x] integridad comprobada
+[x] restore a ubicación temporal ejecutado
+[x] resultado comparado
+[x] credenciales de recuperación disponibles
+[x] documentación actualizada
 ```
 
 ## Estado actual
 
-A 24-09-2026:
+A 01-10-2026:
 
 ```text
 Política general                     VALIDADA
 Restic                               IMPLEMENTADO / VALIDADO
 Destino físico de backup             InfoDGRC / VALIDADO
-Knowledge Vault                      INCLUIDO / RESTORE VALIDADO / TD-004
+Knowledge Vault                      VALIDADO / TD-004 CERRADO
 PostgreSQL backup + restore          TD-003 CERRADO
 Disaster Recovery                    TD-016
 Open WebUI                           RESTORE FUNCIONAL VALIDADO
@@ -613,6 +613,5 @@ Snapshots Btrfs/Snapper              ROLLBACK, NO BACKUP
 ## Próximos pasos
 
 1. ejecutar la prueba completa de Disaster Recovery de TD-016;
-2. revisar el cierre formal de TD-004 para el Knowledge Vault;
-3. medir el crecimiento del repositorio antes de aplicar prune;
-4. evaluar una copia cifrada off-site cuando sea viable.
+2. medir el crecimiento del repositorio antes de aplicar prune;
+3. evaluar una copia cifrada off-site cuando sea viable.
