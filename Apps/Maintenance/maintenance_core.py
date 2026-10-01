@@ -405,6 +405,38 @@ def update_backup_enabled_from_config():
     return state
 
 
+def vault_event_evidence(certification):
+    restored = certification.get("vault_restore") or {}
+    source = certification.get("vault_source") or {}
+
+    if restored.get("match") is not True or source.get("match") is not True:
+        raise MaintenanceError("La certificación del Knowledge Vault no contiene ambas comparaciones válidas.")
+
+    fields = ("files", "markdown_files", "other_files", "symlinks", "directories")
+    evidence = {}
+
+    for field in fields:
+        value = restored.get(field)
+        if not isinstance(value, int) or isinstance(value, bool) or value < 0 or source.get(field) != value:
+            raise MaintenanceError("La evidencia del Knowledge Vault es inconsistente: " + field)
+        evidence[field] = value
+
+    if restored.get("obsidian") is not True or source.get("obsidian") is not True:
+        raise MaintenanceError("La estructura .obsidian no quedó validada.")
+
+    excluded = restored.get("excluded")
+    if not isinstance(excluded, list) or source.get("excluded") != excluded:
+        raise MaintenanceError("La evidencia de exclusiones del Knowledge Vault es inconsistente.")
+
+    evidence.update({
+        "match": True,
+        "source_unchanged": True,
+        "obsidian": True,
+        "excluded": list(excluded),
+    })
+    return evidence
+
+
 def backup_event_metadata(result):
     certification = result.get("certification") or {}
 
@@ -412,6 +444,8 @@ def backup_event_metadata(result):
         raise MaintenanceError(
             "El resultado del backup no está certificado."
         )
+
+    vault = vault_event_evidence(certification)
 
     tag = str(result.get("tag") or "").strip()
     snapshot = result.get("snapshot") or {}
@@ -427,6 +461,7 @@ def backup_event_metadata(result):
         "tag": tag,
         "snapshot_id": snapshot_id,
         "snapshot_short": snapshot_id[:8],
+        "vault": vault,
     }
 
 
@@ -449,6 +484,7 @@ def pending_backup_registration():
         "date": pending.get("date"),
         "tag": tag,
         "snapshot_id": snapshot_id,
+        "vault": pending.get("vault"),
     }
 
 
@@ -459,6 +495,7 @@ def remember_pending_backup_registration(result):
         "date": event["date"].isoformat(),
         "tag": event["tag"],
         "snapshot_id": event["snapshot_id"],
+        "vault": event["vault"],
     }
 
     state = load_state()
@@ -539,6 +576,12 @@ def backup_log_content(event, event_commit):
             "El commit del evento no tiene un hash Git válido."
         )
 
+    vault = event.get("vault") or {}
+    if vault.get("match") is not True or vault.get("source_unchanged") is not True:
+        raise MaintenanceError("El evento no contiene evidencia válida del Knowledge Vault.")
+
+    excluded = ", ".join(vault.get("excluded") or []) or "ninguna"
+
     lines = [
         "# SineOS — Respaldo externo validado",
         "",
@@ -552,6 +595,15 @@ def backup_log_content(event, event_commit):
         "Resultado restic check: sin errores",
         "Resultado restore: VALIDADO",
         "Knowledge Vault: VALIDADO",
+        "Vault archivos comparados: " + str(vault["files"]),
+        "Vault notas Markdown: " + str(vault["markdown_files"]),
+        "Vault otros archivos: " + str(vault["other_files"]),
+        "Vault symlinks: " + str(vault["symlinks"]),
+        "Vault directorios: " + str(vault["directories"]),
+        "Vault estructura .obsidian: VALIDADA",
+        "Vault exclusiones: " + excluded,
+        "Vault origen/restore: COINCIDE",
+        "Vault origen sin cambios durante backup: VALIDADO",
         "PostgreSQL: VALIDADO FUNCIONALMENTE",
         "Uptime Kuma: VALIDADO FUNCIONALMENTE",
         "Open WebUI: VALIDADO FUNCIONALMENTE",

@@ -1,6 +1,6 @@
 # SineOS — Deuda técnica
 
-Última revisión: 26-09-2026
+Última revisión: 01-10-2026
 
 Este documento registra únicamente deuda vigente.
 
@@ -68,7 +68,13 @@ Gitleaks historial Git          -> 0 hallazgos
 TD-001 cerrado el 23-09-2026. El auditor recurrente v1.1.0 fue validado con 12 controles OK, 0 advertencias y 0 errores; la rotación quedó documentada en `Documentation/Security/Secrets-Rotation.md`.
 
 ### Backups y recuperación
-La política general está definida en `Documentation/Recovery/Backup-Policy.md`. El destino físico separado, el repositorio Restic y el flujo certificado de backup/restore ya están implementados y validados, incluyendo PostgreSQL y la recuperación del Knowledge Vault dentro del respaldo externo. Permanecen como deuda independiente TD-004 para el backup propio del Knowledge Vault y TD-016 para la prueba formal de Disaster Recovery. Snapshot Btrfs no equivale a backup.
+La política general está definida en `Documentation/Recovery/Backup-Policy.md`. El destino físico separado, el repositorio Restic y el flujo certificado de backup/restore ya están implementados y validados.
+
+Para TD-004 se implementó validación específica del Knowledge Vault mediante manifiesto de archivos, SHA-256, estructura de directorios, symlinks sin seguimiento, `.obsidian`, exclusiones y comparación origen/restore.
+
+Las pruebas simuladas positiva y negativa fueron validadas el 01-10-2026. TD-004 permanece abierta hasta completar un nuevo backup Restic real con restore temporal y comparación satisfactoria del Vault.
+
+TD-016 permanece pendiente para la prueba formal de Disaster Recovery. Snapshot Btrfs no equivale a backup.
 
 ### Open WebUI
 El secret persistente ya quedó validado y TD-005 está cerrado. Permanecen como deuda fijar la imagen y retirar `restart: unless-stopped` mediante recreación controlada preservando datos.

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import hashlib
 import json
 import os
 import sqlite3
@@ -465,6 +466,223 @@ def backup_excludes():
         REPO_ROOT / "Containers" / "volumes" / "stirling-pdf" / "tessdata",
         home / "Obsidian" / "SineOS" / ".opencode" / "node_modules",
     ]
+
+
+VAULT_EXCLUDED_PATHS = (
+    Path(".opencode") / "node_modules",
+)
+
+
+def _vault_sha256(path):
+    digest = hashlib.sha256()
+
+    try:
+        with Path(path).open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+    except OSError as exc:
+        raise BackupError(
+            f"No se pudo calcular SHA-256 de {path}: {exc}"
+        ) from exc
+
+    return digest.hexdigest()
+
+
+def _vault_path_excluded(relative):
+    relative = Path(relative)
+
+    return any(
+        relative == excluded or excluded in relative.parents
+        for excluded in VAULT_EXCLUDED_PATHS
+    )
+
+
+def build_vault_manifest(vault_root):
+    root = Path(vault_root).expanduser().resolve()
+
+    if not root.is_dir():
+        raise BackupError("No existe el Knowledge Vault.")
+
+    if not (root / ".obsidian").is_dir():
+        raise BackupError(
+            "El Knowledge Vault no contiene la estructura .obsidian."
+        )
+
+    entries = {}
+
+    def scan(directory):
+        try:
+            children = sorted(
+                os.scandir(directory),
+                key=lambda item: item.name,
+            )
+        except OSError as exc:
+            raise BackupError(
+                f"No se pudo leer el Knowledge Vault: {directory}: {exc}"
+            ) from exc
+
+        for entry in children:
+            path = Path(entry.path)
+            relative = path.relative_to(root)
+
+            if _vault_path_excluded(relative):
+                continue
+
+            key = relative.as_posix()
+
+            try:
+                if entry.is_symlink():
+                    entries[key] = {
+                        "type": "symlink",
+                        "target": os.readlink(path),
+                    }
+                    continue
+
+                if entry.is_dir(follow_symlinks=False):
+                    entries[key] = {
+                        "type": "directory",
+                    }
+                    scan(path)
+                    continue
+
+                if entry.is_file(follow_symlinks=False):
+                    entries[key] = {
+                        "type": "file",
+                        "size": entry.stat(
+                            follow_symlinks=False
+                        ).st_size,
+                        "sha256": _vault_sha256(path),
+                    }
+                    continue
+            except OSError as exc:
+                raise BackupError(
+                    f"No se pudo inspeccionar {relative}: {exc}"
+                ) from exc
+
+            raise BackupError(
+                "El Knowledge Vault contiene un tipo de archivo "
+                f"no soportado: {relative}"
+            )
+
+    scan(root)
+
+    regular_files = [
+        path
+        for path, metadata in entries.items()
+        if metadata["type"] == "file"
+    ]
+    markdown_files = [
+        path
+        for path in regular_files
+        if Path(path).suffix.lower() == ".md"
+    ]
+
+    return {
+        "entries": entries,
+        "files": len(regular_files),
+        "markdown_files": len(markdown_files),
+        "other_files": len(regular_files) - len(markdown_files),
+        "symlinks": sum(
+            1
+            for metadata in entries.values()
+            if metadata["type"] == "symlink"
+        ),
+        "directories": sum(
+            1
+            for metadata in entries.values()
+            if metadata["type"] == "directory"
+        ),
+        "obsidian": True,
+        "excluded": [
+            path.as_posix()
+            for path in VAULT_EXCLUDED_PATHS
+        ],
+    }
+
+
+def _vault_difference_preview(paths, limit=5):
+    paths = sorted(paths)
+
+    if len(paths) <= limit:
+        return ", ".join(paths)
+
+    return ", ".join(paths[:limit]) + f" (+{len(paths) - limit} más)"
+
+
+def validate_vault_manifest_matches(expected, actual, context):
+    expected_entries = expected["entries"]
+    actual_entries = actual["entries"]
+
+    expected_paths = set(expected_entries)
+    actual_paths = set(actual_entries)
+
+    missing = expected_paths - actual_paths
+    extra = actual_paths - expected_paths
+    changed = {
+        path
+        for path in expected_paths & actual_paths
+        if expected_entries[path] != actual_entries[path]
+    }
+
+    problems = []
+
+    if missing:
+        problems.append(
+            "faltan: " + _vault_difference_preview(missing)
+        )
+
+    if extra:
+        problems.append(
+            "sobran: " + _vault_difference_preview(extra)
+        )
+
+    if changed:
+        problems.append(
+            "cambiaron: " + _vault_difference_preview(changed)
+        )
+
+    if problems:
+        raise BackupError(
+            f"Knowledge Vault no coincide ({context}): "
+            + "; ".join(problems)
+        )
+
+    return {
+        "match": True,
+        "files": expected["files"],
+        "markdown_files": expected["markdown_files"],
+        "other_files": expected["other_files"],
+        "symlinks": expected["symlinks"],
+        "directories": expected["directories"],
+        "obsidian": expected["obsidian"],
+        "excluded": list(expected["excluded"]),
+    }
+
+
+def validate_vault_restore_matches_source(
+    expected_manifest,
+    restored_vault,
+):
+    restored_manifest = build_vault_manifest(restored_vault)
+
+    return validate_vault_manifest_matches(
+        expected_manifest,
+        restored_manifest,
+        "restore temporal",
+    )
+
+
+def validate_vault_source_unchanged(
+    vault_root,
+    expected_manifest,
+):
+    current_manifest = build_vault_manifest(vault_root)
+
+    return validate_vault_manifest_matches(
+        expected_manifest,
+        current_manifest,
+        "Vault vivo cambió durante el backup",
+    )
 
 
 def restic_snapshot_count(root, password_file):
@@ -2010,6 +2228,8 @@ def certify_restic_snapshot(
     snapshot_id,
     postgres_staging,
     expected_head,
+    vault_root,
+    expected_vault_manifest,
 ):
     validate_stateful_containers_stopped()
 
@@ -2027,6 +2247,11 @@ def certify_restic_snapshot(
     layout = validate_restored_layout(
         restored["target"],
         postgres_staging,
+    )
+
+    vault_restore = validate_vault_restore_matches_source(
+        expected_vault_manifest,
+        layout["vault"],
     )
 
     git_head = validate_restored_git_head(
@@ -2048,6 +2273,11 @@ def certify_restic_snapshot(
         layout["postgres_staging"],
     )
 
+    vault_source = validate_vault_source_unchanged(
+        vault_root,
+        expected_vault_manifest,
+    )
+
     validate_stateful_containers_stopped()
 
     return {
@@ -2055,6 +2285,8 @@ def certify_restic_snapshot(
         "restic_check": check["ok"],
         "restore_target": restored["target"],
         "layout": layout,
+        "vault_restore": vault_restore,
+        "vault_source": vault_source,
         "git_head": git_head,
         "postgres_staging": postgres,
         "postgres_match": postgres_match,
@@ -2236,6 +2468,9 @@ def create_and_certify_backup(
         tag,
     )
 
+    vault_root = Path.home() / "Obsidian" / "SineOS"
+    vault_manifest = build_vault_manifest(vault_root)
+
     snapshot = create_restic_snapshot(
         root=final["root"],
         password_file=final["password_file"],
@@ -2259,6 +2494,8 @@ def create_and_certify_backup(
             snapshot_id=snapshot_id,
             postgres_staging=staging,
             expected_head=expected_head,
+            vault_root=vault_root,
+            expected_vault_manifest=vault_manifest,
         )
 
     except Exception as exc:

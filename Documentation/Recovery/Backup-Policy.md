@@ -335,6 +335,37 @@ TD-004 debe identificar su ruta real y validar:
 - integridad de notas y adjuntos;
 - recuperación de estructura Obsidian.
 
+### Estado de implementación TD-004 — 01-10-2026
+
+La validación específica del Knowledge Vault quedó integrada al flujo certificado de respaldo.
+
+La certificación ahora:
+
+- captura un manifiesto del Vault antes de crear el snapshot;
+- compara archivos regulares por ruta relativa, tamaño y SHA-256;
+- registra y compara symlinks por su destino literal sin seguirlos;
+- compara la estructura de directorios;
+- exige la presencia de `.obsidian`;
+- excluye `.opencode/node_modules`;
+- compara el Vault restaurado contra el manifiesto previo al snapshot;
+- verifica nuevamente que el Vault vivo no haya cambiado durante el backup;
+- conserva en la bitácora los conteos y el resultado de las comparaciones.
+
+Las pruebas simuladas positiva y negativa fueron validadas el 01-10-2026. Una copia idéntica fue aceptada y una copia con un archivo modificado fue rechazada correctamente.
+
+Estado:
+
+```text
+IMPLEMENTACIÓN                         LISTA
+PRUEBA SIMULADA POSITIVA              VALIDADA
+PRUEBA SIMULADA NEGATIVA              VALIDADA
+BACKUP RESTIC REAL                    PENDIENTE
+RESTORE REAL CON COMPARACIÓN VAULT    PENDIENTE
+TD-004                                ABIERTA
+```
+
+TD-004 solo podrá cerrarse después de ejecutar un nuevo ciclo real de backup certificado y comprobar que el Vault restaurado coincide con el estado capturado antes del snapshot.
+
 ## Secretos
 
 Los secretos que sean necesarios para recuperar un servicio pueden formar parte de un backup únicamente dentro de un repositorio cifrado.
