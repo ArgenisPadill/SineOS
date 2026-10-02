@@ -45,7 +45,11 @@ Se validaron:
 - persistencia tras recreación controlada;
 - conexión mediante clientes locales de administración;
 - disponibilidad del servidor;
-- funcionamiento del monitoreo.
+- funcionamiento del monitoreo;
+- backup lógico mediante `pg_dump` y `pg_dumpall`;
+- restauración real sobre PostgreSQL 18;
+- autenticación por contraseña desde fuera del contenedor;
+- recuperación completa dentro de TD-016.
 
 Los parámetros concretos de conexión no se publican.
 
@@ -53,15 +57,16 @@ Los parámetros concretos de conexión no se publican.
 
 `Scripts/Monitoring/check-postgresql.sh` comprueba disponibilidad y utiliza una URL Push almacenada fuera del repositorio.
 
-## Pendientes
-
-- formalizar gestión de secretos;
-- definir frecuencia y retención de backups;
-- definir destino cifrado;
-- probar restauración completa;
-- documentar Disaster Recovery.
 
 Un snapshot no sustituye un backup y un backup no se considera validado hasta probar su restauración.
+
+## Recuperación
+
+El backup lógico y la restauración de PostgreSQL fueron validados primero de forma aislada y después dentro de la prueba completa de Disaster Recovery TD-016.
+
+En un host Podman rootless limpio, el bind mount de datos requirió preparar ownership `999:999` mediante `podman unshare` antes del bootstrap.
+
+El procedimiento completo está documentado en `Documentation/Recovery/Disaster-Recovery.md`.
 
 ## Estado
 
@@ -73,4 +78,4 @@ Un snapshot no sustituye un backup y un backup no se considera validado hasta pr
 | Exposición | Solo local |
 | Arranque | Manual |
 | Monitoreo | Operativo |
-| Backup/restauración | Pendiente |
+| Backup/restauración | Validada |

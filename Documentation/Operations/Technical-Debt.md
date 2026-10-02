@@ -1,6 +1,6 @@
 # SineOS — Deuda técnica
 
-Última revisión: 01-10-2026
+Última revisión: 02-10-2026
 
 Este documento registra únicamente deuda vigente.
 
@@ -18,10 +18,10 @@ Este documento registra únicamente deuda vigente.
 | TD-013 | Media | Miyo | Benchmark semántico multinota |
 | TD-014 | Baja | Paquetes | Revisar apt autoremove manualmente |
 | TD-015 | Media | Recuperación | Procedimiento de migración |
-| TD-016 | Alta | Recuperación | Prueba de Disaster Recovery |
 | TD-017 | Media | Vault | Templates Incidencia/Procedimiento/ADR |
-| TD-018 | Alta | Seguridad | Ejecutar validación final asistida por agente después de cerrar hardening y DR |
+| TD-018 | Alta | Seguridad | Ejecutar validación final asistida por agente después de cerrar el hardening restante |
 | TD-019 | Media | Stirling PDF | Revisar permisos de `/configs` al actualizar desde 2.14.3; la versión actual restablece archivos sensibles a 755 al arrancar |
+| TD-024 | Media | Recuperación | Normalizar ownership de Uptime Kuma durante restore sobre host limpio |
 
 ## Decisiones cerradas
 
@@ -33,11 +33,13 @@ Este documento registra únicamente deuda vigente.
 
 **Gestión de secretos (TD-001):** cerrada. Política, inventario, permisos, Gitleaks, secret persistente de Open WebUI, auditor recurrente y procedimientos de rotación quedaron documentados y validados.
 
-**Política general de backup (TD-002):** cerrada. SineOS adopta Restic como motor preferente para backup cifrado/versionado y Btrfs/Snapper únicamente como rollback local. La implementación se dividió en TD-003, TD-004 y TD-016; TD-003 y TD-004 están cerradas y TD-016 permanece vigente.
+**Política general de backup (TD-002):** cerrada. SineOS adopta Restic como motor preferente para backup cifrado/versionado y Btrfs/Snapper únicamente como rollback local. La implementación se dividió en TD-003, TD-004 y TD-016; TD-003, TD-004 y TD-016 están cerradas.
 
 **PostgreSQL backup/restore (TD-003):** cerrado. El 24-09-2026 se generó un dump lógico con `pg_dump`/ `pg_dumpall`, se validaron hashes SHA-256 y se restauró realmente en una instancia PostgreSQL 18 temporal, aislada, sin red ni puertos publicados. Se verificaron roles y estructura, se eliminó el entorno de prueba y el contenedor productivo permaneció detenido e intacto.
 
 **Knowledge Vault backup independiente (TD-004):** cerrado. El 01-10-2026 se validó de extremo a extremo el snapshot Restic `9ec723e9` con tag `SineOsBackups-011026-0101`. El Vault restaurado coincidió con el manifiesto previo al snapshot: 70 archivos, 27 notas Markdown, 43 archivos adicionales, 33 symlinks y 99 directorios. `.obsidian` fue validado, `.opencode/node_modules` permaneció excluido y el Vault vivo no cambió durante el proceso. La evidencia quedó registrada mediante los commits `01302b9` y `ae3886f`.
+
+**Disaster Recovery (TD-016):** cerrado el 02-10-2026. SineOS fue reconstruido en una VM Debian 13.7 limpia asumiendo pérdida del sistema original. Se recuperaron Git, Restic, Knowledge Vault, secretos necesarios, PostgreSQL, Uptime Kuma, Stirling PDF y Open WebUI. Se validaron autenticación PostgreSQL por contraseña, persistencia de los servicios, conectividad Uptime→Stirling y sincronización Git. El procedimiento probado quedó documentado en `Documentation/Recovery/Disaster-Recovery.md`. El hallazgo de ownership de Uptime Kuma se separó como TD-024.
 
 **Salud trimestral (TD-020):** cerrada. `sineos-health-audit.sh` v1.2.3 fue validado el 24-09-2026 con 21 controles OK, 0 advertencias, 0 errores y `RESULTADO: OK`; Git quedó limpio y sincronizado con GitHub.
 
@@ -71,9 +73,9 @@ TD-001 cerrado el 23-09-2026. El auditor recurrente v1.1.0 fue validado con 12 c
 ### Backups y recuperación
 La política general está definida en `Documentation/Recovery/Backup-Policy.md`. El destino físico separado, el repositorio Restic y el flujo certificado de backup/restore están implementados y validados.
 
-TD-003 y TD-004 están cerradas. El Knowledge Vault cuenta con validación por manifiesto, SHA-256, estructura de directorios, symlinks sin seguimiento, `.obsidian`, exclusiones y comparación real origen/restore.
+TD-003, TD-004 y TD-016 están cerradas. El Knowledge Vault cuenta con validación por manifiesto, SHA-256, estructura de directorios, symlinks sin seguimiento, `.obsidian`, exclusiones y comparación real origen/restore.
 
-TD-016 permanece pendiente para la prueba formal de Disaster Recovery. Snapshot Btrfs no equivale a backup.
+TD-016 quedó cerrado el 02-10-2026 después de una reconstrucción completa y validada sobre Debian 13 limpio. El procedimiento está documentado en `Documentation/Recovery/Disaster-Recovery.md`. TD-024 mantiene pendiente automatizar la corrección de ownership de Uptime Kuma observada durante el DR. Snapshot Btrfs no equivale a backup.
 
 ### Open WebUI
 El secret persistente ya quedó validado y TD-005 está cerrado. Permanecen como deuda fijar la imagen y retirar `restart: unless-stopped` mediante recreación controlada preservando datos.

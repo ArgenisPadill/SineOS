@@ -567,14 +567,16 @@ Si falla:
 
 ## Disaster Recovery
 
-TD-016 utilizará esta política para demostrar recuperación desde una situación donde el sistema principal no pueda utilizarse.
+El 02-10-2026 TD-016 utilizó esta política para demostrar una recuperación completa desde una situación donde el sistema principal no podía utilizarse.
 
-La prueba de DR debe asumir que:
+La prueba certificada de DR asumió que:
 
 - los snapshots locales pueden no existir;
 - el SSD original puede estar perdido;
 - Git aporta infraestructura y documentación;
 - los backups aportan estado y datos privados.
+
+El procedimiento validado está documentado en `Documentation/Recovery/Disaster-Recovery.md`.
 
 ## Definition of Done de un componente respaldado
 
@@ -594,7 +596,7 @@ Un componente solo puede declararse cubierto por backup cuando:
 
 ## Estado actual
 
-A 01-10-2026:
+A 02-10-2026:
 
 ```text
 Política general                     VALIDADA
@@ -602,7 +604,7 @@ Restic                               IMPLEMENTADO / VALIDADO
 Destino físico de backup             InfoDGRC / VALIDADO
 Knowledge Vault                      VALIDADO / TD-004 CERRADO
 PostgreSQL backup + restore          TD-003 CERRADO
-Disaster Recovery                    TD-016
+Disaster Recovery                    VALIDADO / TD-016 CERRADO
 Open WebUI                           RESTORE FUNCIONAL VALIDADO
 Uptime Kuma                          RESTORE FUNCIONAL VALIDADO
 Stirling PDF                         RESTORE FUNCIONAL VALIDADO
@@ -612,6 +614,6 @@ Snapshots Btrfs/Snapper              ROLLBACK, NO BACKUP
 
 ## Próximos pasos
 
-1. ejecutar la prueba completa de Disaster Recovery de TD-016;
+1. incorporar al flujo automatizado la normalización de ownership detectada en Uptime Kuma (TD-024);
 2. medir el crecimiento del repositorio antes de aplicar prune;
 3. evaluar una copia cifrada off-site cuando sea viable.

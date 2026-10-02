@@ -368,7 +368,8 @@ Componentes validados o funcionales:
 - Btrfs;
 - Git y acceso a GitHub mediante SSH;
 - Podman rootless;
-- PostgreSQL 18 con persistencia;
+- PostgreSQL 18 con persistencia y backup/restauración validados;
+- Disaster Recovery completo validado sobre Debian 13 limpio;
 - Ollama;
 - Open WebUI;
 - Obsidian;
@@ -400,15 +401,17 @@ Componentes validados o funcionales:
 
 Uptime Kuma usa la red `sineos-monitoring`. Stirling PDF se comprueba directamente en esa red; Open WebUI y PostgreSQL usan scripts Push desde el host. Las URLs Push permanecen fuera de Git en `~/.config/sineos/monitoring/`.
 
+El procedimiento completo de recuperación ante desastre validado está documentado en `Documentation/Recovery/Disaster-Recovery.md`.
+
 ## Trabajo pendiente
 
-- fijar versión/digest de Open WebUI, definir secret persistente y retirar `restart: unless-stopped` mediante recreación controlada;
+- fijar versión/digest de Open WebUI y retirar `restart: unless-stopped` mediante recreación controlada;
 - determinar si Tor tiene consumidores reales;
 - validar Ollama desde otro dispositivo de la LAN;
 - revisar `flush ruleset` de nftables frente a Podman/netavark;
 - completar auditoría de AppArmor;
 - revisar manualmente candidatos de `apt autoremove`;
-- definir backups de PostgreSQL/Vault, snapshots y Disaster Recovery;
+- formalizar la política de snapshots y resolver la portabilidad del restore de Uptime Kuma (TD-024);
 - formalizar actualización de Miyo y continuar benchmarks semánticos;
 - crear templates de Incidencia, Procedimiento y ADR.
 

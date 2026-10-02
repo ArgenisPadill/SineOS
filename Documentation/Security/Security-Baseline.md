@@ -88,16 +88,16 @@ Otras todavía requieren implementación o validación formal.
 | AppArmor | Requiere auditoría formal |
 | nftables | Operativo; revisión de convivencia con Podman/netavark pendiente |
 | Hardening SSH | Requiere auditoría formal |
-| Gestión central de secretos | Pendiente |
+| Gestión central de secretos | Operativa / TD-001 cerrado |
 | LUKS | Requiere verificación/documentación |
 | Snapshots Btrfs | Pendiente de política formal |
-| Backup Vault | Pendiente |
-| Backup PostgreSQL | Pendiente |
-| Disaster Recovery | Pendiente |
+| Backup Vault | Validado / TD-004 cerrado |
+| Backup PostgreSQL | Validado / TD-003 cerrado |
+| Disaster Recovery | Validado / TD-016 cerrado |
 | Monitoreo integral | Pendiente |
 | Auditoría SineOS | Operativa |
 | Rotación de credenciales | Pendiente |
-| Validación final asistida por agente | Planificada; depende del cierre del hardening y DR |
+| Validación final asistida por agente | Planificada; depende del cierre del hardening restante |
 
 ---
 
@@ -821,7 +821,7 @@ Esto no obliga a utilizar modelos locales para tareas que excedan claramente sus
 
 Los backups constituyen una capa de seguridad y continuidad.
 
-Actualmente la política integral de backups sigue pendiente.
+La política general de backups está implementada y validada para los componentes persistentes actuales. Permanecen mejoras de resiliencia, como evaluar una copia cifrada off-site y formalizar la política de snapshots.
 
 Prioridad:
 
@@ -838,7 +838,7 @@ Prioridad:
 
 ## 41. Regla 3-2-1
 
-La futura política de backup debe evaluar una estrategia equivalente al principio:
+La política vigente de backup mantiene como mejora pendiente evaluar una estrategia equivalente al principio:
 
 ```text
 3 copias
@@ -856,7 +856,7 @@ No debe considerarse implementada hasta ser probada.
 
 Un backup solo tiene valor operativo si puede utilizarse para recuperar el sistema.
 
-La futura prueba de Disaster Recovery debe considerar:
+La prueba de Disaster Recovery ejecutada el 02-10-2026 consideró:
 
 ```text
 Git
@@ -866,7 +866,7 @@ configuración
 secretos necesarios
 ```
 
-El resultado debe comprobarse en un entorno controlado.
+El resultado se comprobó en una VM Debian 13.7 limpia. El procedimiento validado está documentado en `Documentation/Recovery/Disaster-Recovery.md`.
 
 ---
 
@@ -1058,15 +1058,15 @@ Antes de considerar cerrada la fase inicial de hardening deben estar resueltos a
 [ ] Revisión de exposición de Ollama
 [ ] Auditoría SSH
 [ ] Verificación/documentación de LUKS
-[ ] Gestión de secretos
+[x] Gestión de secretos
 [ ] Rotación de credenciales PostgreSQL
-[ ] Secret persistente Open WebUI
-[ ] Backup del Vault
-[ ] Backup PostgreSQL
-[ ] Restauración probada
+[x] Secret persistente Open WebUI
+[x] Backup del Vault
+[x] Backup PostgreSQL
+[x] Restauración probada
 [ ] Política de snapshots
 [ ] Revisión de puertos
-[ ] Disaster Recovery probado
+[x] Disaster Recovery probado
 [ ] Validación final de seguridad asistida por agente
 ```
 
@@ -1099,10 +1099,10 @@ El siguiente bloque de seguridad debe concentrarse primero en:
 4. Inventariar puertos
 5. Revisar convivencia nftables/Podman y validar Ollama desde LAN
 6. Proteger Ollama
-7. Formalizar secretos
+7. Auditar hardening SSH
 8. Rotar credenciales
-9. Diseñar backups
-10. Probar recuperación
+9. Formalizar política de snapshots
+10. Resolver TD-024 de portabilidad del restore de Uptime Kuma
 11. Ejecutar validación final de seguridad asistida por agente
 ```
 
@@ -1129,15 +1129,14 @@ reportes de auditoría fuera de Git
 Al mismo tiempo mantiene pendientes importantes:
 
 ```text
-nftables
+revisión nftables/Podman
 hardening de Ollama
-gestión de secretos
 rotación de credenciales
 verificación de AppArmor
 verificación de LUKS
-snapshots
-backups
-Disaster Recovery
+política de snapshots
+portabilidad del restore de Uptime Kuma (TD-024)
+validación final de seguridad asistida por agente
 ```
 
 Por tanto, el estado actual debe describirse como:
@@ -1148,7 +1147,7 @@ BASE FUNCIONAL
 HARDENING EN PROGRESO
 ```
 
-El objetivo de la siguiente fase es reducir la superficie de exposición y garantizar que los datos importantes puedan recuperarse sin sacrificar la mantenibilidad del sistema.
+El objetivo de la siguiente fase es reducir la superficie de exposición y mantener verificable la capacidad de recuperación sin sacrificar la mantenibilidad del sistema.
 
 
 ---
