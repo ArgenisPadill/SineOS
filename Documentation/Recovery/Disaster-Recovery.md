@@ -61,6 +61,8 @@ Debian limpio
 → Uptime Kuma
 → Stirling PDF
 → Open WebUI
+→ XFCE + LightDM
+→ primer login y configuración visual
 → validación integrada
 ```
 
@@ -215,6 +217,52 @@ En el host limpio Open WebUI reconstruyó aproximadamente 889 MiB de caché desc
 
 Por ello, el estado persistente se recupera sin depender del caché, pero algunas funciones RAG pueden tardar en quedar disponibles después de un Disaster Recovery.
 
+## Entorno gráfico XFCE
+
+La recuperación completa de SineOS también incluye la reconstrucción del entorno gráfico definido por el proyecto.
+
+La validación complementaria de TD-016 se realizó sobre la misma máquina Debian 13 limpia utilizando el script versionado:
+
+```text
+Scripts/Desktop/sineos-xfce-macos.sh
+Versión validada: 4.0.0
+```
+
+Desde una instalación sin XFCE, el script instaló y configuró correctamente:
+
+- XFCE.
+- LightDM.
+- arranque mediante `graphical.target`.
+- Arc-Dark para GTK y XFWM.
+- Papirus-Dark.
+- fuentes Noto Sans y JetBrains Mono.
+- Docklike.
+- barra superior y Dock inferior.
+- wallpaper generado por SineOS.
+- aplicación automática del layout durante el primer inicio de sesión.
+
+Después del reinicio y primer login se validó:
+
+```text
+XFCE instalado: sí
+LightDM: active / enabled
+Sesión: X11 / XFCE
+Layout SineOS: aplicado
+xfce4-panel: activo
+xfdesktop: activo
+Tema GTK: Arc-Dark
+Iconos: Papirus-Dark
+Tema XFWM: Arc-Dark
+Panel superior: p=6;x=0;y=0
+Panel inferior: p=10;x=0;y=0
+Auto-ocultación Dock: 2
+Autostart de primer login: consumido correctamente
+```
+
+El wallpaper utilizado es generado localmente por el instalador y tiene una apariencia deliberadamente genérica. SineOS no define actualmente un tema gráfico propio; reproduce una configuración visual basada en componentes estándar de XFCE.
+
+La validación demuestra que una instalación Debian limpia puede reconstruir automáticamente la experiencia de escritorio definida por SineOS a partir del repositorio Git.
+
 ## Validación integrada
 
 Al finalizar la recuperación deben comprobarse como mínimo:
@@ -225,6 +273,12 @@ Open WebUI: HTTP 200
 Uptime Kuma: HTTP 2xx/3xx
 Stirling PDF: HTTP 200
 Uptime → Stirling: HTTP 200
+XFCE: sesión X11 activa
+LightDM: active / enabled
+Layout SineOS: aplicado
+Tema GTK/XFWM: Arc-Dark
+Iconos: Papirus-Dark
+Wallpaper SineOS: configurado
 Git working tree: limpio
 HEAD local = origin/main
 ```
@@ -255,7 +309,7 @@ Las etiquetas móviles no garantizan reproducibilidad futura. Los IDs anteriores
 
 ## Límites de la prueba
 
-TD-016 valida recuperación de infraestructura, datos persistentes, secretos necesarios y servicios principales.
+TD-016 valida recuperación de infraestructura, datos persistentes, secretos necesarios, servicios principales y entorno gráfico reproducible de SineOS.
 
 No cierra automáticamente las deudas de hardening, red, Ollama, AppArmor, permisos de Stirling PDF ni reproducibilidad de imágenes.
 
@@ -265,4 +319,4 @@ El hallazgo de ownership de Uptime Kuma debe mantenerse como deuda separada hast
 
 La reconstrucción completa desde Debian 13 limpio fue satisfactoria.
 
-SineOS puede recuperarse desde Git, Restic y credenciales independientes sin depender del SSD original ni de snapshots Btrfs locales.
+SineOS puede recuperarse desde Git, Restic y credenciales independientes sin depender del SSD original ni de snapshots Btrfs locales. La reconstrucción validada incluye también XFCE, LightDM y la configuración visual reproducible definida por el proyecto.
