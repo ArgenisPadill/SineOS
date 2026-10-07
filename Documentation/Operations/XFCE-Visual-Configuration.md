@@ -1,5 +1,8 @@
 # SineOS — Configuración visual reproducible de XFCE
 
+> **Nota de evolución:** esta configuración describe el estado visual operativo actual. La siguiente evolución planificada está congelada como **SineOS Desktop Experience (SDE)** en `Documentation/Architecture/SineOS-Desktop-Experience.md` y se sigue en el issue maestro https://github.com/ArgenisPadill/SineOS/issues/1. SDE todavía no sustituye esta implementación hasta que sea desarrollado y validado.
+
+
 Esta carpeta contiene la configuración visual reproducible de **SineOS** para Debian con XFCE.
 
 El objetivo no es convertir Debian en otro sistema operativo, sino conservar una instalación estable y predecible de Debian y aplicar una capa visual moderna, ligera y recuperable sobre XFCE.
