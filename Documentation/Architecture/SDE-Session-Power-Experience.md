@@ -1,4 +1,4 @@
-# SineOS Session & Power Experience — Experiencia de sesión y energía
+# SineOS — Experiencia de sesión y energía
 
 **Fecha de decisión:** 07-10-2026  
 **Estado:** planeación congelada / obligatorio para SDE 1.0  
@@ -76,7 +76,7 @@ Una falla gráfica nunca debe ocultar indefinidamente un error crítico de arran
 
 Se mantiene LightDM.
 
-Slick Greeter será la base preferida para el login de SineOS, salvo que durante la implementación aparezca una limitación bloqueante.
+Slick Greeter será la base preferida para el inicio de sesión de SineOS, salvo que durante la implementación aparezca una limitación bloqueante.
 
 ## Comportamiento de identidad del usuario
 
@@ -93,7 +93,7 @@ El autologin no forma parte de la experiencia predeterminada de SDE.
 
 ## Integración visual
 
-El login debe utilizar el mismo lenguaje visual que SDE:
+El inicio de sesión debe utilizar el mismo lenguaje visual que SDE:
 - identidad SineOS;
 - wallpaper o fondo SineOS;
 - tipografía Inter;
@@ -102,7 +102,7 @@ El login debe utilizar el mismo lenguaje visual que SDE:
 - contraste accesible;
 - estados de foco de teclado visibles.
 
-El login debe seguir siendo utilizable si falla la capa visual opcional.
+El inicio de sesión debe seguir siendo utilizable si falla la capa visual opcional.
 
 ---
 
@@ -155,14 +155,14 @@ Usuario
 Desbloquear
 ```
 
-La pantalla de bloqueo debe verse relacionada con el login, pero debe quedar claro que se trata de una sesión ya iniciada y protegida.
+La pantalla de bloqueo debe verse relacionada con el inicio de sesión, pero debe quedar claro que se trata de una sesión ya iniciada y protegida.
 
 ## Seguridad al desbloquear
 
 Requisitos:
 - la contraseña siempre es obligatoria;
 - Esc no debe saltarse el bloqueo;
-- cerrar el prompt no debe exponer la sesión;
+- cerrar el diálogo no debe exponer la sesión;
 - la autenticación utiliza mecanismos normales de PAM/sistema;
 - la personalización visual nunca sustituye ni debilita la autenticación.
 
@@ -189,7 +189,7 @@ Antes de habilitar esta política en una máquina, la certificación SDE debe co
 - recuperación del panel y dock;
 - recuperación del compositor.
 
-SDE no debe hacer fallback silencioso a suspensión si falla la hibernación.
+SDE no debe hacer respaldo silencioso a suspensión si falla la hibernación.
 
 Si la hibernación no está disponible o está rota, debe reportarse como una falla de configuración o certificación.
 
@@ -394,7 +394,7 @@ Si falla la integración o tema de Slick Greeter:
 Si falla `xfce4-screensaver`:
 - SDE health/recovery debe detectar el problema;
 - una falla de bloqueo se considera un defecto de seguridad;
-- SDE debe ofrecer una ruta de fallback documentada.
+- SDE debe ofrecer una ruta de respaldo documentada.
 
 Si falla la aplicación de política TLP:
 - el sistema sigue siendo utilizable;
@@ -414,7 +414,7 @@ Si la hibernación no aprueba certificación:
 - ruta de diagnóstico disponible;
 - GRUB y recuperación accesibles.
 
-## Login
+## Inicio de sesión
 - último usuario o usuario principal preseleccionado;
 - contraseña siempre obligatoria;
 - cambio de usuario disponible;
@@ -430,7 +430,7 @@ Si la hibernación no aprueba certificación:
 
 ## Hibernación
 - cerrar tapa solicita hibernación;
-- sin fallback silencioso a suspensión;
+- sin respaldo silencioso a suspensión;
 - reanudar restaura la sesión existente;
 - pantalla de bloqueo visible después de reanudar.
 
