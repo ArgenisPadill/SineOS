@@ -999,6 +999,314 @@ Debe validarse:
 
 ---
 
+
+# Ampliación congelada: materiales, overview, snap y lenguaje de movimiento
+
+**Decisión congelada:** 07-10-2026
+
+Esta ampliación surge de comparar patrones visuales y de interacción de GNOME, KDE Plasma, COSMIC, elementary/Pantheon, Cinnamon, compositores modernos como Hyprland, Windows 11 y macOS.
+
+El objetivo no es copiar otro escritorio ni incorporar sus dependencias. SDE adopta ideas de interacción que puedan implementarse de forma compatible con XFCE/X11, manteniendo bajo consumo, degradación elegante y recuperación.
+
+## SineOS Materials
+
+SDE formaliza tres tipos de superficie:
+
+### Surface
+
+Para ventanas y superficies de trabajo normales.
+
+Objetivos:
+- alta legibilidad;
+- fondo prácticamente opaco;
+- costo gráfico mínimo;
+- no aplicar blur cuando el contenido de fondo no es visible.
+
+### Frost
+
+Para superficies transitorias y de navegación:
+- panel;
+- dock;
+- Rofi;
+- notificaciones;
+- menús;
+- popovers.
+
+Características:
+- transparencia moderada;
+- tint SineOS;
+- blur selectivo;
+- posible textura de ruido extremadamente sutil;
+- contraste suficiente para conservar legibilidad.
+
+### Overlay
+
+Para interfaces que requieren elevar el foco:
+- Super+P;
+- apagado/reinicio;
+- confirmaciones;
+- recovery;
+- diálogos importantes;
+- overlays de organización.
+
+Características:
+- superficie elevada;
+- fondo atenuado;
+- blur localizado cuando aporte valor;
+- jerarquía visual claramente superior a Surface/Frost.
+
+Los materiales se definirán mediante tokens centrales, no con valores dispersos por aplicación.
+
+## SineOS Overview
+
+SDE incorporará una vista espacial de ventanas y escritorios.
+
+Atajo previsto:
+
+```text
+Super + Tab
+-> SineOS Overview
+```
+
+Objetivos:
+- visualizar ventanas abiertas;
+- visualizar workspaces;
+- seleccionar una ventana con teclado o mouse;
+- facilitar orientación cuando existan muchas ventanas;
+- mantener una salida inmediata al escritorio normal.
+
+### Candidato técnico
+
+`xfdashboard` es candidato para la implementación inicial.
+
+No entra automáticamente en Desktop Core.
+
+Antes de declararlo dependencia soportada deberá:
+- empaquetarse desde una release fija;
+- probarse con XFCE 4.20/X11;
+- medirse en RAM/CPU;
+- verificarse con multimonitor;
+- validar recuperación si el proceso falla;
+- disponer de fallback.
+
+Fallback obligatorio:
+- Alt+Tab/XFWM;
+- selector normal de workspaces;
+- escritorio completamente utilizable sin Overview.
+
+## SineOS Snap
+
+SDE añadirá organización visual de ventanas inspirada en los mejores patrones de snapping modernos sin sustituir XFWM.
+
+Atajo previsto:
+
+```text
+Super + Z
+-> SineOS Snap
+```
+
+Layouts previstos según geometría disponible:
+
+Pantallas convencionales:
+- 50/50;
+- 70/30;
+- 30/70;
+- cuatro cuadrantes.
+
+Pantallas ultrawide:
+- 33/33/33;
+- 25/50/25;
+- combinaciones equivalentes útiles.
+
+Pantallas pequeñas:
+- 50/50;
+- maximizada;
+- layouts reducidos que no produzcan ventanas inutilizables.
+
+Backend conceptual:
+- Rofi para selección visual;
+- libwnck para ventanas;
+- XRandR para geometría de monitores;
+- scripts SineOS sin daemon residente permanente.
+
+Los layouts deben calcularse usando el monitor activo y no coordenadas hardcodeadas.
+
+## SineOS Motion Language
+
+SDE define un lenguaje de movimiento propio. No se añadirán animaciones de forma independiente sin respetar estas reglas.
+
+Duraciones iniciales:
+
+```text
+FAST      ~90 ms
+STANDARD ~140 ms
+EMPHASIS ~180 ms
+```
+
+Comportamientos previstos:
+- menú -> aparece desde el contexto/origen cuando sea viable;
+- notificación -> slide corto desde el borde + fade;
+- Rofi -> scale discreto + fade;
+- ventana -> entrada sutil, sin rebote;
+- cierre -> fade + reducción mínima;
+- Super+P -> overlay + transición corta;
+- diálogo -> aparece sobre su ventana/contexto;
+- Overview -> zoom out;
+- salida de Overview -> retorno hacia la ventana seleccionada;
+- hover del dock -> elevación mínima, nunca magnificación exagerada.
+
+Reglas:
+- ninguna animación debe retrasar la interacción;
+- evitar rebotes y elasticidad innecesaria;
+- mantener coherencia entre componentes;
+- respetar Reduced Motion;
+- priorizar frame pacing y estabilidad sobre espectacularidad.
+
+## Animaciones de geometría
+
+Las animaciones de posición/size de Picom no quedan habilitadas por defecto en SDE 1.0 mientras su comportamiento no sea suficientemente estable para el baseline.
+
+Política prevista:
+
+```text
+Ligero        -> OFF
+Equilibrado   -> OFF
+Máximo visual -> opcional/experimental, solo tras validación
+```
+
+Mover y redimensionar manualmente una ventana debe seguir siendo inmediato y predecible.
+
+## SineOS Focus
+
+La ventana activa debe ser identificable sin recurrir a bordes brillantes o estética gamer.
+
+Ventana activa:
+- título al 100 %;
+- sombra completa;
+- borde/acento muy sutil;
+- posible tinte azul mínimo en sombra si las pruebas muestran buen resultado.
+
+Ventana inactiva:
+- título atenuado;
+- borde neutro;
+- sombra reducida;
+- contenido no debe perder legibilidad.
+
+El efecto debe ser suficientemente discreto para trabajar muchas horas.
+
+## Reduced Motion global
+
+Reduced Motion es una función de accesibilidad global, no un perfil de bajo rendimiento.
+
+Cuando esté activo:
+- scale espacial -> off;
+- slide -> off o sustituido por fade corto;
+- transiciones de workspaces -> off;
+- motion del dock -> off;
+- geometry animations -> off;
+- fade corto -> permitido.
+
+Todas las herramientas SDE deberán respetar esta preferencia.
+
+## Radios sistémicos
+
+Los radios dejan de ser valores arbitrarios por componente.
+
+Tokens previstos:
+
+```text
+radius-sm
+radius-md
+radius-lg
+radius-xl
+```
+
+Deben aplicarse coherentemente a:
+- ventanas;
+- menús;
+- Rofi;
+- dock;
+- panel popups;
+- notificaciones;
+- OSD;
+- Super+P;
+- lock screen;
+- overlays.
+
+## Smoke / atenuación modal
+
+Los diálogos críticos pueden atenuar temporalmente el contenido que queda detrás para hacer evidente el foco.
+
+Aplicable a:
+- apagar;
+- reiniciar;
+- reset;
+- recovery;
+- confirmaciones destructivas;
+- diálogos críticos de SDE.
+
+Reglas:
+- no bloquear innecesariamente;
+- transición corta;
+- no introducir blur global caro;
+- respetar Reduced Motion.
+
+## Cursor: fuente vectorial
+
+El cursor SineOS tendrá un SVG maestro como fuente de diseño.
+
+Pipeline previsto:
+
+```text
+SVG maestro
+├── 24 px
+├── 32 px
+├── 48 px
+└── 64 px
+    -> assets XCursor
+```
+
+Ventajas:
+- consistencia entre tamaños;
+- mejor nitidez;
+- fuente reutilizable para un futuro backend Wayland;
+- mantenimiento centralizado del diseño.
+
+## Efectos explícitamente fuera del baseline
+
+SDE 1.0 no incorporará por defecto:
+- wobbly windows;
+- desktop cube;
+- fall-apart;
+- efectos tipo genie exagerados;
+- magnificación agresiva del dock;
+- refracción costosa en tiempo real;
+- transparencia completa de aplicaciones de trabajo;
+- animaciones largas;
+- geometría experimental obligatoria;
+- glow/neón permanente alrededor de ventanas.
+
+Estos efectos podrán evaluarse en laboratorio, pero no forman parte de la identidad ni de los criterios de aceptación del release.
+
+## Criterios de aceptación adicionales
+
+Antes de considerar terminadas estas funciones deberá validarse:
+- Overview con 1 y múltiples monitores;
+- Overview ausente/fallando sin afectar XFCE;
+- Snap en resoluciones pequeñas, 1080p, 1440p, 4K y ultrawide cuando exista hardware de prueba;
+- Snap en monitor interno y externo;
+- layouts que nunca coloquen ventanas fuera del área visible;
+- Reduced Motion aplicado de forma coherente;
+- materiales legibles sobre wallpapers claros/oscuros;
+- rendimiento de blur/transparencia medido;
+- animaciones sin stutter perceptible bajo carga razonable;
+- Focus claramente visible sin glow excesivo;
+- overlays accesibles por teclado;
+- salida con Esc donde corresponda.
+
+
+---
+
 # Pendientes de planificación
 
 Antes de comenzar implementación deben cerrarse todavía:
