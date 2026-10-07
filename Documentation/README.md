@@ -54,6 +54,9 @@ Política congelada de empaquetado Debian, recuperación local/GitHub/offline, c
 ### SDE-UX-Contract.md
 Contrato formal de experiencia de usuario de SDE: latencia, feedback inmediato, No Dead Clicks, No Surprise Movement, Display Transactions, Last Known Good, Resume Validation, privacidad al proyectar, coordinación display/audio, accesibilidad, Edit Mode y criterios UX de aceptación.
 
+### SDE-Session-Power-Experience.md
+Política congelada del ciclo completo de sesión y energía: Plymouth en arranque/reinicio/apagado, LightDM + Slick Greeter para login, xfce4-screensaver para bloqueo, contraseña obligatoria, hibernación al cerrar tapa, TLP para políticas AC/BAT, Resume Validation y criterios de recuperación.
+
 ## Operations
 
 ### Academic-Templates.md
