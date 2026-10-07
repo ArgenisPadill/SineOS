@@ -1,532 +1,531 @@
-# SineOS Desktop Experience — UX Contract
+# SineOS Desktop Experience — Contrato de experiencia de usuario
 
-**Decision date:** 2026-10-07  
-**Status:** frozen planning / mandatory for SDE 1.0  
-**Master issue:** https://github.com/ArgenisPadill/SineOS/issues/1  
-**Target:** Debian 13 + XFCE 4.20 + X11 + LightDM
+**Fecha de decisión:** 07-10-2026  
+**Estado:** planeación congelada / obligatorio para SDE 1.0  
+**Issue maestro:** https://github.com/ArgenisPadill/SineOS/issues/1  
+**Plataforma objetivo:** Debian 13 + XFCE 4.20 + X11 + LightDM
 
-## Purpose
+## Propósito
 
-This document defines the user-experience contract for SineOS Desktop Experience (SDE).
+Este documento define el contrato de experiencia de usuario de SineOS Desktop Experience (SDE).
 
-SDE is not considered correct merely because it renders the intended visual design. It must also be predictable, responsive, recoverable, accessible and consistent under real daily use.
+SDE no se considera correcto únicamente porque reproduzca el diseño visual previsto. También debe ser predecible, responsivo, recuperable, accesible y consistente durante el uso cotidiano.
 
-The contract exists to prevent recurring desktop UX failures seen across Windows, macOS and Linux environments: delayed feedback, surprise window movement, fragile customization, fragmented settings, display scaling problems, notification leaks while presenting, inconsistent toolkit behavior and recovery failures.
+El contrato existe para evitar problemas recurrentes observados en escritorios Windows, macOS y Linux: falta de respuesta visible, movimientos inesperados de ventanas, personalización frágil, configuraciones fragmentadas, problemas de escalado, exposición de notificaciones al usar pantallas externas, comportamiento inconsistente entre toolkits y fallas de recuperación.
 
-Community reports are treated as qualitative evidence, not statistical proof. The binding requirements are the rules and acceptance criteria defined below.
+Los reportes de comunidades y foros se consideran evidencia cualitativa, no prueba estadística. Los requisitos obligatorios son las reglas y criterios de aceptación definidos en este documento.
 
 ---
 
-# Core UX rules
+# Reglas centrales de UX
 
-## 1. Immediate Feedback
+## 1. Respuesta inmediata
 
-Every user action must produce visible or otherwise perceptible feedback quickly enough that the user knows the input was received.
+Toda acción del usuario debe producir una respuesta visible o perceptible con suficiente rapidez para dejar claro que la entrada fue recibida.
 
-Examples:
-- launching an app;
-- opening Super+P;
-- changing a display layout;
-- mounting/unmounting storage;
-- starting a capture or recording;
-- applying SDE settings;
-- repair/recovery actions.
+Ejemplos:
+- iniciar una aplicación;
+- abrir Super+P;
+- cambiar una disposición de pantallas;
+- montar o desmontar almacenamiento;
+- iniciar captura o grabación;
+- aplicar configuración de SDE;
+- ejecutar reparación o recuperación.
 
-An action that is accepted but produces no feedback is considered a UX defect.
+Una acción aceptada por el sistema pero sin feedback perceptible se considera un defecto de UX.
 
-## 2. No Dead Clicks
+## 2. Sin clics muertos
 
-A click, keybinding or menu action must never appear to be ignored.
+Un clic, atajo de teclado o acción de menú nunca debe parecer ignorado.
 
-If the requested operation is still preparing, SDE must show an intermediate state such as:
-- opening;
-- detecting;
-- applying;
-- connecting;
-- starting;
-- waiting.
+Si la operación todavía se está preparando, SDE debe mostrar un estado intermedio, por ejemplo:
+- Abriendo…;
+- Detectando…;
+- Aplicando…;
+- Conectando…;
+- Iniciando…;
+- Esperando….
 
-The intermediate state must not create a duplicate background operation when the same control is pressed repeatedly.
+El estado intermedio no debe generar una segunda operación de fondo si el usuario vuelve a presionar el mismo control.
 
-## 3. No Surprise Movement
+## 3. Sin movimientos inesperados
 
-SDE must not move, resize, maximize, minimize or change the workspace/monitor of a window without:
-- explicit user intent; or
-- a recovery condition that would otherwise leave the window inaccessible.
+SDE no debe mover, redimensionar, maximizar, minimizar ni cambiar de workspace o monitor una ventana sin:
+- intención explícita del usuario; o
+- una condición de recuperación que, de no corregirse, dejaría la ventana inaccesible.
 
-Valid recovery example:
-- external monitor is disconnected;
-- a window is now completely outside the visible desktop;
-- SDE returns it to the primary visible work area.
+Ejemplo válido:
+- se desconecta un monitor externo;
+- una ventana queda completamente fuera del escritorio visible;
+- SDE la devuelve al área visible principal.
 
-Invalid example:
-- reorganizing visible windows automatically because a new layout is considered aesthetically preferable.
+Ejemplo inválido:
+- reorganizar automáticamente ventanas visibles porque otra disposición parece más estética.
 
-## 4. Persistence
+## 4. Persistencia
 
-A normal reboot, logout/login, suspend/resume or package update must not arbitrarily reorganize:
+Un reinicio, cierre/inicio de sesión, hibernación/reanudación o actualización normal no debe reorganizar arbitrariamente:
 - panel;
 - dock;
 - workspaces;
-- visual preset;
-- display preferences;
-- application-state indicators.
+- preset visual;
+- preferencias de pantalla;
+- indicadores de estado de aplicaciones.
 
-Validated state changes must persist predictably.
+Los cambios validados deben persistir de forma predecible.
 
-## 5. One Setting, One Home
+## 5. Una configuración, un lugar
 
-Each user-facing preference has exactly one authoritative owner and one documented source of truth.
+Cada preferencia visible para el usuario debe tener un propietario autoritativo y una única fuente de verdad documentada.
 
-SDE must avoid exposing the same setting independently through several conflicting interfaces.
+SDE debe evitar exponer el mismo ajuste de forma independiente en interfaces que puedan entrar en conflicto.
 
-Examples:
-- blur intensity belongs to SDE appearance configuration;
-- display topology belongs to SDE display configuration;
-- SDE shortcuts belong to SDE shortcut configuration.
+Ejemplos:
+- intensidad de blur pertenece a la configuración de apariencia de SDE;
+- topología de pantallas pertenece a la configuración de pantallas de SDE;
+- atajos propios de SDE pertenecen a la configuración de atajos de SDE.
 
-Underlying XFCE/Picom/Rofi configuration may still exist, but SDE-generated values must not create competing sources of truth.
+La configuración subyacente de XFCE, Picom o Rofi puede seguir existiendo, pero los valores generados por SDE no deben crear fuentes de verdad competidoras.
 
-## 6. Safe Automation
+## 6. Automatización segura
 
-Automation must be:
-- understandable;
-- reversible when practical;
-- limited to the smallest necessary scope;
-- visible to the user when it changes meaningful state.
+Toda automatización debe ser:
+- entendible;
+- reversible cuando sea práctico;
+- limitada al alcance mínimo necesario;
+- visible cuando cambie un estado importante.
 
-Important automatic changes should offer Undo/Revert where feasible.
+Los cambios automáticos importantes deben ofrecer Deshacer o Revertir cuando sea técnicamente viable.
 
-Examples:
-- changing HDMI audio output;
-- applying a display layout;
-- repairing a panel profile.
+Ejemplos:
+- cambiar salida de audio HDMI;
+- aplicar una disposición de pantallas;
+- reparar un perfil del panel.
 
-## 7. Graceful Failure
+## 7. Degradación elegante
 
-A visual or optional component may fail without making the desktop unusable.
+Un componente visual u opcional puede fallar sin volver inutilizable el escritorio.
 
-The existing degradation contract remains mandatory:
-- Picom failure -> XFWM compositor;
-- Global Menu failure/incompatibility -> application-local menu;
-- Docklike failure -> usable XFCE panel/window access;
-- Rofi failure -> Whisker;
-- Flameshot failure -> xfce4-screenshooter;
-- wireless display failure -> wired display remains usable.
+El contrato de degradación existente sigue siendo obligatorio:
+- falla Picom → compositor XFWM;
+- falla o incompatibilidad de Global Menu → menú local de la aplicación;
+- falla Docklike → acceso funcional a ventanas mediante XFCE;
+- falla Rofi → Whisker;
+- falla Flameshot → xfce4-screenshooter;
+- falla pantalla inalámbrica → pantalla cableada sigue funcionando.
 
-## 8. State Recovery
+## 8. Último estado funcional
 
-SDE maintains an operational **Last Known Good** state separate from historical backups.
+SDE mantiene un estado operativo **Last Known Good / Último estado funcional** separado de los respaldos históricos.
 
-Last Known Good exists to recover normal desktop operation quickly after:
-- failed configuration apply;
-- bad display topology;
-- broken visual setting;
-- incomplete migration;
-- failed resume repair.
+Este estado existe para recuperar rápidamente la operación normal después de:
+- aplicar una configuración fallida;
+- una topología de pantallas inválida;
+- un ajuste visual defectuoso;
+- una migración incompleta;
+- una reparación fallida después de reanudar.
 
-Historical backup and Last Known Good are separate concepts.
+El respaldo histórico y el Último estado funcional son conceptos distintos.
 
-## 9. Accessible State
+## 9. Estado accesible
 
-Important state must never be communicated by color alone.
+Los estados importantes nunca deben comunicarse únicamente mediante color.
 
-Use a combination of:
-- shape;
-- position;
-- icon;
-- label;
-- line/indicator weight;
+Se debe combinar:
+- forma;
+- posición;
+- icono;
+- etiqueta;
+- grosor de línea o indicador;
 - color.
 
-This applies especially to:
-- Docklike active/inactive state;
-- attention requests;
-- selected workspace;
-- success/warning/error;
-- display selection.
+Aplica especialmente a:
+- estado activo/inactivo de Docklike;
+- solicitudes de atención;
+- workspace seleccionado;
+- éxito, advertencia y error;
+- selección de pantalla.
 
-## 10. Context Awareness
+## 10. Conciencia de contexto
 
-SDE may adapt behavior to context when that adaptation is predictable and reversible.
+SDE puede adaptar su comportamiento al contexto cuando esa adaptación sea predecible y reversible.
 
-Contexts include:
-- fullscreen;
-- projector/external display;
-- duplicate display;
-- battery state;
-- suspend/resume;
-- recording/capture;
-- reduced motion.
+Contextos:
+- pantalla completa;
+- proyector o pantalla externa;
+- pantalla duplicada;
+- estado de batería;
+- hibernación/reanudación;
+- grabación o captura;
+- Reduced Motion.
 
-Context awareness must never silently change unrelated preferences.
+La adaptación nunca debe cambiar silenciosamente preferencias no relacionadas.
 
-## 11. Toolkit Tolerance
+## 11. Tolerancia entre toolkits
 
-GTK3, GTK4, Qt5, Qt6, Chromium/Electron and other toolkits may not look identical.
+GTK3, GTK4, Qt5, Qt6, Chromium/Electron y otros toolkits pueden no verse idénticos.
 
-SDE prioritizes:
-1. correct behavior;
-2. legibility;
-3. predictable keyboard/mouse interaction;
-4. visual coherence.
+SDE prioriza:
+1. funcionamiento correcto;
+2. legibilidad;
+3. interacción predecible con teclado y mouse;
+4. coherencia visual.
 
-Forcing perfect visual uniformity is forbidden when it breaks application behavior.
+Está prohibido forzar uniformidad visual perfecta cuando eso rompa el comportamiento de una aplicación.
 
-## 12. Performance Is UX
+## 12. El rendimiento es parte de la UX
 
-A visually polished feature that causes visible lag, delayed input, stutter or excessive resource use is considered defective.
+Una función visualmente pulida que provoque lag perceptible, entrada retrasada, stutter o consumo excesivo se considera defectuosa.
 
-Performance testing is part of UX certification, not a separate optional optimization stage.
+Las pruebas de rendimiento forman parte de la certificación UX; no son una optimización opcional posterior.
 
 ---
 
-# Latency budget
+# Presupuesto de latencia
 
-Initial engineering targets:
+Objetivos iniciales de ingeniería:
 
-| Interaction | Target |
+| Interacción | Objetivo |
 |---|---:|
-| input acknowledgement | <= 100 ms |
-| menu / Rofi / Super+P visible response | <= 150 ms target |
-| short local operation | <= 500 ms without blocking interaction |
-| operation > 500 ms | show visible state/progress |
-| operation > 2 s | show progress and Cancel when technically safe |
+| confirmación de entrada | <= 100 ms |
+| respuesta visible de menú / Rofi / Super+P | <= 150 ms |
+| operación local corta | <= 500 ms sin bloquear interacción |
+| operación > 500 ms | mostrar estado o progreso |
+| operación > 2 s | mostrar progreso y Cancelar cuando sea seguro |
 
-Rules:
-- animations must not delay command execution;
-- input must be processed before decorative motion completes;
-- repeated input must not spawn duplicate operations;
-- expensive status collection must not run on the UI path.
+Reglas:
+- las animaciones no deben retrasar la ejecución del comando;
+- la entrada debe procesarse antes de que termine el movimiento decorativo;
+- la entrada repetida no debe iniciar operaciones duplicadas;
+- la recolección costosa de estado no debe ejecutarse en la ruta crítica de UI.
 
-These are SDE engineering targets and must be validated on the supported hardware matrix.
+Estos valores son objetivos de SDE y deberán validarse en el hardware físico disponible.
 
 ---
 
-# Display Transaction
+# Transacción de pantalla
 
-Display changes are transactional.
+Los cambios de pantalla son transaccionales.
 
-Applicable to:
-- resolution;
-- refresh rate;
-- duplicate;
-- extend;
-- primary display;
-- major topology changes.
+Aplica a:
+- resolución;
+- frecuencia de actualización;
+- duplicar;
+- extender;
+- pantalla principal;
+- cambios importantes de topología.
 
-Flow:
+Flujo:
 
 ```text
-capture current known-good display state
+capturar estado actual conocido como funcional
         ↓
-apply proposed state
+aplicar estado propuesto
         ↓
-validate outputs
+validar salidas
         ↓
-show confirmation
+mostrar confirmación
         ↓
-Keep / Revert
+Mantener / Revertir
         ↓
-timeout -> automatic revert
+timeout → reversión automática
 ```
 
-Initial confirmation timeout target: approximately 15 seconds; implementation may adjust after usability testing.
+Tiempo inicial sugerido de confirmación: alrededor de 15 segundos; podrá ajustarse después de pruebas de usabilidad.
 
-A failed graphical confirmation must not permanently strand the user on an unusable display state.
+Una falla de confirmación gráfica no debe dejar permanentemente al usuario en un estado de pantalla inutilizable.
 
-Display recovery must also be available from TTY/recovery tooling.
+La recuperación de pantallas también debe estar disponible desde TTY o herramientas de recuperación.
 
 ---
 
-# Last Known Good desktop state
+# Último estado funcional del escritorio
 
-SDE should track a compact operational state containing, as applicable:
-- panel profile;
-- dock layout;
-- visual preset;
-- SDE schema version;
-- compositor mode;
-- display topology;
-- DPI/scale state;
+SDE debe mantener un estado operativo compacto que incluya, cuando corresponda:
+- perfil del panel;
+- disposición del dock;
+- preset visual;
+- versión del esquema SDE;
+- modo del compositor;
+- topología de pantallas;
+- estado de DPI/escala;
 - workspaces;
-- display-associated audio preference.
+- preferencia local de audio asociada al contexto de pantalla.
 
-After a configuration passes validation, it may be promoted to Last Known Good.
+Después de validar una configuración, esta puede promoverse a Último estado funcional.
 
-On startup or repair:
-- validate current state;
-- repair only the broken area when possible;
-- avoid resetting unrelated preferences.
-
----
-
-# Resume Validation
-
-After suspend/resume, SDE performs a one-shot validation.
-
-Checks may include:
-- xfce4-panel alive;
-- compositor state valid;
-- display outputs/topology valid;
-- no windows fully outside visible work areas;
-- audio output still valid;
-- dock state valid;
-- no stale SDE overlay;
-- DPI state sane.
-
-The validator exits after completion. It is not a permanent polling daemon.
-
-Repairs must be scoped and logged locally.
+Al iniciar o reparar:
+- validar el estado actual;
+- reparar solo el área dañada cuando sea posible;
+- evitar restablecer preferencias no relacionadas.
 
 ---
 
-# Display and audio coordination
+# Validación después de reanudar
 
-Display topology and audio output are related but distinct.
+Después de una reanudación, SDE realiza una validación de una sola ejecución.
 
-SDE may remember a local preference for a known display context, for example:
+Puede comprobar:
+- que xfce4-panel esté activo;
+- estado válido del compositor;
+- topología de pantallas válida;
+- que no existan ventanas completamente fuera del área visible;
+- salida de audio válida;
+- estado correcto del dock;
+- ausencia de overlays SDE obsoletos;
+- configuración razonable de DPI y pantallas.
+
+El validador termina al concluir. No debe convertirse en un daemon de sondeo permanente.
+
+Las reparaciones deben ser puntuales y quedar registradas localmente.
+
+---
+
+# Coordinación entre pantalla y audio
+
+La topología de pantallas y la salida de audio están relacionadas, pero son estados distintos.
+
+SDE puede recordar preferencias locales para un contexto conocido, por ejemplo:
 
 ```text
-Projector
-- extended
-- native/common certified resolution
-- audio remains on laptop
+Proyector
+- extendida
+- resolución nativa/común certificada
+- audio permanece en la laptop
 ```
 
-or:
+o:
 
 ```text
 TV
-- duplicate
-- audio over HDMI
+- duplicada
+- audio por HDMI
 ```
 
-Rules:
-- never export device identifiers as portable profile data;
-- automatic audio changes should provide visible feedback;
-- offer Undo when practical;
-- a missing audio device must fall back to a valid output rather than fail the display transaction.
+Reglas:
+- no exportar identificadores de dispositivos como parte de perfiles portables;
+- los cambios automáticos de audio deben mostrar feedback visible;
+- ofrecer Deshacer cuando sea práctico;
+- si desaparece un dispositivo de audio, usar una salida válida en vez de hacer fallar la transacción de pantalla.
 
 ---
 
-# Notification privacy and interruption policy
+# Privacidad e interrupciones de notificaciones
 
-External display presence changes privacy risk.
+La presencia de una pantalla externa aumenta el riesgo de exposición accidental.
 
-SDE must support a projection-safe notification policy without creating a separate "teacher mode".
+SDE debe ofrecer una política segura para pantallas externas sin crear perfiles ligados a una profesión o tipo de usuario.
 
-When duplicating/projecting:
-- sensitive notification content may be hidden;
-- generic app notification may still be shown;
-- the original notification remains available on the primary system where technically viable.
+Al duplicar o proyectar:
+- se puede ocultar el contenido sensible de notificaciones;
+- puede mostrarse una notificación genérica de la aplicación;
+- la notificación original debe seguir disponible en el sistema cuando sea técnicamente viable.
 
-Fullscreen behavior:
-- non-urgent banners should not cover fullscreen content unnecessarily;
-- notifications should remain retrievable rather than being silently lost.
+En pantalla completa:
+- los banners no urgentes no deben cubrir contenido innecesariamente;
+- las notificaciones deben seguir siendo recuperables y no desaparecer silenciosamente.
 
-Privacy behavior must be explicit and user-configurable.
-
----
-
-# Edit Mode
-
-Panel/dock structural editing must not be accidentally available during normal use.
-
-Normal state:
-- layout locked against accidental dragging/removal.
-
-Edit flow:
-```text
-SineOS Settings
-  -> Personalize desktop
-  -> Edit layout
-```
-
-Entering Edit Mode should create a lightweight restore point.
-
-Required controls:
-- Save;
-- Undo/Revert;
-- Restore SineOS layout.
-
-Exiting Edit Mode re-locks protected structure.
+El comportamiento de privacidad debe ser explícito y configurable.
 
 ---
 
-# Interaction target sizes
+# Modo de edición
 
-Small visual icons may have larger invisible/transparent hit targets.
+La edición estructural del panel y dock no debe estar disponible accidentalmente durante el uso normal.
 
-Initial desktop target:
-- clickable controls should normally provide at least approximately 32x32 px effective pointer target where layout permits.
+Estado normal:
+- disposición protegida contra arrastre o eliminación accidental.
 
-Future touch-oriented layouts should target approximately 44x44 px or equivalent physical size.
-
-This does not require icons themselves to be visually large.
-
----
-
-# Snap behavior
-
-Snap Preview must require clear pointer/keyboard intent.
-
-Rules:
-- no premature resize while merely approaching an edge;
-- preview before apply;
-- apply on release/confirmation;
-- preserve current window until the operation is committed;
-- snap layout must use the active monitor work area;
-- Esc cancels overlays when applicable.
-
-SDE prioritizes predictable snapping over aggressive automation.
-
----
-
-# Dock state semantics
-
-Docklike indicators must be understandable without relying only on accent color.
-
-Conceptual states:
+Flujo de edición:
 
 ```text
-closed             no running indicator
-open/inactive      short indicator
-active             stronger indicator
-multiple windows   indicator + count/shape
-attention          temporary pulse/symbol
+Configuración de SineOS
+  → Personalizar escritorio
+  → Editar disposición
 ```
 
-Attention animations:
-- short;
-- self-terminating;
-- no endless flashing;
-- disabled/reduced under Reduced Motion.
+Al entrar en modo de edición se debe crear un punto de restauración ligero.
+
+Controles requeridos:
+- Guardar;
+- Deshacer/Revertir;
+- Restaurar disposición SineOS.
+
+Al salir se vuelve a proteger la estructura.
 
 ---
 
-# Settings information architecture
+# Tamaños de interacción
 
-SDE settings should present user concepts, not implementation technologies.
+Un icono visual pequeño puede tener una zona efectiva de clic mayor.
 
-Preferred top-level concepts:
-- Appearance;
-- Displays;
+Objetivo inicial para escritorio:
+- los controles clicables deben ofrecer, cuando el diseño lo permita, un área efectiva de aproximadamente 32×32 px como mínimo.
+
+Para una futura interfaz orientada a touch se puede usar como objetivo aproximadamente 44×44 px o tamaño físico equivalente.
+
+Esto no obliga a que el icono visual sea grande.
+
+---
+
+# Comportamiento de Snap
+
+Snap Preview debe requerir intención clara mediante mouse o teclado.
+
+Reglas:
+- no redimensionar de forma prematura solo por acercarse a un borde;
+- mostrar preview antes de aplicar;
+- aplicar al soltar o confirmar;
+- conservar la ventana actual hasta confirmar la operación;
+- calcular el layout usando el área útil del monitor activo;
+- Esc cancela overlays cuando corresponda.
+
+SDE prioriza snapping predecible sobre automatización agresiva.
+
+---
+
+# Semántica de estados del dock
+
+Los indicadores de Docklike deben entenderse sin depender solamente del color de acento.
+
+Estados conceptuales:
+
+```text
+cerrada             sin indicador de ejecución
+abierta/inactiva    indicador corto
+activa              indicador más fuerte
+varias ventanas     indicador + conteo/forma
+atención            pulso o símbolo temporal
+```
+
+Las animaciones de atención:
+- deben ser cortas;
+- terminan solas;
+- no parpadean indefinidamente;
+- se eliminan o reducen con Reduced Motion.
+
+---
+
+# Arquitectura de información de Configuración
+
+La configuración de SDE debe presentar conceptos del usuario, no tecnologías internas.
+
+Categorías preferidas:
+- Apariencia;
+- Pantallas;
 - Audio;
-- Mouse & Keyboard;
-- Notifications;
-- Accessibility;
-- Shortcuts;
-- Desktop / Layout;
-- Advanced SDE.
+- Mouse y teclado;
+- Notificaciones;
+- Accesibilidad;
+- Atajos;
+- Escritorio y disposición;
+- SDE avanzado.
 
-Avoid requiring the user to understand:
-- Picom internals;
-- XRandR syntax;
-- XFConf paths;
-- GTK CSS;
-- Rofi config files.
+No se debe obligar al usuario a comprender:
+- detalles internos de Picom;
+- sintaxis XRandR;
+- rutas XFConf;
+- CSS GTK;
+- archivos de configuración de Rofi.
 
-Advanced technical controls may exist behind an explicit advanced section.
+Los controles técnicos avanzados pueden existir en una sección explícitamente avanzada.
 
 ---
 
-# Toolkit workflow certification
+# Certificación de flujos entre toolkits
 
-Certification must test tasks, not only screenshots.
+La certificación debe probar tareas, no solo capturas de pantalla.
 
-At minimum validate these workflows across relevant toolkit families:
-- Open file;
-- Save As;
-- Choose folder;
-- Cancel dialog;
-- keyboard navigation;
-- Esc behavior;
-- clipboard;
+Como mínimo:
+- Abrir archivo;
+- Guardar como;
+- Elegir carpeta;
+- Cancelar diálogo;
+- navegación por teclado;
+- comportamiento de Esc;
+- portapapeles;
 - drag-and-drop;
-- fullscreen;
-- file picker scaling.
+- pantalla completa;
+- escalado del selector de archivos.
 
-Families:
+Familias:
 - XFCE/GTK3;
 - GTK4;
 - Qt5;
 - Qt6;
 - Chromium;
 - Electron;
-- Firefox where behavior differs materially.
+- Firefox cuando su comportamiento sea materialmente distinto.
 
 ---
 
-# UX acceptance tests for SDE 1.0
+# Criterios de aceptación UX para SDE 1.0
 
-SDE 1.0 must demonstrate:
+## Respuesta
+- sin clics muertos en interacciones principales del shell;
+- launcher y Super+P reconocen la entrada dentro del objetivo de latencia en el hardware certificado;
+- operaciones lentas muestran progreso o estado.
 
-## Responsiveness
-- no dead clicks in primary shell interactions;
-- launcher and Super+P acknowledge input within target budget on certified hardware;
-- slow operations expose progress/state.
+## Predictibilidad
+- sin movimiento arbitrario de ventanas;
+- un reinicio normal no reorganiza panel o dock;
+- cada preferencia tiene un propietario autoritativo.
 
-## Predictability
-- no arbitrary window movement;
-- normal reboot does not reorganize panel/dock;
-- settings have one authoritative owner.
+## Pantallas
+- Transacción de pantalla con rollback automático;
+- recuperación de ventanas perdidas;
+- los cambios de pantalla no corrompen silenciosamente la preferencia de audio;
+- la política de privacidad al duplicar/proyectar funciona según lo diseñado.
 
-## Displays
-- Display Transaction with automatic rollback;
-- lost-window recovery;
-- display changes do not silently corrupt audio preference;
-- projector/duplicate privacy policy works as designed.
+## Reanudación
+- la validación de una sola ejecución termina correctamente;
+- la reparación no restablece estado no relacionado.
 
-## Resume
-- one-shot Resume Validation completes;
-- repair does not reset unrelated user state.
+## Accesibilidad
+- los estados importantes se distinguen sin depender solamente del color;
+- Reduced Motion se respeta;
+- navegación por teclado utilizable.
 
-## Accessibility
-- important state is distinguishable without color alone;
-- Reduced Motion is respected;
-- keyboard navigation remains usable.
+## Falla
+- un componente opcional roto no elimina acceso al escritorio;
+- funciona la restauración de Último estado funcional;
+- siguen disponibles recuperación local y recuperación certificada desde GitHub.
 
-## Failure
-- broken optional component does not remove desktop access;
-- Last Known Good restore works;
-- local recovery and certified GitHub recovery remain available.
+## Toolkits
+- los flujos certificados pasan en la matriz de aplicaciones/toolkits disponible.
 
-## Toolkit behavior
-- certified workflows pass on the application/toolkit matrix.
-
-## Performance
-- UX latency and resource budgets meet certification thresholds.
+## Rendimiento
+- los presupuestos de latencia UX y recursos cumplen los umbrales definidos.
 
 ---
 
-# Design anti-patterns forbidden in SDE baseline
+# Antipatrones prohibidos en SDE
 
-- silent state changes;
-- infinite attention flashing;
-- UI actions that require clicking twice because the first click has no feedback;
-- settings duplicated across competing frontends;
-- automatic window rearrangement without recovery necessity;
-- irreversible display changes without confirmation;
-- mandatory third-party extension for critical desktop function;
-- color-only state indicators;
-- animations that block input;
-- background polling where an event/one-shot action is sufficient;
-- update behavior that resets the user's valid layout without migration.
+- cambios de estado silenciosos;
+- parpadeo infinito para solicitar atención;
+- acciones que obligan a hacer clic dos veces porque la primera no muestra feedback;
+- configuraciones duplicadas en frontends competidores;
+- reorganización automática de ventanas sin necesidad de recuperación;
+- cambios de pantalla irreversibles sin confirmación;
+- extensión de terceros obligatoria para una función crítica;
+- estados comunicados únicamente por color;
+- animaciones que bloquean entrada;
+- sondeo en segundo plano cuando basta un evento o acción puntual;
+- actualizaciones que restablecen una disposición válida del usuario sin migración.
 
 ---
 
-# References informing the contract
+# Referencias que informan este contrato
 
-Normative behavior is defined by this document; external sources are context only.
+El comportamiento normativo lo define este documento; las fuentes externas son contexto.
 
-- Microsoft responsiveness guidance: https://learn.microsoft.com/windows/apps/develop/performance/responsive
-- Windows notifications and Do Not Disturb: https://support.microsoft.com/windows/experience/notifications-and-do-not-disturb-in-windows
-- Existing SDE specifications:
+- Guía de Microsoft sobre capacidad de respuesta: https://learn.microsoft.com/windows/apps/develop/performance/responsive
+- Notificaciones y No molestar en Windows: https://support.microsoft.com/windows/experience/notifications-and-do-not-disturb-in-windows
+- Especificaciones SDE relacionadas:
   - `Documentation/Architecture/SineOS-Desktop-Experience.md`
   - `Documentation/Architecture/SDE-Visual-Interaction-Refinements.md`
   - `Documentation/Architecture/SDE-Packaging-Recovery-Certification.md`
 
-## Final rule
+## Regla final
 
-> SineOS should be simple when the user only wants to work, powerful when the user chooses to go deeper, and predictable at all times.
+> SineOS debe ser sencillo cuando el usuario solo quiere trabajar, potente cuando decide profundizar y predecible en todo momento.
