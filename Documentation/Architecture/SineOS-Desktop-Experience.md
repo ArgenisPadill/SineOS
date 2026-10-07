@@ -9,6 +9,8 @@
 
 SineOS Desktop Experience (SDE) es la evolución planificada de la capa visual y de interacción de SineOS.
 
+SineOS es un sistema de propósito general. SDE no debe diseñarse alrededor de un oficio, entorno académico o perfil de usuario específico; sus funciones deben ser útiles y comprensibles en escenarios cotidianos de trabajo, aprendizaje, creación, administración y exploración de Linux.
+
 Su objetivo es llevar XFCE al máximo nivel razonable de pulido visual, ergonomía y coherencia sin sustituirlo por otro escritorio y sin sacrificar las razones por las que XFCE fue elegido: bajo consumo, estabilidad, control, simplicidad operativa y facilidad de recuperación.
 
 SDE no pretende imitar otro escritorio. Toma buenas ideas de interfaces modernas —global menu, dock, blur, microanimaciones, OSD, launcher, control de pantallas, consistencia visual— y las integra de forma compatible con XFCE.
@@ -497,11 +499,9 @@ La selección final de backend queda pendiente de validación.
 
 ---
 
-# Privacidad al proyectar
+# Privacidad en pantallas externas
 
-No se creará un «modo docente» separado.
-
-SDE sí debe poder reducir exposición accidental de información sensible cuando exista una pantalla externa.
+SDE debe poder reducir la exposición accidental de información sensible cuando exista una pantalla externa, independientemente del contexto de uso.
 
 Objetivo:
 
