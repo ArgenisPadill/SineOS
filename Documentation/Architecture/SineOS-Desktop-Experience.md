@@ -384,7 +384,7 @@ LightDM
   ->
 SineOS Desktop
   ->
-Lock Screen
+Pantalla de bloqueo
 ```
 
 sin saltos de identidad visual.
@@ -1230,7 +1230,7 @@ Deben aplicarse coherentemente a:
 - notificaciones;
 - OSD;
 - Super+P;
-- lock screen;
+- pantalla de bloqueo;
 - overlays.
 
 ## Smoke / atenuación modal
