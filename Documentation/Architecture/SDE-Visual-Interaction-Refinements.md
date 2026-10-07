@@ -9,12 +9,12 @@
 
 Este addendum completa detalles de interacción y pulido visual que deben sentirse coherentes con SineOS sin añadir otro escritorio, otro window manager ni dependencias residentes innecesarias.
 
-## 1. Snap Preview
+## 1. Vista previa de ajuste de ventanas
 
 Al arrastrar una ventana hacia una zona compatible con snapping, SDE debe mostrar una previsualización clara del área que ocupará antes de soltarla.
 
 Requisitos:
-- feedback inmediato;
+- respuesta visual inmediato;
 - overlay ligero y legible;
 - cálculo por monitor activo;
 - compatibilidad con SineOS Snap;
@@ -22,9 +22,9 @@ Requisitos:
 - respetar Reduced Motion;
 - no invadir panel/dock fuera del área objetivo.
 
-## 2. Fullscreen y maximizado
+## 2. Pantalla completa y maximizado
 
-Fullscreen:
+Pantalla completa:
 - desactivar blur de fondo innecesario;
 - evitar sombras invisibles;
 - ocultar panel/dock cuando corresponda;
@@ -36,7 +36,7 @@ Maximizado:
 - conservar contraste de título/controles;
 - restaurar el estilo normal al salir de maximizado.
 
-## 3. Launch / Progress Feedback
+## 3. Feedback de inicio y progreso
 
 Toda acción que pueda tardar debe indicar que fue recibida.
 
@@ -84,7 +84,7 @@ Estados visuales inequívocos:
 - operación no permitida;
 - destino válido.
 
-El cursor y feedback deben usar iconografía SineOS y buen contraste.
+El cursor y respuesta visual deben usar iconografía SineOS y buen contraste.
 
 ## 6. Diálogos del sistema
 
@@ -191,7 +191,7 @@ Debe mantener:
 - integración con xfce4-notifyd;
 - limpieza sencilla.
 
-## 16. Safe Areas
+## 16. Áreas seguras
 
 Rofi, OSD, notificaciones, Super+P, Snap Preview y overlays deben respetar:
 - panel superior;
@@ -214,12 +214,12 @@ Frost/Overlay no debe depender de transparencias tan sutiles que desaparezcan en
 ## Prioridad SDE 1.0
 
 ### Obligatorio
-- Snap Preview;
+- vista previa de ajuste de ventanas;
 - reglas fullscreen/maximizado;
-- Launch/Progress Feedback;
+- respuesta visual de inicio y progreso;
 - consistencia CSD/SSD;
 - estados básicos de Docklike;
-- Safe Areas;
+- áreas seguras;
 - pruebas de diálogos;
 - proyectores/resoluciones heredadas.
 
