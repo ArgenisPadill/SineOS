@@ -199,7 +199,7 @@ verify
 
 Reglas:
 - nunca recuperar producción desde un checkout sin fijar de `main`;
-- usar un tag de release o commit explícitamente certificado;
+- usar un tag de versión o commit explícitamente certificado;
 - mostrar el commit o tag que se utilizará antes de modificar el sistema;
 - verificar archivos requeridos y checksums cuando corresponda;
 - crear un respaldo nuevo antes de reparar cuando el sistema de archivos lo permita;
@@ -211,7 +211,7 @@ Reglas:
 
 Para una falla completa de red o indisponibilidad del repositorio, SDE debe permitir recuperación desde:
 - un bundle de release almacenado localmente;
-- una copia USB de la release certificada;
+- una copia USB de la versión certificada;
 - un paquete de recuperación SDE descargado previamente.
 
 Esto evita convertir GitHub en un punto único de falla para recuperación.
@@ -230,8 +230,8 @@ Usar el último respaldo local certificado de SDE.
 ### Nivel 3 — Restaurar XFCE previo a SDE
 Regresar al baseline funcional de XFCE respaldado antes de instalar SDE.
 
-### Nivel 4 — Reconstruir desde release certificada en GitHub
-Reconstruir SDE desde un tag, release o commit fijado y certificado.
+### Nivel 4 — Reconstruir desde versión certificada en GitHub
+Reconstruir SDE desde un tag, versión o commit fijado y certificado.
 
 ---
 
@@ -299,7 +299,7 @@ Rango sugerido:
 
 Propósito:
 - comportamiento esperado de la versión 1.0;
-- no agregar funciones nuevas salvo que sean necesarias para resolver un bloqueo de release.
+- no agregar funciones nuevas salvo que sean necesarias para resolver un bloqueo de versión.
 
 Requisitos de entrada:
 - matriz de hardware sustancialmente cubierta con evidencia disponible;
@@ -472,7 +472,7 @@ Una versión no puede avanzar a estable si existe:
 
 ---
 
-# CI y artefactos de release
+# CI y artefactos de versión
 
 Objetivos de planeación:
 - lint de scripts;
@@ -484,7 +484,7 @@ Objetivos de planeación:
 - adjuntar notas de versión;
 - adjuntar manifiesto de paquetes;
 - registrar versiones de dependencias upstream;
-- conservar el script de bootstrap de recuperación con cada release.
+- conservar el script de bootstrap de recuperación con cada versión.
 
 Una release debe poder reconstruirse desde el estado del repositorio más las fuentes upstream documentadas.
 
@@ -506,7 +506,7 @@ Paquetes:
 Los módulos opcionales pueden usar:
 - `sineos-desktop-<funcion>`
 
-Etapas de release:
+Etapas de versión:
 **Alpha → Beta → RC → Estable**
 
 Estos nombres describen madurez de ingeniería, no calidad visual.
