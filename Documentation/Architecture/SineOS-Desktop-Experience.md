@@ -24,7 +24,7 @@ SDE no pretende imitar otro escritorio. Toma buenas ideas de interfaces modernas
    Se priorizan paquetes oficiales de Debian 13 y proyectos upstream activos.
 
 3. **Bajo consumo.**
-   Instalar una herramienta no implica mantenerla residente. Captura, grabación, anotación, localizador de cursor, wireless display y otras funciones se cargan bajo demanda.
+   Instalar una herramienta no implica mantenerla residente. Captura, grabación, anotación, localizador de cursor, pantalla inalámbrica y otras funciones se cargan bajo demanda.
 
 4. **Sin puntos únicos de fallo visuales.**
    Un fallo de Picom, Rofi, Docklike, AppMenu o una herramienta auxiliar no debe impedir usar XFCE.
@@ -53,7 +53,7 @@ SDE no pretende imitar otro escritorio. Toma buenas ideas de interfaces modernas
 
 SDE se divide en tres capas.
 
-## 1. SineOS Desktop Core
+## 1. Núcleo de escritorio SineOS
 
 Responsable de que el escritorio sea utilizable incluso si las capas visuales opcionales fallan.
 
@@ -73,7 +73,7 @@ Base prevista:
 
 No debe depender de GNOME Shell, Plasma o un segundo window manager.
 
-## 2. SineOS Visual
+## 2. Capa visual SineOS
 
 Responsable de la identidad visual.
 
@@ -98,7 +98,7 @@ Incluye:
 - estados activo/inactivo;
 - sistema de tokens visuales.
 
-## 3. SineOS Tools
+## 3. Herramientas SineOS
 
 Funciones auxiliares que se ejecutan bajo demanda:
 
@@ -765,14 +765,14 @@ Rofi falla
 Flameshot falla
 -> xfce4-screenshooter
 
-Wireless display falla
+Pantalla inalámbrica falla
 -> HDMI/XRandR siguen funcionando
 
 Tema SineOS falla
 -> tema fallback conocido
 ```
 
-Ninguna mejora visual debe ser un Single Point of Failure.
+Ninguna mejora visual debe ser un punto único de falla.
 
 ---
 
@@ -930,7 +930,7 @@ sin rediseñar todo SDE cuando XFCE/Wayland alcance la madurez requerida.
 
 # Criterios de aceptación de SDE 1.0
 
-## Arranque y recovery
+## Arranque y recuperación
 
 Debe validarse:
 
@@ -1000,7 +1000,7 @@ Debe validarse:
 ---
 
 
-# Ampliación congelada: materiales, overview, snap y lenguaje de movimiento
+# Ampliación congelada: materiales, vista general, ajuste de ventanas y lenguaje de movimiento
 
 **Decisión congelada:** 07-10-2026
 
@@ -1008,7 +1008,7 @@ Esta ampliación surge de comparar patrones visuales y de interacción de GNOME,
 
 El objetivo no es copiar otro escritorio ni incorporar sus dependencias. SDE adopta ideas de interacción que puedan implementarse de forma compatible con XFCE/X11, manteniendo bajo consumo, degradación elegante y recuperación.
 
-## SineOS Materials
+## Materiales SineOS
 
 SDE formaliza tres tipos de superficie:
 
@@ -1057,7 +1057,7 @@ Características:
 
 Los materiales se definirán mediante tokens centrales, no con valores dispersos por aplicación.
 
-## SineOS Overview
+## Vista general SineOS
 
 SDE incorporará una vista espacial de ventanas y escritorios.
 
@@ -1094,7 +1094,7 @@ Fallback obligatorio:
 - selector normal de workspaces;
 - escritorio completamente utilizable sin Overview.
 
-## SineOS Snap
+## Ajuste de ventanas SineOS
 
 SDE añadirá organización visual de ventanas inspirada en los mejores patrones de snapping modernos sin sustituir XFWM.
 
@@ -1131,7 +1131,7 @@ Backend conceptual:
 
 Los layouts deben calcularse usando el monitor activo y no coordenadas hardcodeadas.
 
-## SineOS Motion Language
+## Lenguaje de movimiento SineOS
 
 SDE define un lenguaje de movimiento propio. No se añadirán animaciones de forma independiente sin respetar estas reglas.
 
@@ -1176,7 +1176,7 @@ Máximo visual -> opcional/experimental, solo tras validación
 
 Mover y redimensionar manualmente una ventana debe seguir siendo inmediato y predecible.
 
-## SineOS Focus
+## Enfoque visual SineOS
 
 La ventana activa debe ser identificable sin recurrir a bordes brillantes o estética gamer.
 
@@ -1194,7 +1194,7 @@ Ventana inactiva:
 
 El efecto debe ser suficientemente discreto para trabajar muchas horas.
 
-## Reduced Motion global
+## Movimiento reducido global
 
 Reduced Motion es una función de accesibilidad global, no un perfil de bajo rendimiento.
 
@@ -1352,7 +1352,7 @@ Antes de comenzar implementación deben cerrarse todavía:
 
 ---
 
-# Definition of Done
+# Definición de terminado
 
 SDE 1.0 no estará terminado por verse bien.
 
