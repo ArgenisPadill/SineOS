@@ -42,6 +42,9 @@ Clasificación, ciclo de vida, seguridad, documentación y criterios para conser
 ### Documentation-Standard.md
 Estándar general de documentación y Definition of Done documental para componentes SineOS.
 
+### SineOS-Desktop-Experience.md
+Plan de arquitectura congelado para **SineOS Desktop Experience (SDE)**: evolución visual y de interacción de XFCE/X11 orientada a bajo consumo, compatibilidad, escalabilidad, replicabilidad y recuperación. El documento está marcado como pendiente de implementación y se sigue mediante el issue maestro #1.
+
 ## Operations
 
 ### Academic-Templates.md
