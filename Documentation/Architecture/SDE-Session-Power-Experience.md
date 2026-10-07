@@ -1,456 +1,456 @@
-# SineOS Session & Power Experience
+# SineOS Session & Power Experience — Experiencia de sesión y energía
 
-**Decision date:** 2026-10-07  
-**Status:** frozen planning / mandatory for SDE 1.0  
-**Master project:** SineOS Desktop Experience (SDE)  
-**Master issue:** https://github.com/ArgenisPadill/SineOS/issues/1  
-**Target platform:** Debian 13 (Trixie) + XFCE 4.20 + X11 + LightDM
+**Fecha de decisión:** 07-10-2026  
+**Estado:** planeación congelada / obligatorio para SDE 1.0  
+**Proyecto maestro:** SineOS Desktop Experience (SDE)  
+**Issue maestro:** https://github.com/ArgenisPadill/SineOS/issues/1  
+**Plataforma objetivo:** Debian 13 (Trixie) + XFCE 4.20 + X11 + LightDM
 
-## Purpose
+## Propósito
 
-SineOS must present a coherent system experience from power-on to power-off.
+SineOS debe presentar una experiencia coherente desde que se enciende el equipo hasta que se apaga.
 
-The graphical identity must not disappear during:
-- boot;
-- login;
-- lock;
-- hibernation;
-- resume;
-- reboot;
-- shutdown.
+La identidad gráfica no debe desaparecer durante:
+- arranque;
+- inicio de sesión;
+- bloqueo;
+- hibernación;
+- reanudación;
+- reinicio;
+- apagado.
 
-Normal use should not expose kernel/systemd status text unless diagnostic detail is explicitly requested or the system cannot continue normally.
+Durante el uso normal no deben mostrarse mensajes de estado del kernel o systemd, salvo cuando el usuario solicite diagnóstico o el sistema no pueda continuar normalmente.
 
-Security and recovery always take priority over aesthetics.
+La seguridad y la recuperación siempre tienen prioridad sobre la estética.
 
 ---
 
-# 1. Boot experience
+# 1. Experiencia de arranque
 
-## Normal boot
+## Arranque normal
 
-Use Plymouth as the graphical boot layer.
+Se utilizará Plymouth como capa gráfica durante el arranque.
 
-Expected flow:
+Flujo esperado:
 
 ```text
 Firmware / UEFI
       ↓
-GRUB (normally hidden/short)
+GRUB (normalmente oculto o muy breve)
       ↓
-SineOS Plymouth
+Plymouth SineOS
       ↓
-LightDM / SineOS Login
+LightDM / Login SineOS
       ↓
-SDE Desktop
+Escritorio SDE
 ```
 
-Normal graphical boot should show:
-- SineOS branding;
-- a subtle loading animation;
-- optional short state text such as `Iniciando…`.
+El arranque gráfico normal debe mostrar:
+- identidad SineOS;
+- una animación de carga sutil;
+- texto corto opcional como `Iniciando…`.
 
-It should not normally show:
-- kernel command output;
-- initramfs messages;
-- systemd unit status;
-- scrolling boot logs.
+Normalmente no debe mostrar:
+- salida de comandos del kernel;
+- mensajes de initramfs;
+- estados de unidades systemd;
+- logs de arranque desplazándose por pantalla.
 
-## Diagnostic access
+## Acceso a diagnóstico
 
-Boot messages are hidden, not removed.
+Los mensajes de arranque se ocultan, no se eliminan.
 
-Requirements:
-- diagnostics remain accessible when needed;
-- emergency/failure states must expose useful system output;
-- recovery must not depend on Plymouth working;
-- GRUB remains available as a recovery path.
+Requisitos:
+- el diagnóstico debe seguir disponible cuando sea necesario;
+- los estados de emergencia o falla deben mostrar información útil;
+- la recuperación no debe depender de que Plymouth funcione;
+- GRUB debe permanecer disponible como ruta de recuperación.
 
-A graphical failure must never hide a critical boot failure indefinitely.
-
----
-
-# 2. Login experience
-
-## Display manager
-
-Keep LightDM.
-
-Use Slick Greeter as the preferred greeter base unless implementation testing discovers a blocking limitation.
-
-## User identity behavior
-
-The normal login screen should:
-- show/preselect the last valid local user or configured primary user;
-- display the user name/avatar area;
-- require the password every time;
-- never store or autofill the password;
-- provide a secondary `Cambiar usuario` path for multi-user systems.
-
-The user must not normally retype the username on each login.
-
-Autologin is not part of the default SDE experience.
-
-## Visual integration
-
-The login should use the same visual language as SDE:
-- SineOS branding;
-- SineOS wallpaper/background;
-- Inter typography;
-- SineOS accent/tokens;
-- coherent spacing/radii;
-- accessible contrast;
-- keyboard focus states.
-
-Login must remain usable if the optional visual layer fails.
+Una falla gráfica nunca debe ocultar indefinidamente un error crítico de arranque.
 
 ---
 
-# 3. Lock screen
+# 2. Experiencia de inicio de sesión
+
+## Gestor de pantalla
+
+Se mantiene LightDM.
+
+Slick Greeter será la base preferida para el login de SineOS, salvo que durante la implementación aparezca una limitación bloqueante.
+
+## Comportamiento de identidad del usuario
+
+La pantalla normal de login debe:
+- mostrar o preseleccionar el último usuario local válido o el usuario principal configurado;
+- mostrar nombre e identidad visual del usuario;
+- solicitar contraseña siempre;
+- nunca almacenar ni autocompletar la contraseña;
+- ofrecer `Cambiar usuario` como ruta secundaria en equipos multiusuario.
+
+El usuario no debe volver a escribir su nombre de usuario en cada inicio de sesión normal.
+
+El autologin no forma parte de la experiencia predeterminada de SDE.
+
+## Integración visual
+
+El login debe utilizar el mismo lenguaje visual que SDE:
+- identidad SineOS;
+- wallpaper o fondo SineOS;
+- tipografía Inter;
+- acento y tokens SineOS;
+- espaciado y radios coherentes;
+- contraste accesible;
+- estados de foco de teclado visibles.
+
+El login debe seguir siendo utilizable si falla la capa visual opcional.
+
+---
+
+# 3. Pantalla de bloqueo
 
 ## Locker
 
-Use `xfce4-screensaver` as the preferred SDE locker.
+`xfce4-screensaver` será el locker preferido de SDE.
 
-Do not run competing lockers at the same time.
+No se deben ejecutar varios lockers compitiendo al mismo tiempo.
 
-## Manual lock
+## Bloqueo manual
 
-`Super + L` locks the current session immediately.
+`Super + L` bloquea inmediatamente la sesión actual.
 
-Manual lock behavior:
-- does not suspend;
-- does not hibernate;
-- does not log the user out;
-- preserves running applications;
-- hides sensitive desktop content;
-- requires the current user's password to unlock.
+El bloqueo manual:
+- no suspende;
+- no hiberna;
+- no cierra sesión;
+- conserva las aplicaciones en ejecución;
+- oculta contenido sensible del escritorio;
+- requiere la contraseña del usuario actual para desbloquear.
 
-## Lock screen UX
+## UX de la pantalla de bloqueo
 
-The lock screen should show:
-- SineOS branding;
-- current user identity;
-- password field;
-- time/date;
-- battery/power status where useful;
-- keyboard/layout indicator when relevant;
-- accessibility entry point where supported.
+La pantalla de bloqueo debe mostrar:
+- identidad SineOS;
+- usuario actual;
+- campo de contraseña;
+- hora y fecha;
+- estado de batería/corriente cuando aporte valor;
+- indicador de distribución de teclado cuando sea relevante;
+- acceso a accesibilidad cuando esté soportado.
 
-It should not expose:
-- window previews;
-- message contents;
-- terminal output;
-- notifications with sensitive content.
+No debe mostrar:
+- previews de ventanas;
+- contenido de mensajes;
+- salida de terminal;
+- notificaciones con contenido sensible.
 
-Visual concept:
+Concepto visual:
 
 ```text
 SineOS
-time / date
+hora / fecha
 
-User
-[ Password ]
+Usuario
+[ Contraseña ]
 
-Unlock
+Desbloquear
 ```
 
-The lock screen should look related to login but remain clearly a locked-session state.
+La pantalla de bloqueo debe verse relacionada con el login, pero debe quedar claro que se trata de una sesión ya iniciada y protegida.
 
-## Unlock security
+## Seguridad al desbloquear
 
-Requirements:
-- password is always required;
-- Esc must not bypass lock;
-- closing the prompt must not expose the session;
-- authentication uses normal PAM/system mechanisms;
-- visual customization must never replace or weaken authentication.
+Requisitos:
+- la contraseña siempre es obligatoria;
+- Esc no debe saltarse el bloqueo;
+- cerrar el prompt no debe exponer la sesión;
+- la autenticación utiliza mecanismos normales de PAM/sistema;
+- la personalización visual nunca sustituye ni debilita la autenticación.
 
 ---
 
-# 4. Hibernate on lid close
+# 4. Hibernación al cerrar la tapa
 
-Closing the laptop lid should request **hibernation**, not suspension.
+Cerrar la tapa de la laptop debe solicitar **hibernación**, no suspensión.
 
-Default SDE policy:
+Política predeterminada de SDE:
 
 ```text
-lid close
+cerrar tapa
    ↓
-hibernate
+hibernar
 ```
 
-Before enabling this policy on a machine, SDE certification must verify:
-- hibernation is supported;
-- swap/resume configuration is valid;
-- resume restores the session correctly;
-- display state recovers;
-- audio state recovers;
-- panel/dock recover;
-- compositor recovers.
+Antes de habilitar esta política en una máquina, la certificación SDE debe comprobar:
+- que la hibernación esté soportada;
+- configuración válida de swap/resume;
+- restauración correcta de la sesión;
+- recuperación correcta de pantallas;
+- recuperación correcta de audio;
+- recuperación del panel y dock;
+- recuperación del compositor.
 
-SDE must not silently fall back to suspend if hibernation fails.
+SDE no debe hacer fallback silencioso a suspensión si falla la hibernación.
 
-If hibernation is unavailable or broken, report it as a configuration/certification failure.
+Si la hibernación no está disponible o está rota, debe reportarse como una falla de configuración o certificación.
 
 ---
 
-# 5. Resume experience
+# 5. Experiencia al reanudar
 
-Expected flow:
+Flujo esperado:
 
 ```text
-Power on / resume
+Encender / reanudar
       ↓
-SineOS resume visual
+Visual de reanudación SineOS
       ↓
-Resume Validation
+Validación posterior a reanudación
       ↓
-SineOS Lock Screen
+Pantalla de bloqueo SineOS
       ↓
-Password
+Contraseña
       ↓
-Existing session
+Sesión existente
 ```
 
-After hibernation the user must authenticate before returning to the desktop.
+Después de hibernar, el usuario debe autenticarse antes de regresar al escritorio.
 
-## Resume Validation
+## Validación posterior a reanudación
 
-Run one-shot validation after resume.
+Ejecutar una validación de una sola vez después de reanudar.
 
-Check, as applicable:
-- panel alive;
-- compositor state;
-- dock state;
-- visible display topology;
-- windows not stranded off-screen;
-- valid audio output;
-- no stale overlays;
-- sane DPI/display configuration.
+Comprobar, cuando aplique:
+- panel activo;
+- estado del compositor;
+- estado del dock;
+- topología de pantallas visible;
+- ventanas no perdidas fuera del área visible;
+- salida de audio válida;
+- ausencia de overlays obsoletos;
+- configuración razonable de DPI y pantallas.
 
-The validator exits when finished and must not become a permanent polling daemon.
+El validador termina al concluir y no debe convertirse en un daemon permanente.
 
-Repairs should be scoped to the failed component.
+Las reparaciones deben limitarse al componente que falló.
 
 ---
 
-# 6. AC power policy
+# 6. Política al estar conectada a corriente
 
-SineOS uses TLP as the power-management policy layer.
+SineOS utiliza TLP como capa de política energética.
 
-Do not add a second competing power-policy daemon by default.
+No se agregará de forma predeterminada un segundo daemon que compita por la misma política de energía.
 
-When connected to AC power, SDE intent is:
+Cuando la laptop está conectada a corriente, la intención de SDE es:
 
-**Prioritize performance.**
+**Priorizar rendimiento.**
 
-This does not mean hardcoding a specific CPU governor on every machine.
+Esto no significa fijar un governor específico de CPU para todos los equipos.
 
-The implementation must choose hardware-appropriate TLP settings based on the certified CPU/driver path.
+La implementación debe elegir parámetros apropiados de TLP según la ruta de CPU/driver certificada.
 
-Normal AC behavior may include:
-- allowing CPU boost where appropriate;
-- reducing aggressive power-saving constraints;
-- prioritizing responsive performance;
-- preserving thermal safety;
-- preserving existing hardware protections.
+El comportamiento normal con corriente puede incluir:
+- permitir CPU boost cuando corresponda;
+- reducir restricciones agresivas de ahorro;
+- priorizar capacidad de respuesta;
+- conservar seguridad térmica;
+- conservar protecciones propias del hardware.
 
-User-facing state:
+Estado visible para el usuario:
 
 ```text
-Power connected
-Energy mode: Performance
+Corriente conectada
+Modo de energía: Rendimiento
 ```
 
-Feedback should be brief and non-intrusive.
+El feedback debe ser breve y no intrusivo.
 
 ---
 
-# 7. Battery policy
+# 7. Política de batería
 
-When AC power is disconnected, SDE intent is:
+Cuando se desconecta la corriente, la intención de SDE es:
 
-**Prioritize battery efficiency while preserving usable responsiveness.**
+**Priorizar eficiencia de batería sin sacrificar una respuesta utilizable.**
 
-User-facing state:
+Estado visible:
 
 ```text
-On battery
-Energy mode: Efficient
+Usando batería
+Modo de energía: Eficiente
 ```
 
-The switch should be automatic through TLP AC/BAT policy.
+El cambio debe ser automático mediante las políticas AC/BAT de TLP.
 
-Initial battery-state policy:
+Política inicial:
 
-| Battery | Default behavior |
+| Batería | Comportamiento predeterminado |
 |---|---|
-| >20% | normal battery mode |
-| <=20% | discreet low-battery warning |
-| <=10% | critical warning |
-| <=5% | emergency hibernation request |
+| >20 % | modo de batería normal |
+| <=20 % | aviso discreto de batería baja |
+| <=10 % | aviso crítico |
+| <=5 % | solicitar hibernación de emergencia |
 
-Thresholds are configuration values, not hardcoded permanent constants.
+Los umbrales son valores configurables, no constantes permanentes en código.
 
-A future implementation may adjust defaults after real hardware testing.
+La implementación podrá ajustarlos después de pruebas reales de hardware.
 
-## Emergency hibernation
+## Hibernación de emergencia
 
-Emergency hibernation must only be enabled after hibernation has passed certification on the machine.
+La hibernación de emergencia solo debe habilitarse después de que la hibernación haya aprobado la certificación de esa máquina.
 
-If safe hibernation is unavailable, SDE must not pretend that protection exists.
-
----
-
-# 8. Screen blanking while locked
-
-Locking the session and powering off the display are separate operations.
-
-Expected behavior:
-- `Super+L` locks immediately;
-- screen may blank after a configurable inactivity interval;
-- the machine remains running unless another explicit power policy applies;
-- input wakes the display to the SineOS lock screen;
-- password remains required.
+Si no existe hibernación segura, SDE no debe fingir que esa protección está disponible.
 
 ---
 
-# 9. Reboot and shutdown experience
+# 8. Apagado de pantalla mientras está bloqueada
 
-Plymouth should also provide the graphical transition for reboot and poweroff when technically available.
+Bloquear la sesión y apagar la pantalla son operaciones distintas.
 
-Normal reboot:
+Comportamiento esperado:
+- `Super+L` bloquea inmediatamente;
+- la pantalla puede apagarse después de un intervalo configurable de inactividad;
+- la laptop permanece encendida salvo que aplique otra política explícita de energía;
+- una entrada de teclado o mouse reactiva la pantalla y muestra el bloqueo SineOS;
+- la contraseña sigue siendo obligatoria.
+
+---
+
+# 9. Experiencia de reinicio y apagado
+
+Plymouth debe proporcionar también la transición gráfica para reinicio y apagado cuando sea técnicamente viable.
+
+Reinicio normal:
 
 ```text
 SineOS
 Reiniciando…
 ```
 
-Normal shutdown:
+Apagado normal:
 
 ```text
 SineOS
 Apagando…
 ```
 
-Normal use should not show scrolling systemd/kernel shutdown output.
+Durante el uso normal no deben mostrarse mensajes de systemd o kernel desplazándose por pantalla.
 
-However:
-- critical shutdown errors must remain diagnosable;
-- recovery/debug modes may expose detailed output;
-- graphical polish must never prevent a clean shutdown.
+Sin embargo:
+- los errores críticos de apagado deben seguir siendo diagnosticables;
+- los modos de recuperación o depuración pueden mostrar salida detallada;
+- el pulido gráfico nunca debe impedir un apagado limpio.
 
 ---
 
-# 10. Session continuity
+# 10. Continuidad de sesión
 
-The complete SineOS session lifecycle should feel coherent:
+El ciclo completo debe sentirse como el mismo sistema:
 
 ```text
-POWER ON
+ENCENDER
    ↓
-SineOS Boot
+Arranque SineOS
    ↓
-SineOS Login
+Login SineOS
    ↓
-SDE Desktop
+Escritorio SDE
    ↓
-Lock / Hibernate / Resume
+Bloqueo / Hibernación / Reanudación
    ↓
-SineOS Lock
+Bloqueo SineOS
    ↓
-SDE Desktop
+Escritorio SDE
    ↓
-SineOS Shutdown / Reboot
+Apagado / Reinicio SineOS
 ```
 
-The system should not visually appear to switch between unrelated Debian/XFCE components during normal use.
+Durante el uso normal no debe parecer que el sistema cambia entre componentes Debian/XFCE visualmente no relacionados.
 
 ---
 
-# 11. Security rules
+# 11. Reglas de seguridad
 
-Mandatory:
-- no password autofill;
-- no default autologin;
-- lock always requires password;
-- resume from hibernation returns to locked session;
-- PAM/system authentication remains authoritative;
-- lock screen must not leak notification contents;
-- logout and lock are distinct actions;
-- no visual customization may weaken authentication or recovery.
-
----
-
-# 12. Failure and recovery behavior
-
-If Plymouth fails:
-- boot continues with normal system output.
-
-If Slick Greeter theme/integration fails:
-- LightDM must remain usable with a known fallback greeter/configuration.
-
-If xfce4-screensaver fails:
-- SDE health/recovery must detect the issue;
-- lock failure is considered a security defect;
-- SDE must provide a documented fallback path.
-
-If TLP policy application fails:
-- system remains usable;
-- SDE reports the failure;
-- no competing power daemon is automatically enabled.
-
-If hibernation fails certification:
-- lid-close hibernation is not enabled until fixed.
+Obligatorio:
+- sin autocompletado de contraseña;
+- sin autologin predeterminado;
+- el bloqueo siempre requiere contraseña;
+- reanudar desde hibernación regresa a una sesión bloqueada;
+- PAM y los mecanismos normales del sistema siguen siendo autoritativos;
+- la pantalla bloqueada no filtra contenido de notificaciones;
+- cerrar sesión y bloquear son acciones distintas;
+- ninguna personalización visual puede debilitar autenticación o recuperación.
 
 ---
 
-# 13. SDE 1.0 acceptance criteria
+# 12. Comportamiento ante fallas y recuperación
 
-## Boot
-- graphical normal boot;
-- no routine kernel/systemd text;
-- diagnostic path remains available;
-- GRUB/recovery remains accessible.
+Si falla Plymouth:
+- el arranque continúa mostrando la salida normal del sistema.
+
+Si falla la integración o tema de Slick Greeter:
+- LightDM debe seguir siendo utilizable con una configuración de respaldo conocida.
+
+Si falla `xfce4-screensaver`:
+- SDE health/recovery debe detectar el problema;
+- una falla de bloqueo se considera un defecto de seguridad;
+- SDE debe ofrecer una ruta de fallback documentada.
+
+Si falla la aplicación de política TLP:
+- el sistema sigue siendo utilizable;
+- SDE reporta la falla;
+- no se habilita automáticamente otro daemon de energía que compita.
+
+Si la hibernación no aprueba certificación:
+- no se habilita hibernación al cerrar tapa hasta corregir el problema.
+
+---
+
+# 13. Criterios de aceptación de SDE 1.0
+
+## Arranque
+- arranque gráfico normal;
+- sin texto rutinario de kernel/systemd;
+- ruta de diagnóstico disponible;
+- GRUB y recuperación accesibles.
 
 ## Login
-- last/primary user preselected;
-- password always required;
-- multi-user switch available;
-- no autologin by default;
-- visual consistency with SDE.
+- último usuario o usuario principal preseleccionado;
+- contraseña siempre obligatoria;
+- cambio de usuario disponible;
+- sin autologin predeterminado;
+- coherencia visual con SDE.
 
-## Lock
-- Super+L locks immediately;
-- running session preserved;
-- password required;
-- sensitive content hidden;
-- screen blanking independent from lock.
+## Bloqueo
+- Super+L bloquea inmediatamente;
+- sesión en ejecución preservada;
+- contraseña obligatoria;
+- contenido sensible oculto;
+- apagado de pantalla independiente del bloqueo.
 
-## Hibernate
-- lid close requests hibernation;
-- no silent suspend fallback;
-- resume restores the existing session;
-- lock screen shown after resume.
+## Hibernación
+- cerrar tapa solicita hibernación;
+- sin fallback silencioso a suspensión;
+- reanudar restaura la sesión existente;
+- pantalla de bloqueo visible después de reanudar.
 
-## Power
-- AC policy prioritizes performance;
-- BAT policy prioritizes efficiency;
-- low/critical battery states visible;
-- emergency hibernation only after certification.
+## Energía
+- política AC prioriza rendimiento;
+- política BAT prioriza eficiencia;
+- estados de batería baja y crítica visibles;
+- hibernación de emergencia solo después de certificación.
 
-## Shutdown / reboot
-- graphical SineOS transition;
-- normal shutdown text hidden;
-- diagnostic output remains available when needed.
+## Apagado y reinicio
+- transición gráfica SineOS;
+- texto normal de apagado oculto;
+- salida de diagnóstico disponible cuando sea necesaria.
 
-## Recovery
-- login, lock and power customizations can be reverted to known-good system defaults;
-- recovery does not depend on the graphical layer being functional.
+## Recuperación
+- personalizaciones de login, bloqueo y energía pueden revertirse a valores funcionales conocidos;
+- la recuperación no depende de que la capa gráfica esté funcionando.
 
 ---
 
-# Final rule
+# Regla final
 
-> SineOS must feel like the same system from power-on to power-off, while authentication, recovery and power safety always remain more important than visual polish.
+> SineOS debe sentirse como el mismo sistema desde que se enciende hasta que se apaga, mientras autenticación, recuperación y seguridad energética siempre tienen prioridad sobre el acabado visual.
