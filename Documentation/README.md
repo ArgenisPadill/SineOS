@@ -17,7 +17,7 @@ Documentation/
 
 No se crean directorios vacíos solo para representar una arquitectura futura.
 
-## Lifecycle
+## Ciclo de vida
 
 `Documentation/Lifecycle/README.md` es el runbook vivo de construcción de SineOS.
 
@@ -25,7 +25,7 @@ Contiene capítulos numerados desde la preparación de la imagen de Debian hasta
 
 También enlaza los programas propios, scripts, stacks y documentos profundos que sostienen cada etapa.
 
-## Architecture
+## Arquitectura
 
 ### AI-Architecture.md
 Arquitectura híbrida de IA, modelos, routing, privacidad y relación con Ollama, Miyo, Obsidian y servicios cloud.
@@ -46,18 +46,18 @@ Estándar general de documentación y Definition of Done documental para compone
 Plan de arquitectura congelado para **SineOS Desktop Experience (SDE)**: evolución visual y de interacción de XFCE/X11 orientada a bajo consumo, compatibilidad, escalabilidad, replicabilidad y recuperación. El documento está marcado como pendiente de implementación y se sigue mediante el issue maestro #1.
 
 ### SDE-Visual-Interaction-Refinements.md
-Addendum congelado de refinamientos visuales e interacción: Snap Preview, fullscreen/maximizado, Launch/Progress Feedback, CSD/SSD, Docklike, Safe Areas, diálogos y soporte de resoluciones heredadas.
+Anexo congelado de refinamientos visuales e interacción: vista previa de ajuste de ventanas, pantalla completa/maximizado, respuesta de inicio/progreso, CSD/SSD, Docklike, áreas seguras, diálogos y soporte de resoluciones heredadas.
 
 ### SDE-Packaging-Recovery-Certification.md
-Política congelada de empaquetado Debian, recuperación local/GitHub/offline, certificación C0-C5, estados de soporte de hardware y ciclo Alpha → Beta → RC → Stable.
+Política congelada de empaquetado Debian, recuperación local/GitHub/offline, certificación C0-C5, estados de soporte de hardware y ciclo Alpha → Beta → RC → Estable.
 
 ### SDE-UX-Contract.md
-Contrato formal de experiencia de usuario de SDE: latencia, feedback inmediato, No Dead Clicks, No Surprise Movement, Display Transactions, Last Known Good, Resume Validation, privacidad al proyectar, coordinación display/audio, accesibilidad, Edit Mode y criterios UX de aceptación.
+Contrato formal de experiencia de usuario de SDE: latencia, respuesta inmediata, sin clics muertos, sin movimientos inesperados, transacciones de pantalla, último estado funcional, validación posterior a reanudación, privacidad en pantallas externas, coordinación pantalla/audio, accesibilidad, modo de edición y criterios de aceptación UX.
 
 ### SDE-Session-Power-Experience.md
-Política congelada del ciclo completo de sesión y energía: Plymouth en arranque/reinicio/apagado, LightDM + Slick Greeter para login, xfce4-screensaver para bloqueo, contraseña obligatoria, hibernación al cerrar tapa, TLP para políticas AC/BAT, Resume Validation y criterios de recuperación.
+Política congelada del ciclo completo de sesión y energía: Plymouth en arranque/reinicio/apagado, LightDM + Slick Greeter para inicio de sesión, xfce4-screensaver para bloqueo, contraseña obligatoria, hibernación al cerrar tapa, TLP para políticas AC/BAT, validación posterior a reanudación y criterios de recuperación.
 
-## Operations
+## Operaciones
 
 ### Academic-Templates.md
 Sistema académico de Obsidian/Templater y validación de sus entidades.
@@ -92,7 +92,7 @@ Arquitectura, instalación y operación de la aplicación nativa SineOS · Mante
 ### XFCE-Visual-Configuration.md
 Instalación, aplicación, respaldo, restauración y mantenimiento del escritorio XFCE reproducible.
 
-## Recovery
+## Recuperación
 
 ### Backup-Policy.md
 Política general de backups: disco externo `SineOsBackups`, ciclo trimestral, cifrado, validación por restore, Restic y sincronización GitHub.
@@ -103,12 +103,12 @@ Estado versionado del último respaldo externo validado.
 ### Backup-Log/
 Bitácora histórica `Respaldo-<commit>.md` de respaldos certificados y sincronizados.
 
-## Security
+## Seguridad
 
 ### README.md
 Entrada a la documentación de seguridad.
 
-### Security-Baseline.md
+### Seguridad-Baseline.md
 Baseline de seguridad, estado de controles, red, servicios, secretos, backups y hardening.
 
 ### Documentation-Privacy.md
