@@ -45,6 +45,15 @@ Estándar general de documentación y Definition of Done documental para compone
 ### SineOS-Desktop-Experience.md
 Plan de arquitectura congelado para **SineOS Desktop Experience (SDE)**: evolución visual y de interacción de XFCE/X11 orientada a bajo consumo, compatibilidad, escalabilidad, replicabilidad y recuperación. El documento está marcado como pendiente de implementación y se sigue mediante el issue maestro #1.
 
+### SDE-Visual-Interaction-Refinements.md
+Addendum congelado de refinamientos visuales e interacción: Snap Preview, fullscreen/maximizado, Launch/Progress Feedback, CSD/SSD, Docklike, Safe Areas, diálogos y soporte de resoluciones heredadas.
+
+### SDE-Packaging-Recovery-Certification.md
+Política congelada de empaquetado Debian, recuperación local/GitHub/offline, certificación C0-C5, estados de soporte de hardware y ciclo Alpha → Beta → RC → Stable.
+
+### SDE-UX-Contract.md
+Contrato formal de experiencia de usuario de SDE: latencia, feedback inmediato, No Dead Clicks, No Surprise Movement, Display Transactions, Last Known Good, Resume Validation, privacidad al proyectar, coordinación display/audio, accesibilidad, Edit Mode y criterios UX de aceptación.
+
 ## Operations
 
 ### Academic-Templates.md
