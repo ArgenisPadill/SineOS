@@ -78,13 +78,19 @@ make logs
 make health
 ```
 
-## Pendiente
+## Estado de continuidad y pendientes
 
-- backup automático;
-- restore probado;
-- rotación formal de credenciales;
-- política de secretos;
-- Disaster Recovery.
+Ya validados:
+- backup lógico PostgreSQL;
+- hashes SHA-256;
+- restore real en PostgreSQL temporal;
+- integración con respaldo externo certificado;
+- recuperación dentro de Disaster Recovery;
+- política general de secretos.
+
+Pendiente:
+- rotación formal de credenciales PostgreSQL;
+- cualquier automatización adicional que cambie la política actual de arranque manual debe tratarse como decisión separada.
 
 ## Documentación
 
