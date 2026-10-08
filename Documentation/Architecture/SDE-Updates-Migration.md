@@ -84,10 +84,12 @@ Antes de una actualización importante:
 ## Energía para actualizar
 
 Antes de iniciar:
-- si está en batería y tiene **más de 50 %**, puede actualizar;
-- si está en batería y tiene **50 % o menos**, esperar;
-- si está conectada a corriente, puede actualizar aunque la batería no supere 50 %;
-- una vez iniciada la actualización, no se pausa por caída de batería bajo 50 % o desconexión del cargador.
+- si está usando batería y tiene **más de 50 %**, puede actualizar;
+- si está usando batería y tiene **50 % o menos**, esperar;
+- si está en 50 % o menos, conectar a corriente y esperar a superar 50 % antes de iniciar;
+- excepción: si está conectada a corriente pero la batería está degradada y técnicamente no puede alcanzar 50 %, permitir la actualización;
+- una vez iniciada la actualización, terminarla aunque se desconecte el cargador o la batería caiga por debajo de 50 %;
+- nunca pausar APT/dpkg a mitad de una transacción por una regla de batería.
 
 ## Hotspot y datos móviles
 
