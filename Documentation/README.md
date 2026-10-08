@@ -57,6 +57,27 @@ Contrato formal de experiencia de usuario de SDE: latencia, respuesta inmediata,
 ### SDE-Session-Power-Experience.md
 Política congelada del ciclo completo de sesión y energía: Plymouth en arranque/reinicio/apagado, LightDM + Slick Greeter para inicio de sesión, xfce4-screensaver para bloqueo, contraseña obligatoria, hibernación al cerrar tapa, TLP para políticas AC/BAT, validación posterior a reanudación y criterios de recuperación.
 
+### SDE-System-Integration.md
+Integración congelada de red, portales cautivos, Ethernet/Wi-Fi, VPN, Bluetooth, USB, almacenamiento y política de drivers/firmware.
+
+### SDE-Devices-Printing-Scanning.md
+Política congelada de impresión y escaneo: instalación guiada, hoja de prueba SineOS, consumibles, mantenimiento, OCR, PDF buscable y revisión previa al guardado.
+
+### SDE-Privacy-Permissions-Remote-Access.md
+Política congelada de privacidad, permisos sensibles, autorizaciones Polkit temporales, acceso remoto, indicadores y bitácoras.
+
+### SDE-Hardware-Health.md
+Política congelada de salud de hardware: batería, temperatura, SMART, RAM, CPU, GPU, sistema de archivos, modo seguro y reportes técnicos.
+
+### SDE-Updates-Migration.md
+Política congelada de actualizaciones, puntos de restauración y migración desde el XFCE actual hacia SDE.
+
+### SDE-Implementation-Roadmap.md
+Orden congelado de implementación de SDE 1.0, desde recovery y respaldo pre-SDE hasta certificación final.
+
+### SDE-Definition-of-Done-1.0.md
+Criterios obligatorios para declarar SDE 1.0 terminado y estable.
+
 ## Operaciones
 
 ### Academic-Templates.md
