@@ -507,6 +507,14 @@ Decisiones obligatorias:
 
 ---
 
+# Especificación de propiedad y conflictos
+
+La especificación congelada del registro de propiedad, tipos `owned` / `managed-block` / `observed`, comparación previous/applied/current, resolución de conflictos y uninstall seguro se encuentra en:
+
+`Documentation/Architecture/SDE-Alpha-0.1-Ownership-Conflict-Spec.md`
+
+---
+
 # Pendientes técnicos antes de escribir código
 
 - confirmar inventario real de paquetes ya instalados en la laptop de referencia;
