@@ -218,9 +218,11 @@ La desinstalación retira timer, service, lanzador y wrapper de ejecución. Cons
 - no mezcla cambios del usuario en el commit de salud;
 - no habilita backup antes de validarlo.
 
-## Validación pendiente
+## Historial del gate de validación
 
-Antes de cerrar TD-022 deben comprobarse:
+> Esta sección conserva el checklist utilizado antes de cerrar TD-022. **TD-022 está cerrado**; los textos posteriores que indiquen “permanece abierto” o “falta validar” describen pasos históricos de la secuencia del 24-09-2026, no el estado actual.
+
+El gate utilizado fue:
 
 ```text
 [x] sintaxis Python
