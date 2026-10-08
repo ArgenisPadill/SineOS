@@ -96,10 +96,16 @@ El índice de Miyo es reconstruible. El dato importante es el Knowledge Vault.
 
 ## Pendiente
 
-- reinstalación reproducible completa;
-- backup independiente del Vault;
+Permanecen pendientes:
+- reinstalación reproducible completa de Miyo;
 - benchmark semántico multinota;
-- pruebas de recuperación.
+- procedimiento reproducible completo de reinstalación/indexación.
+
+Ya validados:
+- backup independiente del Knowledge Vault (TD-004 cerrado);
+- restore real del Vault desde Restic;
+- recuperación del Vault dentro de Disaster Recovery;
+- preservación de `.obsidian`, estructura y symlinks según la evidencia certificada.
 
 ## Documentación
 
