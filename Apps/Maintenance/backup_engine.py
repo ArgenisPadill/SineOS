@@ -2574,8 +2574,8 @@ def validate_stateful_containers_stopped():
         if state["status"] != "exited" or state["exit_code"] != 0:
             raise BackupError(
                 f"{container} debe estar detenido limpiamente "
-                f"antes del backup; estado={state.get("status")} "
-                f"ExitCode={state.get("exit_code")}."
+                f"antes del backup; estado={state.get('status')} "
+                f"ExitCode={state.get('exit_code')}."
             )
 
     return states
