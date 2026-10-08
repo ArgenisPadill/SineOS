@@ -403,6 +403,14 @@ Uptime Kuma usa la red `sineos-monitoring`. Stirling PDF se comprueba directamen
 
 El procedimiento completo de recuperación ante desastre validado está documentado en `Documentation/Recovery/Disaster-Recovery.md`.
 
+## Prioridades y proyectos planificados
+
+**Orden obligatorio (08-10-2026):** terminar la seguridad pendiente → implementar y certificar **SDE 1.0** (planeación terminada; implementación física pausada) → abordar reproducibilidad y evolución funcional.
+
+El [roadmap maestro](Documentation/Operations/Project-Roadmap.md) y [issue #4](https://github.com/ArgenisPadill/SineOS/issues/4) consolidan el orden de trabajo; seguridad [#2](https://github.com/ArgenisPadill/SineOS/issues/2) y SDE [#1](https://github.com/ArgenisPadill/SineOS/issues/1) son gates previos. Se incorpora **SLDE**, SineOS Laboratory & Development Environment, con 16 módulos *propuestos*, **sin implementar ni instalar**, documentados en [SLDE-Planning](Documentation/Architecture/SLDE-Planning.md) y [issue #3](https://github.com/ArgenisPadill/SineOS/issues/3).
+
+Los proyectos planeados no sustituyen [deuda técnica](Documentation/Operations/Technical-Debt.md) ni evidencias de validación. La operación y los servicios actuales no se alteran por esta decisión documental.
+
 ## Trabajo pendiente
 
 - fijar versión/digest de Open WebUI y retirar `restart: unless-stopped` mediante recreación controlada;

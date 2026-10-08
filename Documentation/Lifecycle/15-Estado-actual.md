@@ -1,6 +1,6 @@
 # 15 — Estado actual de SineOS
 
-**Checkpoint documental:** 07-10-2026
+**Checkpoint documental:** 08-10-2026
 
 ## Estado general
 
@@ -14,9 +14,11 @@ BACKUP / RESTORE / DR VALIDADOS
 HARDENING DE SEGURIDAD EN PROGRESO
 +
 SDE 1.0 PLANIFICADO / IMPLEMENTACIÓN FÍSICA PAUSADA
++
+SLDE (16 MÓDULOS) PLANIFICADO / NO IMPLEMENTADO
 ```
 
-La implementación física de SineOS Desktop Experience (SDE) no debe comenzar hasta concluir o aceptar conscientemente el bloque de seguridad pendiente.
+El orden obligatorio aprobado es: **terminar seguridad → implementar y certificar SDE 1.0 → resolver pendientes de reproducibilidad y ampliar SLDE**. La implementación física de SDE no debe comenzar hasta concluir y verificar el gate de seguridad, con cualquier riesgo residual expresamente aceptado.
 
 ## Componentes validados o funcionales
 
@@ -182,6 +184,18 @@ Alpha 0.1 ya tiene definidos:
 
 **Estado:** no implementar todavía sobre la laptop hasta cerrar el gate de seguridad.
 
+## Priorización de proyectos y nuevas iniciativas (08-10-2026)
+
+El seguimiento general y dependencias se encuentran en [Project-Roadmap](../Operations/Project-Roadmap.md) y en [issue #4](https://github.com/ArgenisPadill/SineOS/issues/4).
+
+1. **Seguridad — EN CURSO / PRIMERO:** [issue #2](https://github.com/ArgenisPadill/SineOS/issues/2). Incluye controles físicos pendientes, TD-008/009/010/011/018/024 y evaluación de riesgos de TD-006/007/019.
+2. **SDE — PLANEACIÓN TERMINADA / IMPLEMENTACIÓN NO INICIADA:** [issue #1](https://github.com/ArgenisPadill/SineOS/issues/1). Sólo comenzar Alpha 0.1 después del gate de seguridad; respetar la Definition of Done y la certificación física.
+3. **Reproducibilidad y deuda operativa — PENDIENTE / POST-SDE:** instalación integral, dependencias, actualizaciones, migración, portabilidad y TD-012/013/014/015/017/025, salvo que una se requiera antes por seguridad o SDE.
+4. **SLDE — PLANIFICADO / NO IMPLEMENTADO:** [issue #3](https://github.com/ArgenisPadill/SineOS/issues/3) y [SLDE-Planning](../Architecture/SLDE-Planning.md). El catálogo de 16 módulos es una propuesta opcional; no equivale a instalaciones ni pruebas.
+5. **Despliegue gradual SLDE — PENDIENTE:** herramientas ligeras, servicios opcionales, laboratorios aislados y finalmente cargas intensivas/remotas.
+
+Los 15 registros de deuda técnica siguen vigentes en `Technical-Debt.md`; los planes SDE/SLDE no se contabilizan como deuda nueva ni como instalaciones completadas.
+
 ## Comprobación operativa
 
 Para comprobar el repositorio:
@@ -212,6 +226,8 @@ ss -tulpn
 - último backup: `Documentation/Recovery/Backup-Status.md`;
 - DR: `Documentation/Recovery/Disaster-Recovery.md`;
 - SDE: issue #1 + documentos `SDE-*.md`.
+- orden general y trabajo futuro: `Documentation/Operations/Project-Roadmap.md` + issue #4.
+- SLDE: `Documentation/Architecture/SLDE-Planning.md` + issue #3.
 
 ## Regla de actualización
 

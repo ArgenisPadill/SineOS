@@ -18,6 +18,17 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ## [Unreleased]
 
+### Priorización maestra y SLDE — 2026-10-08
+
+- Fijado el orden obligatorio: **seguridad pendiente → implementación/certificación SDE 1.0 → reproducibilidad y expansión modular**.
+- Creado `Documentation/Operations/Project-Roadmap.md`, con fases, gates, deuda operativa no olvidada y fuentes de verdad.
+- Registrada la propuesta SLDE de 16 módulos opcionales en `Documentation/Architecture/SLDE-Planning.md`, sin instalaciones ni cambios de runtime.
+- Incorporados issues #2 (seguridad), #3 (SLDE) y #4 (roadmap maestro); preservado issue #1 (SDE).
+- Sin alterar la clasificación/cierre de las 15 TD vigentes ni declarar SDE o SLDE implementados.
+- Alineado el alcance de certificación de SDE a los criterios C0–C12 de su Definition of Done.
+- Cambios únicamente documentales en GitHub; no se ejecutaron pruebas físicas nuevas.
+
+
 ### Auditoría integral del repositorio — 2026-10-07
 
 - Ejecutada revisión transversal de README, Lifecycle, Operations, Recovery, Security, Apps, Scripts, stacks y SDE.

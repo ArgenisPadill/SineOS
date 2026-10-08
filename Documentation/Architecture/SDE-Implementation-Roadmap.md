@@ -161,7 +161,7 @@ No incluir indexador pesado de archivos en 1.0.
 
 ## Fase 13 — Certificación final
 
-- C0 a C5;
+- C0 a C12 según `SDE-Definition-of-Done-1.0.md`;
 - hardware físico de referencia;
 - hibernación/reanudación;
 - HDMI;

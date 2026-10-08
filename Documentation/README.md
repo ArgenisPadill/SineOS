@@ -17,6 +17,16 @@ Documentation/
 
 No se crean directorios vacíos solo para representar una arquitectura futura.
 
+## Roadmap maestro y seguimiento
+
+- [Roadmap global de pendientes](Operations/Project-Roadmap.md): regla obligatoria Seguridad → SDE → fases posteriores, inventario de proyectos, deuda y gates.
+- [Issue #4 — Roadmap maestro](https://github.com/ArgenisPadill/SineOS/issues/4).
+- [Issue #2 — Seguridad](https://github.com/ArgenisPadill/SineOS/issues/2).
+- [Issue #1 — SDE](https://github.com/ArgenisPadill/SineOS/issues/1).
+- [Issue #3 — SLDE](https://github.com/ArgenisPadill/SineOS/issues/3).
+
+Los planes nuevos no equivalen a implementación; la deuda existente conserva su registro separado.
+
 ## Ciclo de vida
 
 `Documentation/Lifecycle/README.md` es el runbook vivo de construcción de SineOS.
@@ -90,7 +100,14 @@ Especificación congelada del respaldo pre-SDE y restauración: estructura simpl
 ### SDE-Alpha-0.1-Ownership-Conflict-Spec.md
 Especificación congelada de propiedad de archivos y resolución de conflictos: tipos owned/managed-block/observed, hashes previous/applied, protección de cambios manuales, rollback y uninstall seguro.
 
+### SLDE-Planning.md
+Planeación inicial (no implementada) de SineOS Laboratory & Development Environment: 16 módulos opcionales, modos de ejecución, aislamiento, requisitos de hardware, catálogo y roadmap posterior a seguridad y SDE.
+
 ## Operaciones
+
+### Project-Roadmap.md
+Fuente de verdad del orden global aprobado: cierre de seguridad, implementación/certificación SDE, reproducibilidad y ampliación modular SLDE. Incluye dependencias, pendientes y gates.
+
 
 ### Academic-Templates.md
 Sistema académico de Obsidian/Templater y validación de sus entidades.

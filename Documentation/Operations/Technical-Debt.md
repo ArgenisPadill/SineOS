@@ -2,7 +2,7 @@
 
 Última revisión: 07-10-2026
 
-Este documento registra únicamente deuda vigente.
+Este documento registra únicamente deuda vigente. **Los planes SDE/SLDE, el catálogo de 16 módulos y los huecos de reproducibilidad aún no convertidos en TD no son deuda adicional de este registro.** Sus prioridades y fases se siguen en [Project-Roadmap](Project-Roadmap.md), sin cerrar ni renumerar las 15 TD abiertas.
 
 ## Resumen
 
