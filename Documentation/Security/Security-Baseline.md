@@ -467,15 +467,13 @@ sin una decisión explícita de arquitectura y seguridad.
 
 ## 22. Open WebUI y secretos
 
-La configuración definitiva de un secret persistente de Open WebUI sigue pendiente.
+El secret persistente de Open WebUI fue recuperado, almacenado fuera de Git en configuración local con permisos restrictivos y validado mediante recreaciones completas del contenedor. TD-005 está cerrado.
 
-Un secret real no debe incorporarse directamente al archivo:
+Regla vigente:
 
-```text
-Containers/stacks/open-webui/compose.yaml
-```
-
-si el archivo será versionado.
+- el valor real no se incorpora a `compose.yaml`;
+- el archivo versionado solo referencia configuración/entorno;
+- la persistencia del secret debe revalidarse después de cambios de imagen o migraciones relevantes.
 
 ---
 
@@ -522,21 +520,23 @@ Existe una tarea pendiente de rotación de credenciales.
 
 # 25. Gestión de secretos
 
-La política general de secretos todavía debe formalizarse.
+La política general de secretos está formalizada y validada. TD-001 está cerrado.
 
-La estructura del proyecto contempla:
+Referencias autoritativas:
 
 ```text
-Containers/secrets/
+Documentation/Security/Secrets-Management.md
+Documentation/Security/Secrets-Rotation.md
+Scripts/Security/sineos-secrets-audit.sh
 ```
-
-pero la existencia del directorio no constituye por sí sola una solución segura.
 
 Estado:
 
 ```text
-PENDIENTE
+OPERATIVA / VALIDADA
 ```
+
+La existencia de cualquier directorio llamado `secrets` no constituye por sí sola una solución segura; prevalecen la política, permisos, exclusión de Git, inventario y auditoría.
 
 ---
 
@@ -969,7 +969,7 @@ Si estas preguntas no tienen respuesta, el servicio todavía no está listo para
 
 Cada puerto abierto debe tener una razón.
 
-La política futura debe mantener un inventario de:
+El inventario debe registrar:
 
 ```text
 servicio
@@ -980,14 +980,21 @@ consumidor
 justificación
 ```
 
-Puertos conocidos actualmente relevantes:
+Puertos conocidos y documentados actualmente:
 
 ```text
-11434/tcp → Ollama
-3000/tcp  → Open WebUI en loopback
+5432/tcp  → PostgreSQL, loopback
+3000/tcp  → Open WebUI, loopback
+3001/tcp  → Uptime Kuma, loopback
+8080/tcp  → Stirling PDF, loopback
+8742/tcp  → servicio local de Miyo, loopback
+53/udp    → DNSCrypt en 127.0.2.1
+9050/tcp  → Tor SOCKS local, en revisión
+11434/tcp → Ollama, todas las interfaces; protegido por nftables y pendiente de hardening
+53317/tcp/udp → LocalSend limitado a LAN de confianza
 ```
 
-Otros servicios deben agregarse al inventario cuando se implementen y validen.
+El inventario debe verificarse contra `ss -tulpn` durante el cierre del hardening. Esta lista documental no sustituye la comprobación en el host.
 
 ---
 
