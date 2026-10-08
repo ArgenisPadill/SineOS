@@ -941,6 +941,7 @@ Forman parte obligatoria de la planeación congelada de SDE:
 - `SDE-Updates-Migration.md`
 - `SDE-Implementation-Roadmap.md`
 - `SDE-Definition-of-Done-1.0.md`
+- `SDE-Advanced-Settings-Policy.md`
 
 En caso de conflicto entre una regla general antigua y una decisión específica más reciente de estos documentos, prevalece la especificación específica más reciente.
 
