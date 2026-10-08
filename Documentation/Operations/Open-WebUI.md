@@ -443,21 +443,26 @@ La persistencia fue validada mediante dos recreaciones completas del contenedor:
 
 ## 22. Gestión de secretos
 
-La futura solución debe respetar el principio:
+La política general de secretos ya está formalizada y validada en SineOS.
+
+Principio vigente:
 
 ```text
-configuración
+configuración reproducible
     ↓
 Git
 
-secretos
+secretos reales
     ↓
-fuera de Git
+fuera de Git + permisos restrictivos + auditoría
 ```
 
-La estrategia puede evolucionar conforme se formalice la política general de secretos de SineOS.
+Referencias:
+- `Documentation/Security/Secrets-Management.md`;
+- `Documentation/Security/Secrets-Rotation.md`;
+- `Scripts/Security/sineos-secrets-audit.sh`.
 
-No debe documentarse una credencial real.
+No debe documentarse ni versionarse una credencial real.
 
 ---
 
@@ -558,24 +563,19 @@ No debe inventarse un número de versión únicamente para completar la document
 
 ## 28. Backup
 
-Debe evaluarse qué información dentro de:
+El estado persistente de Open WebUI está incluido en el respaldo externo certificado de SineOS.
 
-```text
-Containers/volumes/open-webui/data
-```
+Se validó:
+- restauración temporal del volumen;
+- `SQLite integrity_check`;
+- arranque de un contenedor temporal aislado;
+- respuesta HTTP;
+- conservación del restore original;
+- recuperación dentro de Disaster Recovery.
 
-requiere backup.
+El directorio `cache/` permanece excluido porque es reconstruible.
 
-La prioridad de backup debe basarse en la importancia real de los datos.
-
-Open WebUI no debe tener mayor prioridad que fuentes primarias como:
-
-```text
-Knowledge Vault
-PostgreSQL
-```
-
-si su estado puede reconstruirse.
+Open WebUI conserva menor prioridad que fuentes primarias como Knowledge Vault y PostgreSQL, pero su estado persistente sí forma parte del backup certificado.
 
 ---
 
@@ -743,8 +743,8 @@ Pendientes conocidos:
 [ ] Sustituir `:main` por versión o digest fijo
 [ ] Validar la imagen seleccionada
 [x] Secret persistente configurado y validado mediante dos recreaciones
-[ ] Mantener secretos fuera de Git
-[ ] Evaluar backup de datos de Open WebUI
+[x] Mantener secretos fuera de Git según política formal
+[x] Backup y restore funcional del estado persistente validados
 [x] nftables operativo; revisión Podman/netavark pendiente
 [x] Quadlet descartado mientras el arranque sea manual
 [ ] Documentar actualización controlada
