@@ -125,6 +125,9 @@ Arquitectura, instalación y operación de la aplicación nativa SineOS · Mante
 ### XFCE-Visual-Configuration.md
 Instalación, aplicación, respaldo, restauración y mantenimiento del escritorio XFCE reproducible.
 
+### Repository-Audit-2026-10-07.md
+Auditoría integral estática y documental del repositorio: inconsistencias corregidas, bug de código detectado, estados sincronizados y deuda real restante.
+
 ## Recuperación
 
 ### Backup-Policy.md
