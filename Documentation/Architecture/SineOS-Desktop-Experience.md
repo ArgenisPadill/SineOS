@@ -644,7 +644,7 @@ Super + Up            Maximizar
 Super + Down          Restaurar/minimizar
 ```
 
-Antes de registrar un atajo debe comprobarse si ya existe una asignación del usuario.
+SDE aplica su mapa de atajos desde una base limpia. Los atajos anteriores se conservan en el respaldo pre-SDE; se preservan teclas de hardware y multimedia que no entren en conflicto.
 
 ---
 
@@ -863,7 +863,9 @@ Se prevé:
 
 # Seguridad y límites de alcance
 
-SDE no debe modificar por razones visuales:
+SDE no debe modificar infraestructura crítica **por razones puramente visuales**. Las integraciones operativas aprobadas para energía, red, VPN, drivers, hibernación, actualizaciones y recuperación se rigen por sus documentos específicos y siempre requieren validación, rollback y límites claros.
+
+No modificar por motivos visuales:
 
 - kernel;
 - GRUB;
@@ -928,6 +930,22 @@ sin rediseñar todo SDE cuando XFCE/Wayland alcance la madurez requerida.
 
 ---
 
+# Especificaciones operativas consolidadas
+
+Forman parte obligatoria de la planeación congelada de SDE:
+
+- `SDE-System-Integration.md`
+- `SDE-Devices-Printing-Scanning.md`
+- `SDE-Privacy-Permissions-Remote-Access.md`
+- `SDE-Hardware-Health.md`
+- `SDE-Updates-Migration.md`
+- `SDE-Implementation-Roadmap.md`
+- `SDE-Definition-of-Done-1.0.md`
+
+En caso de conflicto entre una regla general antigua y una decisión específica más reciente de estos documentos, prevalece la especificación específica más reciente.
+
+---
+
 # Criterios de aceptación de SDE 1.0
 
 ## Arranque y recuperación
@@ -937,8 +955,8 @@ Debe validarse:
 - login;
 - logout;
 - reboot;
-- suspensión;
-- resume;
+- hibernación;
+- reanudación;
 - fallo de Picom;
 - fallo/reinicio de panel;
 - tema ausente;
@@ -954,7 +972,7 @@ Debe validarse:
 - Duplicar;
 - Extender;
 - Solo esta pantalla;
-- pantalla inalámbrica;
+- pantalla inalámbrica cuando exista backend certificado (no bloqueante para SDE 1.0);
 - cambio de resolución;
 - recuperación de ventanas;
 - DPI mixto.
