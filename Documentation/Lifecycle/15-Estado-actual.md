@@ -1,8 +1,24 @@
 # 15 — Estado actual de SineOS
 
-**Checkpoint documental:** 23-09-2026
+**Checkpoint documental:** 07-10-2026
 
-## Componentes validados
+## Estado general
+
+SineOS se encuentra en:
+
+```text
+BASE FUNCIONAL VALIDADA
++
+BACKUP / RESTORE / DR VALIDADOS
++
+HARDENING DE SEGURIDAD EN PROGRESO
++
+SDE 1.0 PLANIFICADO / IMPLEMENTACIÓN FÍSICA PAUSADA
+```
+
+La implementación física de SineOS Desktop Experience (SDE) no debe comenzar hasta concluir o aceptar conscientemente el bloque de seguridad pendiente.
+
+## Componentes validados o funcionales
 
 ```text
 Debian 13 / XFCE
@@ -21,49 +37,154 @@ nftables
 Proton VPN
 DNSCrypt
 NetworkPrivacy
-auditor SineOS
+SineOS · Mantenimiento
+auditoría trimestral
 configuración XFCE reproducible
 monitoreo local
+backup externo Restic
+restore probado
+Disaster Recovery
 ```
 
 ## Programas propios
 
 ```text
 NetworkPrivacy
+SineOS · Mantenimiento
 ```
 
-## Automatizaciones versionadas
+Catálogo autoritativo:
+
+`Apps/README.md`
+
+## Automatizaciones versionadas principales
 
 ```text
 Scripts/Audit/sineos-audit.sh
+Scripts/Audit/sineos-health-audit.sh
 Scripts/Desktop/sineos-xfce-macos.sh
 Scripts/Monitoring/check-open-webui.sh
 Scripts/Monitoring/check-postgresql.sh
 Scripts/NetworkPrivacy/install-network-privacy.sh
+Scripts/Maintenance/install-sineos-maintenance.sh
+Scripts/Maintenance/run-health-audit-interactive.sh
+Scripts/Security/sineos-secrets-audit.sh
 Containers/stacks/postgres/Makefile
 ```
 
-## Huecos de reproducibilidad detectados por esta guía
+Catálogo autoritativo:
 
-1. procedimiento exacto de particionado/instalación inicial de Debian;
+`Scripts/README.md`
+
+## Recuperación validada
+
+Están cerrados y no deben seguir listándose como huecos:
+
+- gestión de secretos (TD-001);
+- política general de backup (TD-002);
+- backup/restore PostgreSQL (TD-003);
+- backup independiente del Knowledge Vault (TD-004);
+- secret persistente Open WebUI (TD-005);
+- Disaster Recovery (TD-016);
+- salud trimestral (TD-020);
+- primer respaldo externo certificado (TD-021);
+- SineOS · Mantenimiento (TD-022);
+- automatización del respaldo externo (TD-023).
+
+El procedimiento DR validado vive en:
+
+`Documentation/Recovery/Disaster-Recovery.md`
+
+El estado autoritativo del último backup vive en:
+
+`Documentation/Recovery/Backup-Status.md`
+
+## Deuda vigente
+
+La fuente de verdad es:
+
+`Documentation/Operations/Technical-Debt.md`
+
+Pendientes principales actuales:
+
+- TD-006: fijar imagen/digest Open WebUI;
+- TD-007: retirar restart automático de Open WebUI;
+- TD-008: revisar nftables + Podman/netavark;
+- TD-009: validar Ollama desde otro equipo;
+- TD-010: auditoría formal de AppArmor;
+- TD-011: determinar consumidores de Tor;
+- TD-012: actualización Miyo;
+- TD-013: benchmark semántico multinota;
+- TD-014: revisar `apt autoremove`;
+- TD-015: procedimiento de migración;
+- TD-017: templates técnicos del Vault;
+- TD-018: validación final de seguridad asistida por agente;
+- TD-019: permisos de Stirling PDF;
+- TD-024: ownership Uptime Kuma durante restore;
+- TD-025: portabilidad de `sineos-audit.sh`.
+
+## Huecos de reproducibilidad/documentación todavía reales
+
+1. procedimiento integral de instalación de SineOS desde Debian limpio fuera del escenario específico de DR;
 2. verificación/documentación de LUKS;
-3. instalación reproducible de Podman Desktop;
+3. instalación reproducible completa de Podman Desktop;
 4. instalación reproducible completa de Obsidian;
-5. instalación reproducible completa de Miyo;
-6. unidades systemd de los timers de monitoreo aún no versionadas;
-7. ruleset nftables operativo aún no versionado;
-8. gestión formal de secretos;
-9. backups y restore;
-10. Disaster Recovery;
-11. portabilidad del auditor;
-12. hardening pendiente de Open WebUI;
-13. revisión nftables/Podman/netavark;
-14. auditoría AppArmor;
-15. decisión final sobre Tor.
+5. instalación/reinstalación reproducible de Miyo;
+6. unidades/timers exactos del monitoreo recurrente aún requieren formalización completa;
+7. ruleset nftables operativo debe quedar versionado/saneado como artefacto reproducible;
+8. inventario global de dependencias;
+9. procedimiento global de actualización de SineOS;
+10. troubleshooting general por capas.
 
-## Fuente de verdad
+## Seguridad pendiente antes de SDE físico
 
-Para saber qué está realmente en el repositorio:
+Orden aproximado:
+
+```text
+AppArmor
+  ↓
+LUKS
+  ↓
+inventario de puertos
+  ↓
+nftables / Podman / netavark
+  ↓
+validación LAN y exposición de Ollama
+  ↓
+hardening SSH si existe servidor SSH habilitado
+  ↓
+rotación/gestión de credenciales pendientes
+  ↓
+política de snapshots
+  ↓
+TD-024
+  ↓
+validación final de seguridad asistida por agente
+```
+
+No se deben ejecutar todos estos cambios de una sola vez. Cada control requiere evidencia, rollback cuando corresponda y revalidación.
+
+## SineOS Desktop Experience
+
+La planeación funcional y técnica inicial de SDE 1.0 está congelada en el issue maestro #1 y en `Documentation/Architecture/SDE-*.md`.
+
+Alpha 0.1 ya tiene definidos:
+- backup pre-SDE;
+- SHA-256;
+- verify;
+- restore dry-run;
+- restore reanudable;
+- ownership;
+- conflictos;
+- uninstall seguro;
+- Last Known Good;
+- Modo seguro.
+
+**Estado:** no implementar todavía sobre la laptop hasta cerrar el gate de seguridad.
+
+## Comprobación operativa
+
+Para comprobar el repositorio:
 
 ```bash
 cd "$HOME/Workspace/SineOS"
@@ -72,7 +193,7 @@ git log -1 --oneline --decorate
 git ls-files | sort
 ```
 
-Para comprobar el estado operativo:
+Para comprobar el sistema:
 
 ```bash
 systemctl --failed --no-pager
@@ -82,38 +203,23 @@ sudo nft list ruleset
 ss -tulpn
 ```
 
-## Próximo ciclo
+## Fuente de verdad
 
-El siguiente avance debe cerrar huecos en este orden aproximado:
+- estado global: este documento;
+- deuda vigente: `Documentation/Operations/Technical-Debt.md`;
+- seguridad: `Documentation/Security/Security-Baseline.md`;
+- último health: `Documentation/Operations/Health-Status.md`;
+- último backup: `Documentation/Recovery/Backup-Status.md`;
+- DR: `Documentation/Recovery/Disaster-Recovery.md`;
+- SDE: issue #1 + documentos `SDE-*.md`.
 
-```text
-inventario de programas/scripts locales no versionados
-    ↓
-recuperar timers y firewall como código
-    ↓
-gestión de secretos
-    ↓
-backup PostgreSQL + restore probado
-    ↓
-backup Knowledge Vault
-    ↓
-snapshots / recuperación
-    ↓
-Disaster Recovery
-    ↓
-validación final de seguridad asistida por agente
-```
+## Regla de actualización
 
-## Etapa final de seguridad
+Este archivo representa el estado vigente, no una cronología infinita.
 
-Después de cerrar el hardening, backup y recuperación, SineOS ejecutará la fase:
-
-`Documentation/Lifecycle/16-Validacion-seguridad-agentica.md`
-
-Esta etapa utiliza una allowlist defensiva de procedimientos externos y no sustituye los controles anteriores.
-
-## Regla de actualización de esta guía
-
-Cuando una etapa cambie, debe modificarse su archivo numerado y, si afecta el estado global, este documento.
-
-La guía no debe convertirse en un registro histórico infinito; debe representar el camino vigente y reproducible para llegar al estado actual.
+Cuando una deuda se cierre o un componente cambie de estado:
+1. actualizar su documento operativo;
+2. actualizar Technical Debt;
+3. actualizar este checkpoint si cambia el estado global;
+4. actualizar CHANGELOG;
+5. sincronizar con GitHub.
