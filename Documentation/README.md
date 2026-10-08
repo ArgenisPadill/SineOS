@@ -141,7 +141,7 @@ Bitácora histórica `Respaldo-<commit>.md` de respaldos certificados y sincroni
 ### README.md
 Entrada a la documentación de seguridad.
 
-### Seguridad-Baseline.md
+### Security-Baseline.md
 Baseline de seguridad, estado de controles, red, servicios, secretos, backups y hardening.
 
 ### Documentation-Privacy.md
