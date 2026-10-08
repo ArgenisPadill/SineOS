@@ -18,6 +18,20 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ## [Unreleased]
 
+### SineOS Desktop Experience (SDE) — 2026-10-07
+
+- Congelada y consolidada la planeación funcional de SDE 1.0 sobre Debian 13 + XFCE 4.20 + X11 + LightDM.
+- Documentados UX, sesión/energía, integración de red/dispositivos, impresión/escaneo, privacidad/acceso remoto, salud de hardware, actualizaciones/migración, roadmap y Definition of Done.
+- Definida Alpha 0.1 como etapa de seguridad operacional antes de cambios visuales.
+- Congelados backup pre-SDE, SHA-256, `manifest.json`, `checksums.sha256`, restore dry-run, restore reanudable y Last Known Good.
+- Congelado `ownership.json` con tipos `owned`, `managed-block` y `observed`, preservación de cambios manuales y uninstall seguro.
+- Congelada Configuración avanzada con niveles de riesgo, checkpoints ligeros de 7 días, rollback automático ante falla crítica y recomendación de reversión ante inestabilidad.
+- Corregida la política de batería para actualizaciones: <=50 % requiere corriente y superar 50 %, salvo batería degradada que no pueda alcanzar ese nivel.
+- Completada la política de respaldo urgente ante fallas de RAM/CPU/GPU y la bitácora exacta de acceso remoto.
+- Actualizado el issue maestro #1 para eliminar criterios obsoletos y reflejar el estado real.
+- La implementación física sobre la laptop queda pausada hasta concluir la etapa de seguridad pendiente de SineOS.
+
+
 ### Red, privacidad y seguridad — 2026-09-23
 
 - Activado y validado nftables con política de entrada restrictiva y excepción de LocalSend limitada a la LAN configurada.
