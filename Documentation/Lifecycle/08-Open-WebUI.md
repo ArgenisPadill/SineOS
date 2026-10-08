@@ -68,10 +68,15 @@ El Compose todavía contiene `restart: unless-stopped`; esta divergencia está r
 
 ## Deuda pendiente
 
-- fijar versión o digest en lugar de `:main`;
-- secret persistente fuera de Git;
-- retirar `restart: unless-stopped` de forma controlada;
-- definir backup/restore necesario.
+Permanecen abiertas:
+- fijar versión o digest en lugar de `:main` (TD-006);
+- retirar `restart: unless-stopped` de forma controlada (TD-007).
+
+Ya validados:
+- secret persistente fuera de Git (TD-005 cerrado);
+- backup del estado persistente;
+- restauración funcional desde snapshot certificado;
+- recuperación dentro de Disaster Recovery.
 
 ## Regla de seguridad
 
