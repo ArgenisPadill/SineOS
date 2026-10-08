@@ -81,6 +81,9 @@ Criterios obligatorios para declarar SDE 1.0 terminado y estable.
 ### SDE-Alpha-0.1-Technical-Manifest.md
 Manifiesto técnico inicial de Alpha 0.1: paquetes, propiedad de archivos, estructura de configuración/estado, CLI mínima, respaldo pre-SDE, transacción de instalación, rollback, gates y pendientes previos a implementación.
 
+### SDE-Alpha-0.1-Backup-Restore-Spec.md
+Especificación congelada del respaldo pre-SDE y restauración: estructura simple, SHA-256, manifiesto JSON, conflictos de tres estados, validación, dry-run, orden de restore, reanudación y reportes.
+
 ## Operaciones
 
 ### Academic-Templates.md
