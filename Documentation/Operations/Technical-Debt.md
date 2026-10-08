@@ -1,6 +1,6 @@
 # SineOS — Deuda técnica
 
-Última revisión: 02-10-2026
+Última revisión: 07-10-2026
 
 Este documento registra únicamente deuda vigente.
 
@@ -22,6 +22,7 @@ Este documento registra únicamente deuda vigente.
 | TD-018 | Alta | Seguridad | Ejecutar validación final asistida por agente después de cerrar el hardening restante |
 | TD-019 | Media | Stirling PDF | Revisar permisos de `/configs` al actualizar desde 2.14.3; la versión actual restablece archivos sensibles a 755 al arrancar |
 | TD-024 | Media | Recuperación | Normalizar ownership de Uptime Kuma durante restore sobre host limpio |
+| TD-025 | Baja | Auditoría | Eliminar rutas rígidas `$HOME/Workspace/SineOS` de `sineos-audit.sh` y detectar/configurar dinámicamente la raíz del repositorio |
 
 ## Decisiones cerradas
 
@@ -97,6 +98,9 @@ Formalizar actualización, continuar benchmarks y crear templates técnicos.
 
 ### Stirling PDF
 La imagen estable 2.14.3 ejecuta `chmod -R 755` sobre `/configs` durante el arranque. Esto revierte permisos restrictivos aplicados a claves JWT y backups SQL. No se mantiene un parche local; se revisará una futura versión estable donde upstream ya haya corregido esta lógica.
+
+### Portabilidad del auditor
+`Scripts/Audit/sineos-audit.sh` todavía usa rutas históricas basadas en `$HOME/Workspace/SineOS`. El script sigue siendo útil como diagnóstico, pero no cumple aún la portabilidad deseada. TD-025 queda abierto hasta migrarlo a detección dinámica de la raíz o `SINEOS_REPO` y revalidarlo.
 
 ### Validación final asistida por agente
 La fase final utilizará una allowlist defensiva de `Anthropic-Cybersecurity-Skills` después de cerrar las capas tradicionales de hardening y recuperación. No debe marcarse como completada por instalar la biblioteca: requiere evaluación, evidencia, remediación individual y revalidación.
