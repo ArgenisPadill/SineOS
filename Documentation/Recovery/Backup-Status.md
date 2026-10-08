@@ -40,6 +40,10 @@ HEAD local = origin/main = main remoto
 `Backup-Status.md` conserva el commit del evento y el estado de sincronización, no un hash autorreferencial del commit que lo contiene.
 
 
+## Historial de construcción y certificación
+
+> **Importante:** las secciones siguientes conservan evidencia cronológica del proceso iniciado el 24-09-2026. Frases como “Restic no instalado”, “repositorio no inicializado”, “backup deshabilitado” o “TD-021 abierto” describen **ese momento histórico** y no el estado vigente. El estado actual autoritativo es **Último respaldo validado** al inicio de este documento.
+
 ## Destino externo preparado
 
 Validado el 24-09-2026:
