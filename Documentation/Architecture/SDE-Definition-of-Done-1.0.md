@@ -209,9 +209,11 @@ Debe pasar:
 - categorías de usuario coherentes;
 - Mostrar configuración avanzada;
 - persistencia de esa elección;
+- niveles de riesgo de Configuración avanzada;
 - puntos ligeros de restauración de 7 días;
 - reversión automática solo ante fallas críticas inmediatas;
 - recomendación de revertir ante inestabilidad;
+- protección de ajustes críticos en modo lectura o flujo administrativo explícito;
 - una configuración, un lugar.
 
 # C11 — Rendimiento
