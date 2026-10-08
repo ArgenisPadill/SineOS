@@ -49,7 +49,8 @@ Si el disco entra en estado crítico:
 - estas protecciones no son una barrera absoluta frente a un root que deliberadamente las retire.
 
 Tras reemplazar/restaurar el disco:
-- SineOS debe detectar que proviene de una restauración;
+- SineOS debe detectar que proviene de una restauración mediante metadatos de recovery, no por inferencia;
+- registrar como mínimo fecha, respaldo utilizado, versión de SineOS/SDE, identificador del nuevo disco y resultado de validación;
 - verificar salud del nuevo medio;
 - ejecutar validación completa;
 - reparar automáticamente errores menores cuando sea seguro;
@@ -70,6 +71,15 @@ Ante señales fiables:
 - no fragmentar el respaldo entre múltiples dispositivos de forma automática.
 
 El respaldo usa el esquema normal de respaldos de SineOS; no se marca como “emergencia”.
+
+Política del medio externo:
+- si existe un disco reconocido como destino válido de respaldos SineOS, con espacio suficiente e integridad correcta, usarlo automáticamente;
+- si el medio es desconocido, pedir autorización antes de escribir;
+- si el repositorio de respaldo existente falla validación pero el disco físico está sano y tiene espacio, no sobrescribirlo: crear un repositorio independiente nuevo en el mismo disco;
+- si el disco externo presenta errores físicos, SMART, filesystem dañado o integridad dudosa, rechazarlo y esperar un medio sano;
+- no usar el disco interno como destino alternativo;
+- no borrar respaldos anteriores automáticamente para hacer espacio;
+- no dividir el respaldo entre varios dispositivos.
 
 Si existen archivos irrecuperables o corrupción durante el respaldo:
 - recuperar todo lo posible;
@@ -118,7 +128,8 @@ Si una misma aplicación se congela **3 veces en 7 días**:
 - revisar versión, logs, recursos, GPU/driver, actualizaciones recientes y errores relacionados;
 - proponer reparaciones seguras;
 - pedir confirmación para acciones destructivas o de alto impacto;
-- generar reporte si no puede resolverse.
+- generar reporte si no puede resolverse;
+- si la inestabilidad comenzó después de una actualización, indicarlo y ofrecer rollback cuando exista un mecanismo técnicamente seguro.
 
 # Reportes técnicos
 
