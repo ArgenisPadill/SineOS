@@ -77,7 +77,7 @@ antes de considerar cerrado el recordatorio trimestral.
 
 El estado pendiente no depende únicamente de una notificación visual.
 
-La futura aplicación nativa guardará estado local persistente y un servicio/timer de usuario volverá a notificar mientras el ciclo siga vencido.
+La aplicación nativa SineOS · Mantenimiento guarda estado local persistente y su servicio/timer de usuario vuelve a notificar mientras el ciclo siga vencido. Esta integración fue validada al cerrar TD-022.
 
 ## Primera ejecución — 23-09-2026
 
