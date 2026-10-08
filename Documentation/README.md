@@ -78,6 +78,9 @@ Orden congelado de implementación de SDE 1.0, desde recovery y respaldo pre-SDE
 ### SDE-Definition-of-Done-1.0.md
 Criterios obligatorios para declarar SDE 1.0 terminado y estable.
 
+### SDE-Advanced-Settings-Policy.md
+Política congelada de Configuración avanzada: niveles de riesgo, checkpoints ligeros de 7 días, reversión automática ante fallas críticas y recomendación de rollback ante inestabilidad.
+
 ### SDE-Alpha-0.1-Technical-Manifest.md
 Manifiesto técnico inicial de Alpha 0.1: paquetes, propiedad de archivos, estructura de configuración/estado, CLI mínima, respaldo pre-SDE, transacción de instalación, rollback, gates y pendientes previos a implementación.
 
