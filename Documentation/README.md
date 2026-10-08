@@ -178,12 +178,11 @@ Estos huecos no se consideran documentación terminada hasta que exista implemen
 
 ### Prioridad alta
 
-- instalación completa de SineOS desde Debian 13 limpio;
+- instalación completa/reproducible de SineOS desde Debian 13 limpio como flujo integral documentado;
 - inventario global de dependencias;
-- backup y restore probado de PostgreSQL;
-- backup y recuperación del Knowledge Vault;
-- Disaster Recovery completo;
-- procedimiento global de actualización de SineOS.
+- procedimiento global de actualización de SineOS;
+- cierre del hardening pendiente: AppArmor, LUKS, puertos, nftables/Podman, Ollama y snapshots;
+- portabilidad completa de restore para Uptime Kuma (TD-024).
 
 ### Prioridad media
 
