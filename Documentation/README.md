@@ -12,7 +12,7 @@ Documentation/
 ├── Architecture/   # por qué existe cada diseño y cómo se relacionan sus partes
 ├── Operations/     # cómo se usa, valida, mantiene y diagnostica
 ├── Security/       # controles, riesgos, políticas y hardening
-└── Recovery/       # se incorporará cuando existan procedimientos validados
+└── Recovery/       # políticas, estado y procedimientos de recuperación validados o en evolución
 ```
 
 No se crean directorios vacíos solo para representar una arquitectura futura.
