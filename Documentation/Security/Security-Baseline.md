@@ -993,15 +993,15 @@ Otros servicios deben agregarse al inventario cuando se implementen y validen.
 
 # 49. Principio deny by default
 
-La futura política de firewall debe evaluar un enfoque:
+La política actual de entrada de nftables ya utiliza un enfoque deny-by-default:
 
 ```text
-denegar por defecto
+INPUT policy drop
         ↓
 permitir explícitamente lo necesario
 ```
 
-Debe implementarse de forma controlada para no perder conectividad administrativa.
+Este principio está operativo. Lo que permanece pendiente es versionar/sanear el ruleset como artefacto reproducible y revisar formalmente su convivencia con Podman/netavark antes de considerar cerrado el hardening de red.
 
 ---
 
@@ -1192,7 +1192,8 @@ Estado:
 
 ```text
 PLANIFICADA
-DEPENDE DEL CIERRE DEL HARDENING Y DISASTER RECOVERY
+DISASTER RECOVERY YA VALIDADO
+DEPENDE DEL CIERRE DEL HARDENING RESTANTE
 ```
 
 
