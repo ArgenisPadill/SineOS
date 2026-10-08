@@ -84,6 +84,9 @@ Manifiesto técnico inicial de Alpha 0.1: paquetes, propiedad de archivos, estru
 ### SDE-Alpha-0.1-Backup-Restore-Spec.md
 Especificación congelada del respaldo pre-SDE y restauración: estructura simple, SHA-256, manifiesto JSON, conflictos de tres estados, validación, dry-run, orden de restore, reanudación y reportes.
 
+### SDE-Alpha-0.1-Ownership-Conflict-Spec.md
+Especificación congelada de propiedad de archivos y resolución de conflictos: tipos owned/managed-block/observed, hashes previous/applied, protección de cambios manuales, rollback y uninstall seguro.
+
 ## Operaciones
 
 ### Academic-Templates.md
