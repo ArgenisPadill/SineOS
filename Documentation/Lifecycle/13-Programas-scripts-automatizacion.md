@@ -10,7 +10,7 @@ El catálogo oficial está en:
 Apps/README.md
 ```
 
-Actualmente incluye NetworkPrivacy.
+Actualmente incluye NetworkPrivacy y SineOS · Mantenimiento.
 
 Comprobar:
 
