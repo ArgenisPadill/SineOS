@@ -78,6 +78,18 @@ Para evitar fatiga de permisos:
 Ruta conceptual:
 `Configuración de SineOS → Aplicaciones → Inicio automático / Segundo plano / Servicios`
 
+# Recursos en segundo plano
+
+SineOS puede observar consumo sostenido de procesos y servicios en segundo plano sin convertirlo en una política de cierre automático.
+
+- Si una aplicación o servicio mantiene CPU o RAM anormalmente altos durante varios minutos, avisar.
+- Mostrar aplicación/proceso y detalles suficientes para identificar el consumo.
+- Ofrecer cerrar/detener cuando sea seguro, pero nunca cerrar automáticamente.
+- El consumo breve o una aplicación activa en primer plano no debe disparar avisos.
+- El drenaje anormal de batería se evalúa únicamente cuando el equipo está usando batería y el comportamiento es sostenido.
+- Ante drenaje anormal, mostrar detalles y permitir al usuario decidir si cierra el proceso.
+- No usar esta función como excusa para añadir un daemon pesado o muestreo de alta frecuencia.
+
 # Acceso remoto
 
 AnyDesk, RustDesk, TeamViewer y herramientas equivalentes se tratan como **Acceso remoto**, no como simple captura de pantalla.
@@ -102,9 +114,9 @@ Mientras exista una sesión remota:
 
 Ruta interna:
 
-`~/.local/state/sineos-desktop/logs/remote-access/`
+`~/.local/state/sineos-desktop/logs/remote-access/remote-access.log`
 
-Bitácora incremental e indefinida.
+Bitácora incremental e indefinida. Si el usuario la elimina manualmente o usa **Limpiar registros**, el historial desaparece y la siguiente sesión remota crea un archivo nuevo.
 
 Registrar por sesión:
 - aplicación;
