@@ -28,11 +28,11 @@ No ejecutar la validación final hasta completar o aceptar explícitamente:
 [ ] puertos
 [ ] nftables / Podman
 [ ] Ollama
-[ ] secretos
-[ ] backups
-[ ] restore
+[x] secretos
+[x] backups
+[x] restore
 [ ] snapshots
-[ ] Disaster Recovery
+[x] Disaster Recovery
 ```
 
 ## Preparación
