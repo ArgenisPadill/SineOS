@@ -12,6 +12,20 @@
 
 **A y B son prioridades obligatorias.** El orden de las fases posteriores es una propuesta técnica revisable una vez que SDE esté certificado. No hay fechas comprometidas ni instalaciones autorizadas por este documento.
 
+## Regla de continuidad y preservación de acuerdos anteriores (08-10-2026)
+
+**Todo lo que estaba planeado, documentado, congelado, aprobado, implementado o pendiente antes de la conversación del 08-10-2026 se mantiene tal como estaba.** Esta ampliación del roadmap es **aditiva**, no sustituye documentos anteriores, no altera el alcance técnico congelado de SDE, no modifica los 15 registros TD existentes ni cambia sus criterios de cierre, evidencia, dependencias o estado. Las certificaciones y decisiones técnicas anteriores siguen siendo válidas en el alcance en que fueron documentadas.
+
+- La única precedencia nueva y explícitamente aprobada es **terminar primero el bloque de seguridad y después implementar SDE**. El gate y los requisitos ya definidos para cada proyecto se conservan.
+- Los proyectos y pendientes preexistentes **no se cancelan, eliminan, reinician, reemplazan, degradan ni se consideran concluidos** por incluirlos en este roadmap. Sus especificaciones y fuentes originales conservan autoridad.
+- La secuencia de iniciativas **posterior a SDE** es una **sugerencia organizativa**, no modifica automáticamente prioridades individuales previamente establecidas ni desplaza tareas con dependencias existentes. Cualquier ajuste sustantivo se analizará y acordará en su momento.
+- El catálogo SLDE y los métodos de integración son **candidatos por estudiar**, no un listado obligatorio de instalaciones, soluciones escogidas ni compromisos de compatibilidad.
+- Ante una duda futura se evaluará la necesidad real, factibilidad, ventajas, restricciones, seguridad, rendimiento, mantenimiento, costos/licencias, compatibilidad con SineOS y opciones equivalentes o mejores. El resultado posible incluye **adoptar, sustituir, adaptar, ejecutar remoto, posponer o descartar**, documentando el motivo y la alternativa.
+- **No se modifica una decisión congelada ni se cierra un pendiente anterior por inferencia.** Si surge una propuesta que lo contradice, se documenta aparte y se solicita una decisión explícita antes de tocar la especificación original.
+- La evaluación futura tampoco autoriza instalaciones o cambios de configuración por sí sola: se mantiene la regla de pruebas, backup, rollback y validación.
+
+**Principio:** continuidad primero; las nuevas ideas amplían el inventario sin borrar historia, compromisos anteriores ni tareas abiertas.
+
 ## Situación al aprobar el roadmap
 
 - Base Debian 13/XFCE, Podman rootless, apps nativas y servicios principales: funcionales según evidencia versionada.

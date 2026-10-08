@@ -11,6 +11,27 @@ SLDE será un subsistema opcional de herramientas de ingeniería, investigación
 
 La fase actual se limita a inventario y planeación. No crear aún directorios `Modules/`, `Labs/` ni `Apps/LaboratoryManager/` vacíos; incorporarlos solo con artefactos funcionales.
 
+## Naturaleza de propuesta y resolución progresiva de dudas
+
+**El inventario de 16 módulos es un conjunto inicial de posibilidades, no una selección final de herramientas ni una decisión de instalarlas todas.** Sus nombres y agrupaciones sirven para no olvidar áreas de interés; las elecciones técnicas concretas se estudiarán **cuando corresponda implementarlas**, después de Seguridad y SDE y respetando los pendientes previos.
+
+Por cada herramienta o necesidad se decidirá entonces:
+
+1. Qué problema real resuelve y si ya existe una capacidad equivalente en SineOS.
+2. Si es viable técnica y legalmente en Debian 13 y en el hardware disponible; dependencias, privilegios, licencias y actualizaciones.
+3. Si conviene instalación nativa, Podman, máquina virtual, servicio remoto o simplemente no incorporarla.
+4. Su impacto en aislamiento, puertos, privacidad, seguridad, RAM/CPU/disco, autonomía y respaldos.
+5. Si existe una **alternativa mejor**: más ligera, segura, mantenible, compatible o útil.
+6. Resultado documentado: **adoptar / cambiar por alternativa / adaptar / diferir / descartar**, junto con motivos, riesgos y pruebas previstas.
+
+Ninguna incompatibilidad probable obliga hoy a descartar un módulo entero, ni una sugerencia preliminar impide elegir otra tecnología mejor. **Las estrategias de la tabla son hipótesis de trabajo**, no decisiones cerradas.
+
+### Continuidad con SineOS existente
+
+Esta iniciativa es **estrictamente aditiva**: todo diseño, planificación congelada, deuda técnica, control de seguridad, procedimiento y compromiso anterior a la conversación del 08-10-2026 **permanece sin cambio y pendiente de ejecución donde corresponda**. En particular, no reabre SDE 1.0, ni sustituye los requisitos de seguridad ni renumera/cierra deuda técnica. Cualquier cambio de alcance preexistente requiere análisis posterior, acuerdo explícito y actualización de su propia fuente de verdad.
+
+Referencia: [Regla de continuidad del roadmap maestro](../Operations/Project-Roadmap.md#regla-de-continuidad-y-preservación-de-acuerdos-anteriores-08-10-2026).
+
 ## Arquitectura propuesta
 
 - **SineOS Core:** Debian 13/XFCE, seguridad, backups/Restic, snapshots, Mantenimiento, Podman, monitoreo.
@@ -24,7 +45,7 @@ La fase actual se limita a inventario y planeación. No crear aún directorios `
 
 La plataforma de referencia es la Gateway GWTN141-10 (Intel i5-1135G7, 16 GB RAM, Intel Iris Xe, SSD 512 GB). Los presupuestos de CPU/RAM/disco de SLDE deberán **medirse**; no hay consumo certificado por módulo.
 
-## Inventario congelado del alcance propuesto
+## Inventario inicial de opciones por evaluar
 
 | # | Dominio | Herramientas/capacidades propuestas | Estrategia inicial |
 |---|---|---|---|

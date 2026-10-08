@@ -18,6 +18,13 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ## [Unreleased]
 
+### Preservación de acuerdos anteriores — 2026-10-08
+
+- Aclarado que la ampliación SLDE es aditiva y no modifica ni sustituye la planificación congelada de SDE, el gate de seguridad, la deuda técnica ni los pendientes previos a esta conversación.
+- Las dudas de viabilidad y la selección de tecnologías y alternativas se resolverán en el momento de su implementación, con criterios técnicos y evidencia. Ninguna herramienta de la lista queda aprobada automáticamente.
+- El orden obligatorio es Seguridad → SDE; el trabajo posterior es una propuesta organizativa revisable, sin reordenar automáticamente los compromisos existentes.
+- Cambios exclusivamente documentales, sin instalaciones ni alteraciones del host.
+
 ### Priorización maestra y SLDE — 2026-10-08
 
 - Fijado el orden obligatorio: **seguridad pendiente → implementación/certificación SDE 1.0 → reproducibilidad y expansión modular**.
