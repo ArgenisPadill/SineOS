@@ -18,6 +18,21 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ## [Unreleased]
 
+### Auditoría integral del repositorio — 2026-10-07
+
+- Ejecutada revisión transversal de README, Lifecycle, Operations, Recovery, Security, Apps, Scripts, stacks y SDE.
+- Corregido un error sintáctico real en `Apps/Maintenance/backup_engine.py` causado por comillas anidadas dentro de f-strings.
+- Sincronizados estados de TD-001/003/004/005/016/020/021/022/023 como cerrados en documentos que todavía los trataban como pendientes.
+- Actualizados Lifecycle 06, 08, 09, 11, 13 y 15 para reflejar el estado vigente.
+- Sincronizados `Health-Status.md` y `Backup-Status.md` con el snapshot validado más reciente documentado.
+- Corregido `Security-Baseline.md`: secretos, Open WebUI, deny-by-default, DR e inventario documental de puertos.
+- Registrado TD-025 para eliminar rutas rígidas de `sineos-audit.sh`.
+- Actualizado Open WebUI para reflejar secret persistente y backup/restore ya validados.
+- Separado explícitamente estado actual e historial cronológico en documentación de recovery/mantenimiento.
+- Creado `Documentation/Operations/Repository-Audit-2026-10-07.md` como evidencia de la revisión.
+- No se modificó runtime de seguridad ni SDE en la laptop; esos cambios permanecen sujetos a validación física.
+
+
 ### SineOS Desktop Experience (SDE) — 2026-10-07
 
 - Congelada y consolidada la planeación funcional de SDE 1.0 sobre Debian 13 + XFCE 4.20 + X11 + LightDM.
