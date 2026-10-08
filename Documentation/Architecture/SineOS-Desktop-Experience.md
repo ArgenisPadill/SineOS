@@ -942,6 +942,9 @@ Forman parte obligatoria de la planeación congelada de SDE:
 - `SDE-Implementation-Roadmap.md`
 - `SDE-Definition-of-Done-1.0.md`
 - `SDE-Advanced-Settings-Policy.md`
+- `SDE-Alpha-0.1-Technical-Manifest.md`
+- `SDE-Alpha-0.1-Backup-Restore-Spec.md`
+- `SDE-Alpha-0.1-Ownership-Conflict-Spec.md`
 
 En caso de conflicto entre una regla general antigua y una decisión específica más reciente de estos documentos, prevalece la especificación específica más reciente.
 
@@ -1078,7 +1081,7 @@ Los materiales se definirán mediante tokens centrales, no con valores dispersos
 
 ## Vista general SineOS
 
-SDE incorporará una vista espacial de ventanas y escritorios.
+SDE podrá incorporar una vista espacial de ventanas y escritorios en 1.0 únicamente si la implementación elegida supera las pruebas de estabilidad, rendimiento y recuperación. Si no las supera, el Overview completo se difiere a 1.1 y XFWM/Alt+Tab permanece como fallback.
 
 Atajo previsto:
 
@@ -1351,7 +1354,7 @@ Antes de comenzar implementación deben cerrarse todavía:
    - monitores externos;
    - proyectores;
    - HiDPI;
-   - suspend/resume.
+   - hibernación/reanudación.
 
 4. **Documentación final de 1.0**
    - installation;
