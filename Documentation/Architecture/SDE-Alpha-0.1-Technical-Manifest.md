@@ -485,6 +485,28 @@ Prioridad:
 
 ---
 
+# Especificación de backup/restore
+
+La especificación detallada y congelada del respaldo pre-SDE, propiedad de archivos, validación, dry-run, rollback y restauración reanudable se encuentra en:
+
+`Documentation/Architecture/SDE-Alpha-0.1-Backup-Restore-Spec.md`
+
+Decisiones obligatorias:
+- backup local sin cifrado, con permisos estrictos;
+- respaldo pre-SDE inmutable una vez validado;
+- `manifest.json` + `README.md` + `checksums.sha256`;
+- SHA-256;
+- copias reales como baseline;
+- preferencia por archivos `conf.d` propios;
+- modelo original/aplicado/actual para conflictos;
+- verify + restore dry-run obligatorios antes de modificar SDE;
+- restore con un solo comando;
+- orden funcional antes que visual;
+- `restore-state.json` para reanudación;
+- archivar estado de restore cuando termina bien y conservarlo cuando falla.
+
+---
+
 # Pendientes técnicos antes de escribir código
 
 - confirmar inventario real de paquetes ya instalados en la laptop de referencia;
