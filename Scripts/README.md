@@ -14,8 +14,8 @@ La política completa se encuentra en `Documentation/Architecture/Script-Standar
 | Open WebUI | `Monitoring/check-open-webui.sh` | Operativo recurrente | Activo | Comprueba el endpoint local y envía heartbeat Push a Uptime Kuma |
 | PostgreSQL | `Monitoring/check-postgresql.sh` | Operativo recurrente | Activo | Comprueba PostgreSQL mediante `pg_isready` y envía heartbeat Push |
 | NetworkPrivacy | `NetworkPrivacy/install-network-privacy.sh` | Pilar / instalación | Activo | Valida dependencias e integra SineOS Privacidad de red con XFCE |
-| Mantenimiento | `Maintenance/install-sineos-maintenance.sh` | Pilar / instalación | Pendiente de validar | Integra la app nativa, lanzador XFCE y timer de recordatorio |
-| Mantenimiento | `Maintenance/run-health-audit-interactive.sh` | Operativo recurrente | Pendiente de validar | Lanza la auditoría trimestral interactiva desde la app |
+| Mantenimiento | `Maintenance/install-sineos-maintenance.sh` | Pilar / instalación | Validado | Integra la app nativa, lanzador XFCE y timer de recordatorio |
+| Mantenimiento | `Maintenance/run-health-audit-interactive.sh` | Operativo recurrente | Validado | Lanza la auditoría trimestral interactiva desde la app |
 | Seguridad | `Security/sineos-secrets-audit.sh` | Operativo recurrente | Validado | Audita permisos, Git y Gitleaks sin mostrar secretos |
 
 ## Audit — sineos-audit.sh
