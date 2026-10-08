@@ -120,13 +120,23 @@ mokutil --sb-state
 
 ## Pendientes para cerrar seguridad
 
-- auditoría AppArmor;
-- verificación de LUKS;
-- gestión formal de secretos;
-- rotación/gestión de credenciales;
+- auditoría formal de AppArmor;
+- verificación/documentación de LUKS;
+- rotación/gestión de credenciales pendiente;
+- inventario y revisión final de puertos;
 - revisión nftables + Podman/netavark;
-- validación de Ollama desde otro dispositivo;
-- backups y restore;
+- validación de Ollama desde otro dispositivo y cierre de su exposición;
+- política formal de snapshots;
+- portabilidad del restore de Uptime Kuma (TD-024);
+- validación final de seguridad asistida por agente.
+
+Ya están cerrados y no deben seguir apareciendo como pendientes:
+- gestión formal de secretos;
+- backup PostgreSQL;
+- backup Knowledge Vault;
+- primer respaldo externo certificado;
+- automatización del backup;
+- restore probado;
 - Disaster Recovery.
 
 ## Documentación
