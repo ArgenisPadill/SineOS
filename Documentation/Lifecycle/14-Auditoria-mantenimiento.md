@@ -42,7 +42,7 @@ Los reportes locales están excluidos de Git.
 
 ## Deuda detectada
 
-El auditor todavía contiene referencias históricas rígidas a `$HOME/Workspace/SineOS`. Debe migrarse a detección dinámica de la raíz del repositorio antes de declararlo portable.
+El auditor todavía contiene referencias históricas rígidas a `$HOME/Workspace/SineOS`. Debe migrarse a detección dinámica de la raíz del repositorio antes de declararlo portable. Este punto está registrado como **TD-025**.
 
 ## Comprobación rápida después de cambios
 
