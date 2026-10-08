@@ -72,7 +72,7 @@ SineOS/
 
 Las responsabilidades se dividen actualmente en:
 
-- **Apps:** aplicaciones propias de SineOS. Actualmente incluye NetworkPrivacy.
+- **Apps:** aplicaciones propias de SineOS. Actualmente incluye NetworkPrivacy y SineOS · Mantenimiento.
 - **Containers:** definiciones reproducibles de los servicios desplegados mediante Podman. Los datos persistentes, respaldos, secretos y logs permanecen fuera de Git.
 - **Documentation:** arquitectura, operación, seguridad y registro técnico.
 - **Scripts:** auditoría, diagnóstico, mantenimiento y automatización, incluida la configuración visual reproducible de XFCE, monitoreo e instaladores de aplicaciones.
