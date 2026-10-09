@@ -18,6 +18,15 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ## [Unreleased]
 
+### Oracle Cloud, n8n y Minecraft: nueva prioridad post-SDE — 2026-10-09
+
+- Aprobado el orden **Seguridad → SDE 1.0 → Oracle Cloud/n8n/Minecraft → resto del backlog**, sin cerrar ni cancelar deuda y proyectos existentes.
+- Creado [issue #5](https://github.com/ArgenisPadill/SineOS/issues/5) y `Documentation/Architecture/Oracle-Cloud-n8n-Minecraft-Planning.md` para planear **n8n local en SineOS**, **n8n externo en Oracle Always Free** y **Minecraft Java opcional** aislado.
+- Documentado objetivo de disponibilidad 24/7 independiente de la laptop, sujeto a capacidad OCI, seguridad, licencia/costos, controles, backups y pruebas; no se promete SLA ni cero gasto de terceros.
+- Registrado que **n8n Community es gratis para autohospedaje permitido pero fair-code, no open source OSI**; quedará sujeto a validación de licencia.
+- Actualizados roadmap maestro, issue #4, estado global e índice documental. **Sólo documentación:** sin acceder a OCI, borrar VM, cambiar reglas ni desplegar servicios.
+
+
 ### Documentación académica Obsidian/Templater — 2026-10-09
 
 - Auditado el inventario original de siete plantillas académicas funcionalmente validadas el 19-09-2026, preservándolas sin alteraciones.
