@@ -18,6 +18,18 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ## [Unreleased]
 
+### Documentación académica Obsidian/Templater — 2026-10-09
+
+- Auditado el inventario original de siete plantillas académicas funcionalmente validadas el 19-09-2026, preservándolas sin alteraciones.
+- Documentadas las extensiones `Evaluacion.md` (`EVA`, examen o exposición) y `Plan de clase.md` (`PLC`, planeación de la Universidad de Xalapa) en `Documentation/Operations/Academic-Templates-Extensions.md`.
+- Formalizado el flujo **Ctrl + N → Ctrl + P → comando individual** mediante **Templater / Template Hotkeys**, con rutas reales del Vault y distinción frente al complemento nativo Templates.
+- Registrados contratos MAT/UNI/EVA/PLC, seguridad, prevención de duplicados, formatos YAML, rúbricas de ejemplo, fechas, límites y campos docentes pendientes.
+- Advertida la incompatibilidad bidireccional entre `Examen.md` antiguo y `Evaluacion.md` nuevo; no se modificó el código de las plantillas históricas.
+- Alineados README principal, índice documental, modelo del Knowledge Vault y documento histórico académico.
+- Comprobada sintaxis de las dos versiones entregadas; Plan de clase superó pruebas simuladas de las tres modalidades y bloqueos básicos. **La ejecución real en Obsidian, los comandos locales y el contenido actual del Vault no fueron verificados remotamente**.
+- Cambios **exclusivamente documentales** en el repositorio. Sin modificar runtime, secretos, Vault, deuda técnica ni los gates de Seguridad → SDE.
+
+
 ### Preservación de acuerdos anteriores — 2026-10-08
 
 - Aclarado que la ampliación SLDE es aditiva y no modifica ni sustituye la planificación congelada de SDE, el gate de seguridad, la deuda técnica ni los pendientes previos a esta conversación.
