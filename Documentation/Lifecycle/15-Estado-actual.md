@@ -1,6 +1,6 @@
 # 15 — Estado actual de SineOS
 
-**Checkpoint documental:** 08-10-2026
+**Checkpoint documental:** 09-10-2026
 
 ## Estado general
 
@@ -15,10 +15,12 @@ HARDENING DE SEGURIDAD EN PROGRESO
 +
 SDE 1.0 PLANIFICADO / IMPLEMENTACIÓN FÍSICA PAUSADA
 +
+ORACLE + n8n (LOCAL / EXTERNO) + MINECRAFT PLANIFICADO / NO IMPLEMENTADO
++
 SLDE (16 MÓDULOS) PLANIFICADO / NO IMPLEMENTADO
 ```
 
-El orden obligatorio aprobado es: **terminar seguridad → implementar y certificar SDE 1.0 → resolver pendientes de reproducibilidad y ampliar SLDE**. La implementación física de SDE no debe comenzar hasta concluir y verificar el gate de seguridad, con cualquier riesgo residual expresamente aceptado.
+El orden obligatorio actualizado el 09-10-2026 es: **terminar seguridad → implementar y certificar SDE 1.0 → plan Oracle Cloud/n8n/Minecraft → resto de reproducibilidad y SLDE**. Las tareas críticas requeridas por Seguridad o SDE conservan prioridad. La implementación física de SDE no debe comenzar hasta concluir y verificar el gate de seguridad, con cualquier riesgo residual expresamente aceptado.
 
 ## Componentes validados o funcionales
 
@@ -184,15 +186,16 @@ Alpha 0.1 ya tiene definidos:
 
 **Estado:** no implementar todavía sobre la laptop hasta cerrar el gate de seguridad.
 
-## Priorización de proyectos y nuevas iniciativas (08-10-2026)
+## Priorización de proyectos y nuevas iniciativas (08-10-2026; actualizada 09-10-2026)
 
 El seguimiento general y dependencias se encuentran en [Project-Roadmap](../Operations/Project-Roadmap.md) y en [issue #4](https://github.com/ArgenisPadill/SineOS/issues/4).
 
 1. **Seguridad — EN CURSO / PRIMERO:** [issue #2](https://github.com/ArgenisPadill/SineOS/issues/2). Incluye controles físicos pendientes, TD-008/009/010/011/018/024 y evaluación de riesgos de TD-006/007/019.
 2. **SDE — PLANEACIÓN TERMINADA / IMPLEMENTACIÓN NO INICIADA:** [issue #1](https://github.com/ArgenisPadill/SineOS/issues/1). Sólo comenzar Alpha 0.1 después del gate de seguridad; respetar la Definition of Done y la certificación física.
-3. **Reproducibilidad y deuda operativa — PENDIENTE / POST-SDE:** instalación integral, dependencias, actualizaciones, migración, portabilidad y TD-012/013/014/015/017/025, salvo que una se requiera antes por seguridad o SDE.
-4. **SLDE — PLANIFICADO / NO IMPLEMENTADO:** [issue #3](https://github.com/ArgenisPadill/SineOS/issues/3) y [SLDE-Planning](../Architecture/SLDE-Planning.md). El catálogo de 16 módulos es una propuesta opcional; no equivale a instalaciones ni pruebas.
-5. **Despliegue gradual SLDE — PENDIENTE:** herramientas ligeras, servicios opcionales, laboratorios aislados y finalmente cargas intensivas/remotas.
+3. **Oracle Cloud + n8n + Minecraft — PLANIFICADO / NO IMPLEMENTADO / POST-SDE:** [issue #5](https://github.com/ArgenisPadill/SineOS/issues/5) y [plan de arquitectura](../Architecture/Oracle-Cloud-n8n-Minecraft-Planning.md). Dos instancias independientes (local y externa), Minecraft opcional aislado. Disponibilidad externa 24/7 deseada pero no garantizada; VM de OCI sin verificar, ningún recurso modificado.
+4. **Reproducibilidad y deuda operativa — PENDIENTE / DESPUÉS DE ORACLE:** instalación integral, dependencias, actualizaciones, migración, portabilidad y TD-012/013/014/015/017/025, salvo que una se requiera antes por seguridad o SDE.
+5. **SLDE — PLANIFICADO / NO IMPLEMENTADO:** [issue #3](https://github.com/ArgenisPadill/SineOS/issues/3) y [SLDE-Planning](../Architecture/SLDE-Planning.md). Catálogo de 16 módulos opcionales, sin instalar.
+6. **Despliegue gradual SLDE — PENDIENTE:** herramientas ligeras, servicios opcionales, laboratorios aislados y finalmente cargas intensivas/remotas.
 
 Los 15 registros de deuda técnica siguen vigentes en `Technical-Debt.md`; los planes SDE/SLDE no se contabilizan como deuda nueva ni como instalaciones completadas.
 
@@ -227,6 +230,7 @@ ss -tulpn
 - DR: `Documentation/Recovery/Disaster-Recovery.md`;
 - SDE: issue #1 + documentos `SDE-*.md`.
 - orden general y trabajo futuro: `Documentation/Operations/Project-Roadmap.md` + issue #4.
+- Oracle Cloud/n8n/Minecraft, sólo planificación: `Documentation/Architecture/Oracle-Cloud-n8n-Minecraft-Planning.md` + issue #5.
 - SLDE: `Documentation/Architecture/SLDE-Planning.md` + issue #3.
 
 ## Regla de actualización
