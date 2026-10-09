@@ -274,7 +274,7 @@ Documentation/Architecture/Knowledge-Vault.md
 
 SineOS incluye un sistema de gestión académica construido sobre Obsidian y Templater.
 
-Actualmente existen siete templates funcionalmente validados:
+El núcleo académico tiene **siete plantillas funcionalmente validadas desde el 19-09-2026**:
 
 ```text
 Materia.md
@@ -284,6 +284,13 @@ Actividad.md
 Examen.md
 Proyecto-Integrador.md
 Etapa-Proyecto.md
+```
+
+El 09-10-2026 se prepararon dos **ampliaciones aditivas**, cuya ejecución real en el Vault todavía requiere certificación:
+
+```text
+Evaluacion.md       # examen o exposición
+Plan de clase.md    # planeación institucional
 ```
 
 Las entidades utilizan identificadores estables:
@@ -296,15 +303,18 @@ ACT-YYYYMMDD-XXXX
 EXA-YYYYMMDD-XXXX
 PRO-YYYYMMDD-XXXX
 ETA-YYYYMMDD-XXXX
+EVA-YYYYMMDD-XXXX  # Evaluación nueva
+PLC-YYYYMMDD-XXXX  # Plan de clase nuevo
 ```
 
 El sistema implementa validación de relaciones padre-hijo, protección de notas estructurales, detección de duplicados, generación dinámica de directorios y reglas de evaluación.
 
-La documentación completa se encuentra en:
+La documentación del núcleo original y de las dos nuevas plantillas se encuentra en:
 
-```text
-Documentation/Operations/Academic-Templates.md
-```
+- [Academic-Templates.md](Documentation/Operations/Academic-Templates.md): contratos y evidencia de las siete plantillas históricas.
+- [Academic-Templates-Extensions.md](Documentation/Operations/Academic-Templates-Extensions.md): Evaluación (EVA), Plan de clase (PLC), instalación mediante **Templater → Template Hotkeys → Ctrl + P**, compatibilidad y pruebas pendientes.
+
+Los archivos ejecutables se colocan en `01-Sistema/Templates/` del Vault separado del repositorio. GitHub **documenta**, pero no instala ni respalda automáticamente esas notas.
 
 ## Auditoría
 
@@ -379,7 +389,7 @@ Componentes validados o funcionales:
 - Gemini como backend cloud principal;
 - DeepSeek como backend adicional;
 - arquitectura académica;
-- siete templates académicos funcionalmente validados;
+- siete templates académicos originales validados y dos ampliaciones (Evaluación y Plan de clase) documentadas, pendientes de certificación de ejecución real en el Vault;
 - configuración visual reproducible de XFCE con barra superior translúcida, Dock auto-ocultable, tema, iconos y tipografías documentadas;
 - firewall nftables activo con política de entrada restrictiva;
 - Proton VPN validado con DNS propio durante la conexión;
