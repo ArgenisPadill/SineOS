@@ -1,24 +1,31 @@
 # SineOS — Roadmap maestro de pendientes
 
-**Fecha de decisión:** 08-10-2026
-**Estado:** vigente para priorización; cambios de esta fecha sólo documentales.
+**Fecha de decisión:** 08-10-2026; **actualización explícita de prioridades:** 09-10-2026
+**Estado:** vigente para priorización; modificaciones exclusivamente documentales.
 **Seguimiento maestro:** [GitHub issue #4](https://github.com/ArgenisPadill/SineOS/issues/4)
 
 ## Regla de precedencia aprobada
 
 1. **Seguridad:** terminar hardening pendiente y obtener evidencia real de los controles críticos.
 2. **SineOS Desktop Experience (SDE):** ejecutar el diseño ya consolidado, certificarlo y recuperar si falla.
-3. **Después de SDE:** el resto se desarrolla en orden de reducción de riesgos y valor operativo: reproducibilidad → gestor modular SLDE → módulos ligeros → laboratorios aislados → cargas pesadas.
+3. **Oracle Cloud + automatizaciones:** plan híbrido n8n local/externo y Minecraft opcional, sujeto a capacidad, costo cero, seguridad y recuperación; implementación **después de certificar SDE**.
+4. **Resto de pendientes:** reproducibilidad → gestor modular SLDE → módulos ligeros → laboratorios aislados → cargas pesadas.
 
-**A y B son prioridades obligatorias.** El orden de las fases posteriores es una propuesta técnica revisable una vez que SDE esté certificado. No hay fechas comprometidas ni instalaciones autorizadas por este documento.
+**A → B → C es el orden expresamente solicitado el 09-10-2026.** Las fases D en adelante conservan alcance, evidencia, riesgos y dependencias propias; ninguna deuda crítica para seguridad/SDE se aplaza por esta repriorización. No hay fechas comprometidas ni instalaciones autorizadas por este documento.
+
+## Actualización de prioridad aprobada (09-10-2026)
+
+- Nueva **fase C (Prioridad 3)**: [Oracle Cloud, n8n local/externo y Minecraft](../Architecture/Oracle-Cloud-n8n-Minecraft-Planning.md), [issue #5](https://github.com/ArgenisPadill/SineOS/issues/5).
+- **La implementación no ha comenzado:** no se verificó consola OCI ni si existe VM; no se borró, instaló ni modificó infraestructura.
+- Las fases antes C/D/E pasan ahora a **D/E/F** respectivamente; sus tareas y estados **no cambian**. La nueva precedencia es una decisión explícita posterior y se impone solamente para ordenar la ejecución futura, sin saltarse gates críticos anteriores.
 
 ## Regla de continuidad y preservación de acuerdos anteriores (08-10-2026)
 
 **Todo lo que estaba planeado, documentado, congelado, aprobado, implementado o pendiente antes de la conversación del 08-10-2026 se mantiene tal como estaba.** Esta ampliación del roadmap es **aditiva**, no sustituye documentos anteriores, no altera el alcance técnico congelado de SDE, no modifica los 15 registros TD existentes ni cambia sus criterios de cierre, evidencia, dependencias o estado. Las certificaciones y decisiones técnicas anteriores siguen siendo válidas en el alcance en que fueron documentadas.
 
-- La única precedencia nueva y explícitamente aprobada es **terminar primero el bloque de seguridad y después implementar SDE**. El gate y los requisitos ya definidos para cada proyecto se conservan.
+- El 08-10 se aprobó **Seguridad → SDE** y el 09-10 se añadió expresamente **Oracle/n8n/Minecraft como prioridad inmediata posterior a SDE**. Los gates y requisitos de Seguridad y SDE se conservan.
 - Los proyectos y pendientes preexistentes **no se cancelan, eliminan, reinician, reemplazan, degradan ni se consideran concluidos** por incluirlos en este roadmap. Sus especificaciones y fuentes originales conservan autoridad.
-- La secuencia de iniciativas **posterior a SDE** es una **sugerencia organizativa**, no modifica automáticamente prioridades individuales previamente establecidas ni desplaza tareas con dependencias existentes. Cualquier ajuste sustantivo se analizará y acordará en su momento.
+- A partir del 09-10, **Oracle/n8n/Minecraft precede al resto posterior a SDE**; el orden de las iniciativas **después de Oracle** continúa como sugerencia organizativa, sin desplazar dependencias de seguridad/recuperación ni cambiar compromisos de cada tarea.
 - El catálogo SLDE y los métodos de integración son **candidatos por estudiar**, no un listado obligatorio de instalaciones, soluciones escogidas ni compromisos de compatibilidad.
 - Ante una duda futura se evaluará la necesidad real, factibilidad, ventajas, restricciones, seguridad, rendimiento, mantenimiento, costos/licencias, compatibilidad con SineOS y opciones equivalentes o mejores. El resultado posible incluye **adoptar, sustituir, adaptar, ejecutar remoto, posponer o descartar**, documentando el motivo y la alternativa.
 - **No se modifica una decisión congelada ni se cierra un pendiente anterior por inferencia.** Si surge una propuesta que lo contradice, se documenta aparte y se solicita una decisión explícita antes de tocar la especificación original.
@@ -69,7 +76,21 @@
 
 **Aclaración:** el script XFCE reproducible y el DR ya validados no significan que SDE 1.0 esté instalado o certificado.
 
-## C · PRIORIDAD 3 — Reproducibilidad y deuda operativa restante (PENDIENTE; POST-SDE)
+## C · PRIORIDAD 3 — Oracle Cloud + n8n + Minecraft (PLANIFICADO; POST-SDE)
+
+**Issue:** [#5 — Oracle / n8n / Minecraft](https://github.com/ArgenisPadill/SineOS/issues/5). **Diseño:** [plan de arquitectura](../Architecture/Oracle-Cloud-n8n-Minecraft-Planning.md).
+
+- [ ] Finalizar gates A y B; no comenzar instalaciones antes de certificar SDE 1.0.
+- [ ] Inventariar cuenta e infraestructura OCI previamente usada para Minecraft: VM (si existe), región, cuota Always Free, volúmenes, red, IP, reglas y facturación. **No borrar recursos por defecto.**
+- [ ] Confirmar factibilidad de alojamiento externo gratuito 24/7 (sin SLA garantizado); si no hay capacidad, registrar bloqueo y alternativas sin asumir pagos.
+- [ ] Diseñar dos instancias aisladas: **n8n local** en Podman SineOS para Ollama/Obsidian/segundo cerebro; **n8n externo** en OCI para webhooks, correo, Telegram, WhatsApp mediante API y apps web.
+- [ ] Evaluar el alojamiento separado de Minecraft Java en la misma VM, con límites de recursos y prioridad de servicio para n8n.
+- [ ] Validar licencias: n8n Community gratuito pero **fair-code, no OSI open source**; comparar opción OSI si procede. Verificar costos externos de APIs y cuota OCI.
+- [ ] Implementar **sólo después de una decisión técnica**: acceso seguro, TLS, firewall de OCI+host, secretos, backup externo, restore probado, monitoreo, pruebas de disponibilidad y riesgo aceptado.
+
+**Estado actual:** decisión y backlog documentados; no existe confirmación de VM operativa ni despliegue de n8n o Minecraft.
+
+## D · PRIORIDAD 4 — Reproducibilidad y deuda operativa restante (PENDIENTE; POST-SDE)
 
 Las 15 TD vigentes se mantienen **exclusivamente** en [Technical-Debt](Technical-Debt.md), no se renumeran ni cierran aquí. Algunas TD de seguridad se priorizan en A; las no críticas quedan ordenadas después de SDE.
 
@@ -88,7 +109,7 @@ Las 15 TD vigentes se mantienen **exclusivamente** en [Technical-Debt](Technical
 
 **Regla:** si un pendiente resulta ser necesario para seguridad, disponibilidad o un gate SDE, se adelanta a A/B y no espera esta fase.
 
-## D · PRIORIDAD 4 — SLDE base modular (PLANIFICADO; POST-C)
+## E · PRIORIDAD 5 — SLDE base modular (PLANIFICADO; POST-C)
 
 **Issue:** [#3 — SLDE](https://github.com/ArgenisPadill/SineOS/issues/3). **Diseño:** [SLDE-Planning](../Architecture/SLDE-Planning.md).
 
@@ -98,7 +119,7 @@ Las 15 TD vigentes se mantienen **exclusivamente** en [Technical-Debt](Technical
 - [ ] Gate de instalación opcional: requisitos, estado, pruebas, backup/restore, desinstalación y rollback.
 - [ ] Piloto con herramienta sencilla, mediciones reales y recuperación validada.
 
-## E · PRIORIDAD 5 — Despliegue gradual de los 16 módulos SLDE (PENDIENTE)
+## F · PRIORIDAD 6 — Despliegue gradual de los 16 módulos SLDE (PENDIENTE)
 
 - [ ] E1: Desarrollo (04), Matemáticas/Estadística (09), Ofimática (11), Certificaciones (15).
 - [ ] E2: Bases de Datos (03), Ingeniería de Software (05), Comunicación (12).
@@ -116,6 +137,7 @@ Los módulos se instalan **bajo demanda**. Los laboratorios privilegiados, la se
 | Deuda técnica real (TD) | `Documentation/Operations/Technical-Debt.md` |
 | Riesgos y gate de seguridad | `Documentation/Security/Security-Baseline.md` + issue #2 |
 | SDE | Issue #1 y `Documentation/Architecture/SDE-*.md` |
+| Oracle / n8n / Minecraft (prioridad 3) | Issue #5 y `Documentation/Architecture/Oracle-Cloud-n8n-Minecraft-Planning.md` |
 | SLDE | Issue #3 y `Documentation/Architecture/SLDE-Planning.md` |
 | Historial de cambios | `CHANGELOG.md` |
 
