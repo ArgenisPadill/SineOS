@@ -415,9 +415,11 @@ El procedimiento completo de recuperación ante desastre validado está document
 
 ## Prioridades y proyectos planificados
 
-**Orden obligatorio (08-10-2026):** terminar la seguridad pendiente → implementar y certificar **SDE 1.0** (planeación terminada; implementación física pausada) → abordar reproducibilidad y evolución funcional.
+**Orden obligatorio actualizado (09-10-2026):** terminar **Seguridad** → implementar y certificar **SDE 1.0** (aún sin implementación física) → plan de **Oracle Cloud + n8n local/externo + Minecraft** (prioridad 3, no implementado) → reproducibilidad y evolución modular SLDE.
 
-El [roadmap maestro](Documentation/Operations/Project-Roadmap.md) y [issue #4](https://github.com/ArgenisPadill/SineOS/issues/4) consolidan el orden de trabajo; seguridad [#2](https://github.com/ArgenisPadill/SineOS/issues/2) y SDE [#1](https://github.com/ArgenisPadill/SineOS/issues/1) son gates previos. Se incorpora **SLDE**, SineOS Laboratory & Development Environment, con 16 módulos *propuestos*, **sin implementar ni instalar**, documentados en [SLDE-Planning](Documentation/Architecture/SLDE-Planning.md) y [issue #3](https://github.com/ArgenisPadill/SineOS/issues/3).
+El [roadmap maestro](Documentation/Operations/Project-Roadmap.md) y [issue #4](https://github.com/ArgenisPadill/SineOS/issues/4) consolidan el orden de trabajo; seguridad [#2](https://github.com/ArgenisPadill/SineOS/issues/2) y SDE [#1](https://github.com/ArgenisPadill/SineOS/issues/1) son gates previos. Se agrega como prioridad 3 la iniciativa híbrida **Oracle Cloud Always Free + automatizaciones n8n y Minecraft opcional**, documentada en [plan de arquitectura](Documentation/Architecture/Oracle-Cloud-n8n-Minecraft-Planning.md) y [issue #5](https://github.com/ArgenisPadill/SineOS/issues/5). Se mantiene **pendiente**, sin VM OCI verificada ni despliegues. La continuidad 24/7 es objetivo, no garantía gratuita.
+
+Se incorpora **SLDE**, SineOS Laboratory & Development Environment, con 16 módulos *propuestos*, **sin implementar ni instalar**, documentados en [SLDE-Planning](Documentation/Architecture/SLDE-Planning.md) y [issue #3](https://github.com/ArgenisPadill/SineOS/issues/3).
 
 Los proyectos planeados no sustituyen [deuda técnica](Documentation/Operations/Technical-Debt.md) ni evidencias de validación. La operación y los servicios actuales no se alteran por esta decisión documental.
 
