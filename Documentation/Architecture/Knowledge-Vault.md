@@ -94,6 +94,8 @@ ACT-YYYYMMDD-XXXX
 EXA-YYYYMMDD-XXXX
 PRO-YYYYMMDD-XXXX
 ETA-YYYYMMDD-XXXX
+EVA-YYYYMMDD-XXXX  # ampliación Evaluación
+PLC-YYYYMMDD-XXXX  # ampliación Plan de clase
 ```
 
 El sufijo utiliza:
@@ -114,4 +116,6 @@ El Knowledge Vault contiene conocimiento, procedimientos, decisiones, incidencia
 
 Arquitectura del Knowledge Vault definida.
 
-Sistema académico basado en Templater validado funcionalmente el **19-09-2026**.
+Sistema académico original de **siete templates** basado en Templater validado funcionalmente el **19-09-2026**.
+
+Ampliaciones documentadas el **09-10-2026**: `Evaluacion.md` (`EVA`) y `Plan de clase.md` (`PLC`). Se generan dentro de `03-Evaluaciones/` y `01-Planeacion/` de cada Materia respectivamente. Requieren validación de ejecución real en Obsidian; el Vault sigue separado de GitHub. La documentación operativa está en [Academic-Templates-Extensions.md](../Operations/Academic-Templates-Extensions.md).
