@@ -19,10 +19,11 @@ No se crean directorios vacíos solo para representar una arquitectura futura.
 
 ## Roadmap maestro y seguimiento
 
-- [Roadmap global de pendientes](Operations/Project-Roadmap.md): regla obligatoria Seguridad → SDE → fases posteriores, inventario de proyectos, deuda y gates.
+- [Roadmap global de pendientes](Operations/Project-Roadmap.md): regla obligatoria Seguridad → SDE → Oracle/n8n/Minecraft → fases restantes, inventario de proyectos, deuda y gates.
 - [Issue #4 — Roadmap maestro](https://github.com/ArgenisPadill/SineOS/issues/4).
 - [Issue #2 — Seguridad](https://github.com/ArgenisPadill/SineOS/issues/2).
 - [Issue #1 — SDE](https://github.com/ArgenisPadill/SineOS/issues/1).
+- [Issue #5 — Oracle/n8n/Minecraft](https://github.com/ArgenisPadill/SineOS/issues/5).
 - [Issue #3 — SLDE](https://github.com/ArgenisPadill/SineOS/issues/3).
 
 Los planes nuevos no equivalen a implementación; la deuda existente conserva su registro separado.
@@ -101,12 +102,15 @@ Especificación congelada del respaldo pre-SDE y restauración: estructura simpl
 Especificación congelada de propiedad de archivos y resolución de conflictos: tipos owned/managed-block/observed, hashes previous/applied, protección de cambios manuales, rollback y uninstall seguro.
 
 ### SLDE-Planning.md
-Planeación inicial (no implementada) de SineOS Laboratory & Development Environment: 16 módulos opcionales, modos de ejecución, aislamiento, requisitos de hardware, catálogo y roadmap posterior a seguridad y SDE.
+Planeación inicial (no implementada) de SineOS Laboratory & Development Environment: 16 módulos opcionales, modos de ejecución, aislamiento, requisitos de hardware y catálogo. Su turno de implementación sigue después de Oracle y reproducibilidad.
+
+### Oracle-Cloud-n8n-Minecraft-Planning.md
+Planeación pendiente de dos instancias de automatización (n8n local y n8n externo 24/7 deseado), Oracle Always Free, Minecraft Java opcional, inventario OCI, aislamiento, licencia, costo cero, seguridad, recuperación, pruebas y gates post-SDE. [Seguimiento #5](https://github.com/ArgenisPadill/SineOS/issues/5).
 
 ## Operaciones
 
 ### Project-Roadmap.md
-Fuente de verdad del orden global aprobado: cierre de seguridad, implementación/certificación SDE, reproducibilidad y ampliación modular SLDE. Incluye dependencias, pendientes y gates.
+Fuente de verdad del orden global aprobado: cierre de seguridad, implementación/certificación SDE, Oracle/n8n/Minecraft, reproducibilidad y ampliación modular SLDE. Incluye dependencias, pendientes y gates.
 
 
 ### Academic-Templates.md
