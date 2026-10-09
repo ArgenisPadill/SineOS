@@ -2,7 +2,9 @@
 
 ## Estado
 
-**Validado funcionalmente: 19-09-2026**
+**Núcleo original validado funcionalmente: 19-09-2026.**
+
+**Ampliación documentada: 09-10-2026.** Se añadieron las plantillas `Evaluacion.md` (examen o exposición) y `Plan de clase.md` (planeación institucional). Ambas requieren prueba final de ejecución en el Obsidian local; **no se incluyen en la certificación histórica de las siete originales**. Contratos, instalación con `Ctrl + P` y matriz de pruebas: [Academic-Templates-Extensions.md](Academic-Templates-Extensions.md).
 
 Los siete templates académicos se consideran estables:
 
@@ -24,12 +26,15 @@ Ubicación en el Vault:
 Materia/
 ├── 00-Materia.md
 ├── 01-Planeacion/
+│   └── Plan de clase.md  (opcional, un plan por Materia)
 ├── 02-Unidades/
 │   └── Unidad-N/
 │       ├── Unidad-N.md
 │       ├── Tareas/
 │       └── Actividades/
 ├── 03-Evaluaciones/
+│   ├── Examen-*.md        (legacy EXA, cuando corresponda)
+│   └── Evaluacion-*.md    (nuevo EVA, cuando corresponda)
 ├── 04-Proyecto-Integrador/
 │   ├── 00-Proyecto-Integrador.md
 │   └── Etapas/
@@ -80,8 +85,8 @@ Flujo seguro:
 
 1. Crear una nota nueva.
 2. Mantener activa la nota vacía.
-3. Ejecutar `Templater: Open Insert Template modal`.
-4. Seleccionar el template correspondiente.
+3. Abrir `Ctrl + P` y ejecutar el comando **individual de Templater** registrado en `Template Hotkeys` para el template correspondiente.
+4. Como alternativa, utilizar `Templater: Open Insert Template modal` y seleccionar el template. Nunca usar el comando nativo `Templates: Insert template` para estos scripts.
 5. Seleccionar el padre válido.
 6. Leer y validar metadatos y estructura física.
 7. Validar los datos introducidos.
@@ -530,3 +535,20 @@ Etapa Proyecto         OK
 Los siete templates académicos quedan funcionalmente cerrados.
 
 No deben modificarse salvo que durante su utilización real se identifique un defecto reproducible.
+
+## Extensiones posteriores — 09-10-2026
+
+Se conserva íntegra la validación histórica de las siete plantillas anteriores. Se documentan dos **ampliaciones aditivas**:
+
+| Plantilla | Nota producida | ID | Destino | Estado |
+| --- | --- | --- | --- | --- |
+| `Evaluacion.md` | Evaluación mediante examen o exposición | `EVA` | `03-Evaluaciones/Evaluacion-{Parcial-1,Parcial-2,Final}.md` | Sintaxis revisada; validación en Obsidian pendiente |
+| `Plan de clase.md` | Plan de clase institucional | `PLC` | `01-Planeacion/Plan de clase.md` | Sintaxis y pruebas simuladas revisadas; validación en Obsidian pendiente |
+
+Las nuevas plantillas se almacenan en `01-Sistema/Templates/` del **Vault**, no en el repositorio. Su ejecución directa desde `Ctrl + P` requiere registrarlas individualmente en **Templater → Template Hotkeys**. El sistema no sincroniza automáticamente archivos del Vault con GitHub.
+
+**Precaución:** la nueva plantilla `Evaluacion.md` reconoce los exámenes heredados `EXA` y evita ocupar el mismo momento, pero el antiguo `Examen.md` **no reconoce** evaluaciones `EVA`. No usar ambos comandos para crear evaluaciones futuras de una misma materia; conservar el archivo histórico para consulta. La planeación genera una nota editable que **no se actualiza automáticamente** al crear nuevas Unidades y utiliza ponderaciones de ejemplo, sujetas a revisión docente.
+
+Para contratos YAML detallados, rutas, modalidades, instalación, recuperación, controles y protocolo de validación, consultar **[Academic-Templates-Extensions.md](Academic-Templates-Extensions.md)**.
+
+**No cambian los gates del roadmap**: primero seguridad, después implementación y certificación SDE, y posteriormente las ampliaciones restantes.
