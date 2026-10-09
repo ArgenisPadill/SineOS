@@ -110,7 +110,10 @@ Fuente de verdad del orden global aprobado: cierre de seguridad, implementación
 
 
 ### Academic-Templates.md
-Sistema académico de Obsidian/Templater y validación de sus entidades.
+Sistema académico original de Obsidian/Templater, sus siete plantillas históricas y su validación del 19-09-2026.
+
+### Academic-Templates-Extensions.md
+Ampliaciones `Evaluacion.md` (EVA: examen/exposición) y `Plan de clase.md` (PLC), contratos, configuración **Ctrl + P / Template Hotkeys**, seguridad, compatibilidad, limitaciones y prueba en el Vault aún pendiente.
 
 ### Miyo.md
 Operación, arquitectura, integración, actualización y troubleshooting de Miyo.
