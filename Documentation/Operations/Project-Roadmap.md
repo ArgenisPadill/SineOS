@@ -90,7 +90,7 @@
 
 **Estado actual:** decisión y backlog documentados; no existe confirmación de VM operativa ni despliegue de n8n o Minecraft.
 
-## D · PRIORIDAD 4 — Reproducibilidad y deuda operativa restante (PENDIENTE; POST-SDE)
+## D · PRIORIDAD 4 — Reproducibilidad y deuda operativa restante (PENDIENTE; POST-ORACLE)
 
 Las 15 TD vigentes se mantienen **exclusivamente** en [Technical-Debt](Technical-Debt.md), no se renumeran ni cierran aquí. Algunas TD de seguridad se priorizan en A; las no críticas quedan ordenadas después de SDE.
 
@@ -109,7 +109,7 @@ Las 15 TD vigentes se mantienen **exclusivamente** en [Technical-Debt](Technical
 
 **Regla:** si un pendiente resulta ser necesario para seguridad, disponibilidad o un gate SDE, se adelanta a A/B y no espera esta fase.
 
-## E · PRIORIDAD 5 — SLDE base modular (PLANIFICADO; POST-C)
+## E · PRIORIDAD 5 — SLDE base modular (PLANIFICADO; POST-D)
 
 **Issue:** [#3 — SLDE](https://github.com/ArgenisPadill/SineOS/issues/3). **Diseño:** [SLDE-Planning](../Architecture/SLDE-Planning.md).
 
