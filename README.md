@@ -435,6 +435,15 @@ Los proyectos planeados no sustituyen [deuda técnica](Documentation/Operations/
 - formalizar actualización de Miyo y continuar benchmarks semánticos;
 - crear templates de Incidencia, Procedimiento y ADR.
 
+## Metodología de ingeniería asistida
+
+SineOS incorpora como **metodología documental**, pendiente de verificar con un agente local compatible, el flujo gstack (Pensar → Planear → Construir → Revisar → Probar → Lanzar → Reflexionar). gstack se instala por separado y no se integra como código ni servicio residente en este repositorio.
+
+- [Reglas para agentes](AGENTS.md).
+- [Proceso completo, gates, invocaciones y reutilización](Documentation/Operations/WORKFLOW.md).
+
+Su adopción no altera el orden de prioridades **Seguridad → SDE → Oracle/n8n/Minecraft**, ni cierra deuda o autoriza cambios en el host.
+
 ## Principios del proyecto
 
 SineOS sigue cinco principios fundamentales:
