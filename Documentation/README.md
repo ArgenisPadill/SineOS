@@ -17,6 +17,11 @@ Documentation/
 
 No se crean directorios vacíos solo para representar una arquitectura futura.
 
+## Metodología de desarrollo asistida
+
+- [WORKFLOW de ingeniería con gstack](Operations/WORKFLOW.md): ciclo Pensar → Planear → Construir → Revisar → Probar → Lanzar → Reflexionar, roles, seguridad, gates, instalación separada y reutilización en proyectos futuros.
+- [AGENTS.md](../AGENTS.md): reglas de agentes de IA específicas de SineOS. **Documentado; ejecución local de skills aún no certificada.**
+
 ## Roadmap maestro y seguimiento
 
 - [Roadmap global de pendientes](Operations/Project-Roadmap.md): regla obligatoria Seguridad → SDE → Oracle/n8n/Minecraft → fases restantes, inventario de proyectos, deuda y gates.
