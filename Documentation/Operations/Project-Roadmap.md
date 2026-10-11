@@ -41,6 +41,16 @@
 - SDE 1.0: planeación funcional y preparación técnica Alpha 0.1 consolidadas; implementación física **sin iniciar**.
 - SLDE y sus 16 módulos: iniciativa nueva **planificada**, ningún componente nuevo instalado por este cambio.
 
+## Directriz transversal — Evolución tecnológica controlada (11-10-2026)
+
+Se adopta la [política de evolución tecnológica](../Architecture/Technology-Evolution-Policy.md) como criterio permanente para **evaluar** posibles cambios de lenguajes, herramientas, runtimes, motores, interfaces o estándares. **No es una fase nueva ni un permiso de implementación.** Su ejecución técnica queda diferida hasta cerrar los compromisos actuales y consolidar un baseline funcional, reproducible y recuperable, con aprobación expresa de cada incorporación.
+
+- Preserva sin cambios las fases A → B → C → D → E → F, sus gates y las decisiones congeladas de Seguridad/SDE, así como los compromisos anteriores.
+- No crea deuda TD, no modifica el estado de los 15 TD vigentes, no reemplaza aplicaciones funcionales y no exige instalar lenguajes.
+- Rust, Mojo, Zig, Gleam, Odin, MoonBit, Hare, Carbon y Koka son candidatos de observación, **no una lista de adopción**.
+- Cualquier propuesta deberá acreditar necesidad, alternativas, compatibilidad, licencias, seguridad, impacto en recursos, pruebas, documentación, mantenimiento y rollback.
+- La investigación documental no autoriza pilotos sobre el host ni altera las prioridades. El desarrollo opcional de toolchains se relacionará con SLDE cuando corresponda y sea autorizado.
+
 ## A · PRIORIDAD 1 — Seguridad (EN CURSO)
 
 **Issue:** [#2 — Gate de seguridad](https://github.com/ArgenisPadill/SineOS/issues/2).
