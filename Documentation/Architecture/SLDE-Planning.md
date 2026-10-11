@@ -32,6 +32,10 @@ Esta iniciativa es **estrictamente aditiva**: todo diseño, planificación conge
 
 Referencia: [Regla de continuidad del roadmap maestro](../Operations/Project-Roadmap.md#regla-de-continuidad-y-preservación-de-acuerdos-anteriores-08-10-2026).
 
+## Relación con la evolución tecnológica futura (11-10-2026)
+
+La [política de evolución tecnológica de SineOS](Technology-Evolution-Policy.md) establece cómo estudiar nuevos lenguajes, toolchains y estándares sin sacrificar la operación existente. Rust, Mojo, Zig, Gleam, Odin, MoonBit, Hare, Carbon y Koka permanecen como **candidatos no obligatorios**; este inventario no autoriza instalarlos, ampliar los 16 módulos, rediseñar SLDE ni adelantar su implementación. Las evaluaciones futuras utilizarán el módulo 04 de Desarrollo u otros módulos pertinentes **solo después de los gates del roadmap y de una aprobación concreta**. Las tecnologías pueden descartarse sin consecuencia para el proyecto.
+
 ## Arquitectura propuesta
 
 - **SineOS Core:** Debian 13/XFCE, seguridad, backups/Restic, snapshots, Mantenimiento, Podman, monitoreo.
