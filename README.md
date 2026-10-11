@@ -435,6 +435,12 @@ Los proyectos planeados no sustituyen [deuda técnica](Documentation/Operations/
 - formalizar actualización de Miyo y continuar benchmarks semánticos;
 - crear templates de Incidencia, Procedimiento y ADR.
 
+## Evolución tecnológica controlada
+
+**Directriz arquitectónica adoptada el 11-10-2026; implementación diferida.** SineOS debe poder evaluar lenguajes, frameworks, runtimes y estándares futuros sin sacrificar su filosofía, estabilidad, seguridad, rendimiento, compatibilidad o recuperación. **La tecnología se adapta a SineOS y no a la tendencia del momento.** No se autorizan migraciones, nuevos toolchains ni reemplazos por esta decisión.
+
+La [política de evolución tecnológica](Documentation/Architecture/Technology-Evolution-Policy.md) define los invariantes, criterios de evaluación, compatibilidad y reversión, y cataloga Rust, Mojo, Zig, Gleam, Odin, MoonBit, Hare, Carbon y Koka como **candidatos de estudio, no dependencias**. Su implementación se considera únicamente después de concluir los compromisos vigentes y consolidar una base estable. **Se mantiene íntegro el roadmap existente** y las decisiones congeladas de Seguridad, SDE y SLDE.
+
 ## Principios del proyecto
 
 SineOS sigue cinco principios fundamentales:
