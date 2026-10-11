@@ -18,6 +18,15 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ## [Unreleased]
 
+### Política de evolución tecnológica controlada — 2026-10-11
+
+- Adoptada y documentada la directriz de preservar filosofía, estabilidad, compatibilidad, seguridad, bajo consumo, reproducibilidad y recuperación ante avances tecnológicos futuros.
+- Creado `Documentation/Architecture/Technology-Evolution-Policy.md` con reglas de evaluación, selección, pruebas, licencias, contratos e interfaces cuando se justifiquen, compatibilidad, rollback y aceptación explícita.
+- Registrados como **candidatos de estudio, no dependencias**: Rust, Mojo, Zig, Gleam, Odin, MoonBit, Hare, Carbon y Koka; otras tecnologías futuras podrán evaluarse bajo los mismos criterios.
+- La ejecución técnica se difiere hasta concluir compromisos vigentes y consolidar una base estable. **Se preservan sin cambio los gates y la precedencia Seguridad → SDE → Oracle/n8n/Minecraft → reproducibilidad → SLDE y el resto de tareas.**
+- Actualizados README, índice documental, roadmap y planeación SLDE. Cambio solo documental: sin instalaciones, migraciones, servicios nuevos, deuda cerrada ni modificaciones del sistema anfitrión.
+
+
 ### Oracle Cloud, n8n y Minecraft: nueva prioridad post-SDE — 2026-10-09
 
 - Aprobado el orden **Seguridad → SDE 1.0 → Oracle Cloud/n8n/Minecraft → resto del backlog**, sin cerrar ni cancelar deuda y proyectos existentes.
