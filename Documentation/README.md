@@ -53,6 +53,9 @@ Clasificación, ciclo de vida, seguridad, documentación y criterios para conser
 ### Documentation-Standard.md
 Estándar general de documentación y definición de terminado para componentes SineOS.
 
+### Technology-Evolution-Policy.md
+Política arquitectónica de **evolución tecnológica controlada** (11-10-2026): preservar la filosofía de SineOS ante lenguajes, frameworks y estándares futuros; cambios solo con necesidad demostrada, pruebas, compatibilidad, seguridad y reversión. Directriz adoptada, **implementación diferida** sin alterar prioridades, deuda ni diseños congelados.
+
 ### SineOS-Desktop-Experience.md
 Plan de arquitectura congelado para **SineOS Desktop Experience (SDE)**: evolución visual y de interacción de XFCE/X11 orientada a bajo consumo, compatibilidad, escalabilidad, replicabilidad y recuperación. El documento está marcado como pendiente de implementación y se sigue mediante el issue maestro #1.
 
