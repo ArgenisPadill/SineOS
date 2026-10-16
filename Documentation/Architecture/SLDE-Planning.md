@@ -72,6 +72,12 @@ La plataforma de referencia es la Gateway GWTN141-10 (Intel i5-1135G7, 16 GB RAM
 
 **Reutilización entre dominios:** pandas sirve a 09/13; Python a 04/09/13/14; PostgreSQL a 03/07; Ollama a 13/16; Wireshark a 01/06. No se crean instalaciones paralelas por cada módulo.
 
+### Estudio complementario vinculado a 11 — Ofimática (2026-10-16)
+
+Se registra el problema real de fidelidad de plantillas académicas Word/Excel y congelamientos en ONLYOFFICE para **evaluación futura**, según [Office-Compatibility-Planning.md](Office-Compatibility-Planning.md) y [issue #7](https://github.com/ArgenisPadill/SineOS/issues/7). La posible VM Windows/Office con QEMU/KVM, libvirt y WinApps **no queda seleccionada ni implementada**; también se considerarán correcciones de LibreOffice/ONLYOFFICE, WinBoat, Wine/Bottles/CrossOver, RDP remoto o no integración.
+
+Este registro **no agrega un módulo 17**, no modifica el alcance ni las prioridades aprobadas, no certifica rendimiento/compatibilidad y no habilita cambios a Core/SDE. Cualquier piloto exigirá aprobación, licencias, evaluación de privacidad de datos académicos y control de carpetas compartidas, pruebas de consumo en hardware real y rollback validado.
+
 ## Reglas técnicas y de seguridad
 
 1. **Ninguna instalación automática antes del gate Seguridad → SDE.** El simple registro de SLDE no añade paquetes, contenedores, bridges o servicios.
