@@ -421,6 +421,8 @@ El [roadmap maestro](Documentation/Operations/Project-Roadmap.md) y [issue #4](h
 
 Se incorpora **SLDE**, SineOS Laboratory & Development Environment, con 16 módulos *propuestos*, **sin implementar ni instalar**, documentados en [SLDE-Planning](Documentation/Architecture/SLDE-Planning.md) y [issue #3](https://github.com/ArgenisPadill/SineOS/issues/3).
 
+Se registra además el problema práctico de fidelidad **Word/Excel en plantillas universitarias** para un posible componente opcional **SLDE módulo 11 (Ofimática)**, sin adelantar su ejecución. El [estudio de compatibilidad](Documentation/Architecture/Office-Compatibility-Planning.md) y el [issue #7](https://github.com/ArgenisPadill/SineOS/issues/7) evaluarán diagnósticos de LibreOffice/ONLYOFFICE y, si procede, QEMU/KVM + Windows/Office con WinApps. **No hay solución seleccionada, software instalado ni validación física por este registro.**
+
 Los proyectos planeados no sustituyen [deuda técnica](Documentation/Operations/Technical-Debt.md) ni evidencias de validación. La operación y los servicios actuales no se alteran por esta decisión documental.
 
 ## Trabajo pendiente
