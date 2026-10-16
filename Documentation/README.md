@@ -24,6 +24,7 @@ No se crean directorios vacíos solo para representar una arquitectura futura.
 - [Issue #2 — Seguridad](https://github.com/ArgenisPadill/SineOS/issues/2).
 - [Issue #1 — SDE](https://github.com/ArgenisPadill/SineOS/issues/1).
 - [Issue #5 — Oracle/n8n/Minecraft](https://github.com/ArgenisPadill/SineOS/issues/5).
+- [Issue #7 — Compatibilidad Word/Excel en SineOS](https://github.com/ArgenisPadill/SineOS/issues/7): estudio sin autorización de instalación; vinculado al módulo 11 de SLDE.
 - [Issue #3 — SLDE](https://github.com/ArgenisPadill/SineOS/issues/3).
 
 Los planes nuevos no equivalen a implementación; la deuda existente conserva su registro separado.
@@ -106,6 +107,9 @@ Especificación congelada de propiedad de archivos y resolución de conflictos: 
 
 ### SLDE-Planning.md
 Planeación inicial (no implementada) de SineOS Laboratory & Development Environment: 16 módulos opcionales, modos de ejecución, aislamiento, requisitos de hardware y catálogo. Su turno de implementación sigue después de Oracle y reproducibilidad.
+
+### Office-Compatibility-Planning.md
+Estudio documental (16-10-2026) de fidelidad Word/Excel en plantillas universitarias: diagnóstico de LibreOffice/ONLYOFFICE, alternativas KVM/libvirt + Windows/Office + WinApps, WinBoat, Wine/Bottles/CrossOver y RDP remoto. **Pendiente y no implementado**, con reglas de seguridad, licencias, rendimiento, pruebas y rollback. [Seguimiento #7](https://github.com/ArgenisPadill/SineOS/issues/7); encaje futuro SLDE-11, sin cambio de prioridades.
 
 ### Oracle-Cloud-n8n-Minecraft-Planning.md
 Planeación pendiente de dos instancias de automatización (n8n local y n8n externo 24/7 deseado), Oracle Always Free, Minecraft Java opcional, inventario OCI, aislamiento, licencia, costo cero, seguridad, recuperación, pruebas y gates post-SDE. [Seguimiento #5](https://github.com/ArgenisPadill/SineOS/issues/5).
