@@ -136,6 +136,11 @@ Las 15 TD vigentes se mantienen **exclusivamente** en [Technical-Debt](Technical
 - [ ] E3: Redes (01), Sistemas Operativos (02), Ciberseguridad (06), Cloud/DevOps (07), Virtualización/Servidores (08), Electrónica/Hardware (10).
 - [ ] E4: Ciencia de Datos (13), Procesamiento de Imágenes (14), IA Local ampliada (16).
 
+### Registro complementario de SLDE-11: fidelidad Word/Excel (16-10-2026)
+
+- [ ] Estudiar la compatibilidad de plantillas universitarias en Debian 13 con [plan de evaluación de Office](../Architecture/Office-Compatibility-Planning.md) y [seguimiento #7](https://github.com/ArgenisPadill/SineOS/issues/7). Iniciar por diagnóstico de suites actuales y considerar QEMU/KVM/libvirt + Windows/Office legítimos, con WinApps como integración opcional **solo tras pruebas y autorización**.
+- **Estado:** pendiente documental, no implementado y **sin prioridad nueva**; pertenece potencialmente al módulo 11 de SLDE (y al 08 si requiere VM). No cambia los 16 módulos ni el orden A → B → C → D → E → F. Cualquier prueba anticipada exige decisión aparte sin saltar gates de seguridad.
+
 Los módulos se instalan **bajo demanda**. Los laboratorios privilegiados, la seguridad ofensiva y las cargas GPU se aíslan o se derivan a máquinas remotas cuando corresponda.
 
 ## Fuentes de verdad y cambios de estado
@@ -148,6 +153,7 @@ Los módulos se instalan **bajo demanda**. Los laboratorios privilegiados, la se
 | Riesgos y gate de seguridad | `Documentation/Security/Security-Baseline.md` + issue #2 |
 | SDE | Issue #1 y `Documentation/Architecture/SDE-*.md` |
 | Oracle / n8n / Minecraft (prioridad 3) | Issue #5 y `Documentation/Architecture/Oracle-Cloud-n8n-Minecraft-Planning.md` |
+| Compatibilidad Word/Excel (estudio SLDE-11) | Issue #7 y `Documentation/Architecture/Office-Compatibility-Planning.md` |
 | SLDE | Issue #3 y `Documentation/Architecture/SLDE-Planning.md` |
 | Historial de cambios | `CHANGELOG.md` |
 
