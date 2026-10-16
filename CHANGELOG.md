@@ -18,6 +18,13 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ## [Unreleased]
 
+### Estudio de compatibilidad Word/Excel (SLDE-11) — 2026-10-16
+
+- Registrado [issue #7](https://github.com/ArgenisPadill/SineOS/issues/7) por incompatibilidad de plantillas universitarias en LibreOffice/ONLYOFFICE y acceso limitado desde herramientas web.
+- Creado [Office-Compatibility-Planning.md](Documentation/Architecture/Office-Compatibility-Planning.md) con alternativas, diagnóstico reproducible, evaluación de KVM/libvirt/WinApps, licenciamiento, privacidad, rendimiento, recuperación y criterios de aprobación.
+- Enlazado el estudio desde el README, índice, roadmap y SLDE módulo 11 **sin modificar los 16 módulos, SDE congelado, seguridad ni la precedencia A → B → C → D → E → F**.
+- Cambio **únicamente documental**: sin ejecutar comandos en la laptop, instalar software, crear VM, alterar datos/servicios, certificar una solución ni abrir una nueva prioridad.
+
 ### Política de evolución tecnológica controlada — 2026-10-11
 
 - Adoptada y documentada la directriz de preservar filosofía, estabilidad, compatibilidad, seguridad, bajo consumo, reproducibilidad y recuperación ante avances tecnológicos futuros.
