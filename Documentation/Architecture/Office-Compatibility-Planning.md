@@ -1,9 +1,17 @@
 # SineOS — Compatibilidad de documentos Microsoft Office (plan de evaluación)
 
 **Registro:** 2026-10-16  
-**Estado:** PENDIENTE / INVESTIGACIÓN DOCUMENTAL / NO IMPLEMENTADO / SIN AUTORIZACIÓN DE INSTALACIÓN  
+**Estado al 17-10-2026:** PILOTO LOCAL FUNCIONAL / NO CERTIFICADO; el resto de este plan conserva su carácter de evaluación y sus requisitos pendientes.  
 **Seguimiento:** [Issue #7 — Compatibilidad Word/Excel](https://github.com/ArgenisPadill/SineOS/issues/7)  
 **Dependencias de gobernanza:** [Roadmap](../Operations/Project-Roadmap.md), [SLDE módulo 11](SLDE-Planning.md), [Política de evolución](Technology-Evolution-Policy.md) y [Seguridad](../Security/Security-Baseline.md)
+
+## Actualización verificada del piloto — 17-10-2026
+
+**Cambio respecto al estudio inicial:** en una sesión posterior, el usuario implementó y probó un **piloto local excepcional** de Windows 11 Pro + Office LTSC 2024 + Dockur/QEMU-KVM sobre Podman rootless, con FreeRDP 3.32.1 de Trixie Backports y lanzadores RemoteApp Word/Excel/PowerPoint en XFCE. La integración de DOCX con Thunar y el intercambio Samba bidireccional fueron comprobados. Esto **no significa que la instalación provenga del repositorio SineOS principal**, ni que el módulo SLDE-11 esté certificado o desplegado como componente reproducible.
+
+**Fuente de verdad del estado observado y de los pendientes:** [SineOS-Office-Pilot-2026-10-17.md](../Operations/SineOS-Office-Pilot-2026-10-17.md) · [issue #7](https://github.com/ArgenisPadill/SineOS/issues/7). Las secciones de evaluación y el texto en futuro que sigue reflejan **la propuesta original del 16-10-2026**, no niegan la existencia del piloto del 17-10.
+
+**Riesgos sin cerrar:** copia restaurable de la VM no realizada ni validada; permisos 2777 sobre `shared`; sesiones RAIL residuales; notificaciones engañosas tras desconexión; `TimeSync` deshabilitada; pruebas de compatibilidad académica, rendimiento y licencias pendientes. **Sin cambio a los gates y prioridades de Seguridad/SDE/SLDE**.
 
 ## 1. Resumen ejecutivo
 
