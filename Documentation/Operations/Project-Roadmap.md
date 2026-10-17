@@ -139,7 +139,8 @@ Las 15 TD vigentes se mantienen **exclusivamente** en [Technical-Debt](Technical
 ### Registro complementario de SLDE-11: fidelidad Word/Excel (16-10-2026)
 
 - [ ] Estudiar la compatibilidad de plantillas universitarias en Debian 13 con [plan de evaluación de Office](../Architecture/Office-Compatibility-Planning.md) y [seguimiento #7](https://github.com/ArgenisPadill/SineOS/issues/7). Iniciar por diagnóstico de suites actuales y considerar QEMU/KVM/libvirt + Windows/Office legítimos, con WinApps como integración opcional **solo tras pruebas y autorización**.
-- **Estado:** pendiente documental, no implementado y **sin prioridad nueva**; pertenece potencialmente al módulo 11 de SLDE (y al 08 si requiere VM). No cambia los 16 módulos ni el orden A → B → C → D → E → F. Cualquier prueba anticipada exige decisión aparte sin saltar gates de seguridad.
+- **Estado original (16-10):** estudio sin implementación; corresponde al diagnóstico previo al piloto posterior. Se preserva para trazabilidad.
+- **Actualización del 17-10:** el usuario ejecutó y validó **un piloto local excepcional** de Windows 11 + Office 2024 sobre Podman rootless y RemoteApp FreeRDP 3.32.1. [Registro de pruebas y pendientes](SineOS-Office-Pilot-2026-10-17.md) y [issue #7](https://github.com/ArgenisPadill/SineOS/issues/7). **No es implantación ni certificación oficial de SLDE-11, no cierra gates, no altera los 16 módulos ni la precedencia A → B → C → D → E → F.**
 
 Los módulos se instalan **bajo demanda**. Los laboratorios privilegiados, la seguridad ofensiva y las cargas GPU se aíslan o se derivan a máquinas remotas cuando corresponda.
 
@@ -153,7 +154,7 @@ Los módulos se instalan **bajo demanda**. Los laboratorios privilegiados, la se
 | Riesgos y gate de seguridad | `Documentation/Security/Security-Baseline.md` + issue #2 |
 | SDE | Issue #1 y `Documentation/Architecture/SDE-*.md` |
 | Oracle / n8n / Minecraft (prioridad 3) | Issue #5 y `Documentation/Architecture/Oracle-Cloud-n8n-Minecraft-Planning.md` |
-| Compatibilidad Word/Excel (estudio SLDE-11) | Issue #7 y `Documentation/Architecture/Office-Compatibility-Planning.md` |
+| SineOS Office (piloto local SLDE-11 no certificado) | Issue #7, `Documentation/Architecture/Office-Compatibility-Planning.md` y `Documentation/Operations/SineOS-Office-Pilot-2026-10-17.md` |
 | SLDE | Issue #3 y `Documentation/Architecture/SLDE-Planning.md` |
 | Historial de cambios | `CHANGELOG.md` |
 
