@@ -25,6 +25,8 @@ No se crean directorios vacíos solo para representar una arquitectura futura.
 - [Issue #1 — SDE](https://github.com/ArgenisPadill/SineOS/issues/1).
 - [Issue #5 — Oracle/n8n/Minecraft](https://github.com/ArgenisPadill/SineOS/issues/5).
 - [Issue #7 — Piloto SineOS Office y estabilización](https://github.com/ArgenisPadill/SineOS/issues/7): probado localmente, con pendientes de seguridad, recuperación y certificación; candidato opcional al módulo 11 de SLDE.
+- [Issue #8 — Sesiones RAIL y avisos Office](https://github.com/ArgenisPadill/SineOS/issues/8): diagnóstico y estabilización de RemoteApp.
+- [Issue #9 — Backup y seguridad Office](https://github.com/ArgenisPadill/SineOS/issues/9): recuperación verificable y permisos mínimos del intercambio.
 - [Issue #3 — SLDE](https://github.com/ArgenisPadill/SineOS/issues/3).
 
 Los planes nuevos no equivalen a implementación; la deuda existente conserva su registro separado.
