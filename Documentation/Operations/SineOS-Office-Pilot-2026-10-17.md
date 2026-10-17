@@ -2,7 +2,7 @@
 
 **Estado:** PILOTO LOCAL FUNCIONAL / NO CERTIFICADO / PENDIENTE DE ENDURECIMIENTO.  
 **Origen de la evidencia:** pruebas interactivas del usuario en su Debian 13 y Windows 11 invitado, compartidas el 17-10-2026; no se obtuvo acceso directo al host desde esta revisión de GitHub.  
-**Seguimiento:** [issue #7](https://github.com/ArgenisPadill/SineOS/issues/7), [plan original](../Architecture/Office-Compatibility-Planning.md), [roadmap](Project-Roadmap.md).  
+**Seguimiento:** [issue #7 (piloto)](https://github.com/ArgenisPadill/SineOS/issues/7), [issue #8 (sesiones RAIL)](https://github.com/ArgenisPadill/SineOS/issues/8), [issue #9 (seguridad/backup)](https://github.com/ArgenisPadill/SineOS/issues/9), [plan original](../Architecture/Office-Compatibility-Planning.md), [roadmap](Project-Roadmap.md).  
 **Alcance de este commit:** memoria documental del estado observado; **sin** sincronizar archivos locales de configuración, ejecutar comandos en la laptop ni certificar recuperación.
 
 > **Congelación de referencia.** Este documento es el punto de reanudación del piloto de SineOS Office. No describe una funcionalidad instalada por el repositorio principal ni una publicación de SLDE/SDE. Todo lo señalado como `PENDIENTE` requiere revisión y pruebas en el host antes de un cambio. La prioridad global Seguridad → SDE 1.0 → Oracle/n8n/Minecraft → reproducibilidad → SLDE no cambia; este piloto respondió a una necesidad académica concreta por una ejecución excepcional del usuario.
