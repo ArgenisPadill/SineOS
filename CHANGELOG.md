@@ -18,6 +18,15 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ## [Unreleased]
 
+### Piloto local SineOS Office: corte y pendientes — 2026-10-17
+
+- Documentado el piloto funcional sobre Debian 13 XFCE/X11: Windows 11 Pro en Dockur/QEMU-KVM + Podman rootless; Microsoft Office LTSC Professional Plus 2024; FreeRDP actualizado de 3.15.0 a 3.32.1 desde Trixie Backports.
+- Confirmados lanzadores XFCE sin terminal ni contraseña interactiva para Word/Excel/PowerPoint mediante RAIL, y acceso al escritorio Windows. DOCX desde Thunar y lectura/edición/guardado en carpeta Samba dedicada probados.
+- Registradas **limitaciones reales**: RAIL residual tras cerrar apps, conexiones que bloquean el acceso al escritorio, falsos avisos de `files-*.log`, latencia y pruebas parciales de XLSX/PPTX, permisos amplios de `shared` y gestión concurrente pendiente.
+- Identificada la tarea WinApps `TimeSync` con PowerShell en ejecución; deshabilitada reversiblemente en Windows. Persisten sesiones RAIL auxiliares; no se declara resuelta la causa completa.
+- **Riesgo abierto: sin backup/restore validado de la VM**. Estado de licenciamiento no auditado, pruebas de fidelidad académica/rendimiento/seguridad pendientes; no se publicó imagen, configuración secreta ni scripts locales sin revisar.
+- Publicado el [registro operativo y punto de reanudación](Documentation/Operations/SineOS-Office-Pilot-2026-10-17.md); actualizado seguimiento [#7](https://github.com/ArgenisPadill/SineOS/issues/7). **Documentación de piloto, no certificación ni implementación oficial SLDE/SDE; prioridades originales intactas.**
+
 ### Estudio de compatibilidad Word/Excel (SLDE-11) — 2026-10-16
 
 - Registrado [issue #7](https://github.com/ArgenisPadill/SineOS/issues/7) por incompatibilidad de plantillas universitarias en LibreOffice/ONLYOFFICE y acceso limitado desde herramientas web.
