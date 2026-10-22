@@ -455,6 +455,8 @@ No autoriza instalar ni modificar sistemas por sí mismo, ni altera prioridades,
 
 ## Skills de IA y trabajo con Codex
 
+**Colaboración multiagente (planeación futura):** [plan de orquestación de Codex para SineOS](Documentation/AI/Multiagent-Codex-Planning.md) y [seguimiento #11](https://github.com/ArgenisPadill/SineOS/issues/11). Se propone un coordinador con hasta tres especialistas para análisis y revisión independientes. **Pendiente de configurar y probar en Codex CLI local**; no autoriza cambios a Debian ni salta la prioridad de Seguridad.
+
 SineOS conserva una [biblioteca especializada de Agent Skills](Documentation/AI/Agent-Skills/README.md) para investigar habilidades públicas compatibles con Codex y estandarizar flujos de auditoría, depuración, verificación y revisión de skills de terceros. Las habilidades internas están en [`.agents/skills/`](.agents/skills/) y se rigen por [AGENTS.md](AGENTS.md). **No se han instalado skills externas ni modificado Debian por esta investigación.**
 
 ## Principios del proyecto
