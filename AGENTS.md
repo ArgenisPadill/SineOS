@@ -18,6 +18,14 @@
 
 ## Biblioteca de skills del proyecto
 
+## Trabajo multiagente: planeado, no activado
+
+- **Propuesta vigente:** [Arquitectura y plan multiagente para Codex](Documentation/AI/Multiagent-Codex-Planning.md) · [pendiente #11](https://github.com/ArgenisPadill/SineOS/issues/11).
+- **Esta referencia NO autoriza lanzar subagentes de manera automática.** Solo delegar cuando el usuario solicite expresamente un trabajo multiagente o apruebe una sesión futura concreta con su alcance y sus límites de permisos.
+- El piloto futuro prevé **1 coordinador + hasta 3 subagentes** con tareas independientes de Seguridad, Arquitectura y QA. Sin compartir escritura, Git, servicios ni recursos mutables; coordinar resultados y comprobar evidencias antes de cualquier adopción.
+- **Importante:** los agentes heredan el sandbox y las aprobaciones del coordinador; un rol que diga «solo lectura» **no** crea aislamiento real. No modificar `.codex/config.toml`, `~/.codex/config.toml`, crear roles, instalar plugins ni ejecutar pruebas sin autorización posterior.
+- La implementación queda **PENDIENTE** y subordinada al gate de Seguridad, al roadmap y a la regla de ingeniería. Office sigue congelado.
+
 - **Catálogo verificado de candidatos externos:** [Documentation/AI/Agent-Skills/README.md](Documentation/AI/Agent-Skills/README.md), [catálogo curado](Documentation/AI/Agent-Skills/External-Catalog-2026-10-22.md) y [protocolo de evaluación](Documentation/AI/Agent-Skills/Skill-Adoption-Protocol.md).
 - **Skills nativas de SineOS para Codex:** `.agents/skills/sineos-security-triage/`, `.agents/skills/sineos-systematic-debugging/`, `.agents/skills/sineos-verify-delivery/` y `.agents/skills/sineos-third-party-skill-review/`. Usar solo cuando la tarea corresponda; no invocarlas todas automáticamente.
 - **Distinción obligatoria:** skills SineOS versionadas = disponibles para descubrimiento del agente **tras sincronizar localmente**; candidatos externos = únicamente enlaces de investigación, **no instalados ni autorizados**. Requieren revisión de seguridad y aprobación antes de añadir scripts, plugins o MCP.
