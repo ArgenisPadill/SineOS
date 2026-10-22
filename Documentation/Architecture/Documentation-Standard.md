@@ -163,6 +163,10 @@ Un documento técnicamente correcto pero imposible de encontrar también constit
 
 ## Regla de mantenimiento
 
+## Relación con el lineamiento general de ingeniería
+
+Este estándar documental se aplica junto con el [Lineamiento general de ingeniería y entregas verificables de SineOS](Engineering-Delivery-Standard.md), que exige incrementos útiles, pruebas apropiadas, reversión proporcional al riesgo y evidencia antes de declarar avances. Este vínculo **no modifica** los requisitos documentales ni la decisión congelada del 23-09-2026.
+
 Cuando un cambio modifica el comportamiento real de un componente, debe revisarse su documentación en el mismo bloque de trabajo o registrarse explícitamente la deuda generada.
 
 ## Criterio final
