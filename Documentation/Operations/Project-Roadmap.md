@@ -4,6 +4,12 @@
 **Estado:** vigente para priorización; modificaciones exclusivamente documentales.
 **Seguimiento maestro:** [GitHub issue #4](https://github.com/ArgenisPadill/SineOS/issues/4)
 
+## Regla transversal de ejecución (22-10-2026)
+
+Se adopta para **todo SineOS** el [Lineamiento general de ingeniería y entregas verificables](../Architecture/Engineering-Delivery-Standard.md): **cada avance aporta valor, se valida con pruebas reales pertinentes y cuenta con reversión/recuperación proporcional al riesgo antes de continuar**. Implementar incrementalmente permite aceptar funciones parciales sin falsificar certificaciones de proyecto. Aplica a Seguridad, SDE, Oracle/n8n, reproducibilidad, SLDE, Core, aplicaciones y módulos; la asistencia de Codex no sustituye pruebas ni autorización.
+
+Esta norma define **el método**, no un nuevo proyecto, fase, permiso de intervención ni cambio de prioridades. Todas las fases A → F y sus gates conservan precedencia.
+
 ## Regla de precedencia aprobada
 
 1. **Seguridad:** terminar hardening pendiente y obtener evidencia real de los controles críticos.
