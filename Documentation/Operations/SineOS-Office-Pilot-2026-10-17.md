@@ -1,5 +1,8 @@
 # SineOS Office — corte operativo del piloto (17-10-2026)
 
+> **AVISO DE ESTADO VIGENTE (21-10-2026):** Este documento conserva únicamente el estado **histórico del 17-10-2026**; algunas afirmaciones (por ejemplo, ausencia de copia restaurable o la madurez de RemoteApp) han quedado superadas. La decisión actual es **[SineOS Office: PILOTO LOCAL OPERATIVO CONGELADO / NO CERTIFICADO](SineOS-Office-Pilot-Frozen-2026-10-21.md)**, con escritorio RDP único como vía principal. No constituye integración completa de SineOS, SDE o SLDE.
+
+
 **Estado:** PILOTO LOCAL FUNCIONAL / NO CERTIFICADO / PENDIENTE DE ENDURECIMIENTO.  
 **Origen de la evidencia:** pruebas interactivas del usuario en su Debian 13 y Windows 11 invitado, compartidas el 17-10-2026; no se obtuvo acceso directo al host desde esta revisión de GitHub.  
 **Seguimiento:** [issue #7 (piloto)](https://github.com/ArgenisPadill/SineOS/issues/7), [issue #8 (sesiones RAIL)](https://github.com/ArgenisPadill/SineOS/issues/8), [issue #9 (seguridad/backup)](https://github.com/ArgenisPadill/SineOS/issues/9), [plan original](../Architecture/Office-Compatibility-Planning.md), [roadmap](Project-Roadmap.md).  
