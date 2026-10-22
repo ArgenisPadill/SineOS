@@ -76,6 +76,7 @@ Se adopta la [política de evolución tecnológica](../Architecture/Technology-E
 
 **Issue:** [#1 — SDE](https://github.com/ArgenisPadill/SineOS/issues/1).
 **Fuentes:** [roadmap específico](../Architecture/SDE-Implementation-Roadmap.md) y [Definition of Done](../Architecture/SDE-Definition-of-Done-1.0.md).
+**Método de ejecución aprobado (22-10-2026):** entregas incrementales con apoyo de Codex, cada una funcional, reversible y validada; Alpha 0.1 prioriza recuperación y rollback antes de funciones visuales. La aceptación de Alphas no equivale a certificar SDE 1.0 (C0–C12). [Regla completa](../Architecture/SDE-Implementation-Roadmap.md#regla-aprobada--entregas-incrementales-con-codex-22-10-2026). **No adelanta el gate de Seguridad ni modifica la precedencia A → B → C → D → E → F.**
 
 - [x] Congelar diseño funcional SDE 1.0, decisiones UX, requisitos de recovery, especificaciones Alpha 0.1 y criterios C0–C12.
 - [ ] Autorizar inicio de Alpha 0.1 **sólo después** del gate A.
