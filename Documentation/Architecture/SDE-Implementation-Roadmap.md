@@ -4,6 +4,21 @@
 **Estado:** orden de implementación congelado  
 **Issue maestro:** https://github.com/ArgenisPadill/SineOS/issues/1
 
+## Regla aprobada — entregas incrementales con Codex (22-10-2026)
+
+**Decisión de método de ejecución, no una modificación de la arquitectura congelada.** La implementación de SDE 1.0 se organizará en **entregas pequeñas, funcionales, verificables y reversibles**, asistidas por Codex. No es necesario terminar las trece fases para comenzar a utilizar partes del nuevo escritorio que ya hayan sido aceptadas, siempre que no comprometan el XFCE funcional existente.
+
+- **Gate previo inalterado:** no ejecutar cambios físicos de SDE en la laptop hasta completar el gate de Seguridad #2 (o documentar y autorizar explícitamente los riesgos aceptados conforme al roadmap). La asistencia de Codex **no** salta ese requisito.
+- **Alpha 0.1, primero seguridad de cambio:** preflight, inventario, copia comprobada, restauración en seco, propiedad de archivos, instalación/transacción, desinstalación y rollback. La Alpha 0.1 **no tiene obligación de cambiar el aspecto visual**; debe demostrar recuperabilidad.
+- **Incrementos visuales y funcionales posteriores:** ofrecer resultados visibles y utilizables tan pronto como las dependencias y pruebas lo permitan; mantener degradación elegante y *fallback* XFCE para lo todavía no implementado. No adelantar módulos que dependan de recuperación, sesión o infraestructura aún no validada.
+- **Cadencia por entrega:** (1) definir alcance y criterios de aceptación; (2) establecer baseline y checkpoint recuperable; (3) Codex prepara cambios revisables; (4) validar estáticamente, ejecutar pruebas controladas y probar rollback; (5) validar con usuario sobre hardware real; (6) documentar evidencia y decidir adoptar, corregir o revertir. **No avanzar a la siguiente entrega riesgosa con una regresión sin resolver.**
+- **Regresión obligatoria:** preservar inicio de sesión, escritorio, pantallas, red/VPN, energía, audio, dispositivos, permisos, integridad de Debian y aplicaciones existentes. En caso de fallo, volver al último estado funcional probado.
+- **Codex es asistente, no certificador:** código y automatización pueden acelerar preparación y diagnóstico, pero las comprobaciones de hardware, usabilidad, reinicio/hibernación y recuperación requieren evidencia real y aceptación del usuario. No declarar PASS a partir de simulaciones o reportes no ejecutados.
+- **Estimaciones de tiempo:** orientativas y revisables por incremento; no prometer fechas ni convertir estimaciones previas en compromisos. La certificación SDE 1.0 exige **C0–C12 completos**, aunque existan Alphas utilizables.
+- **Gobernanza:** preservar la arquitectura, especificaciones de Alpha 0.1, orden general de las 13 fases, decisión SDE/SLDE y prioridades del roadmap; toda excepción requiere aprobación expresa y registro. Nada de reescribir el diseño congelado por el mero uso de Codex.
+
+**Criterio de avance:** cada entrega debe **funcionar, ser reversible y tener pruebas demostrables antes de continuar**.
+
 ## Regla de ejecución
 
 SDE se implementa en orden de riesgo:
