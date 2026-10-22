@@ -48,6 +48,8 @@ También enlaza los programas propios, scripts, stacks y documentos profundos qu
 
 ## Habilidades de agentes de IA (Codex)
 
+**Orquestación multiagente futura:** [arquitectura y plan Codex](AI/Multiagent-Codex-Planning.md) · [issue #11](https://github.com/ArgenisPadill/SineOS/issues/11). Modelo propuesto de 1 coordinador + hasta 3 agentes especializados; **sin configuración ni prueba local**, subordinado a Seguridad y autorización posterior.
+
 - [Biblioteca de skills de SineOS](AI/Agent-Skills/README.md): punto de entrada para Codex y otros agentes.
 - [Catálogo de proyectos externos evaluables (22-10-2026)](AI/Agent-Skills/External-Catalog-2026-10-22.md): skills GitHub, Trail of Bits, obra/superpowers, Vercel y otras fuentes; **candidatos no instalados**.
 - [Protocolo para evaluar, aislar y aprobar skills de terceros](AI/Agent-Skills/Skill-Adoption-Protocol.md): seguridad, licencias, dependencias y validación.
