@@ -443,6 +443,16 @@ Los proyectos planeados no sustituyen [deuda técnica](Documentation/Operations/
 
 La [política de evolución tecnológica](Documentation/Architecture/Technology-Evolution-Policy.md) define los invariantes, criterios de evaluación, compatibilidad y reversión, y cataloga Rust, Mojo, Zig, Gleam, Odin, MoonBit, Hare, Carbon y Koka como **candidatos de estudio, no dependencias**. Su implementación se considera únicamente después de concluir los compromisos vigentes y consolidar una base estable. **Se mantiene íntegro el roadmap existente** y las decisiones congeladas de Seguridad, SDE y SLDE.
 
+## Lineamiento general de ingeniería — regla de oro (22-10-2026)
+
+> **Cada cambio de SineOS debe aportar valor, funcionar con pruebas demostrables y permitir volver al último estado funcional antes de continuar, de manera proporcional a su riesgo.**
+
+Es una **norma transversal**, no solo para SDE u Office: aplica a seguridad, desarrollo, escritorio, contenedores, servicios, bases de datos, herramientas, IA, automatización y recuperación. El trabajo se divide en entregas incrementales, verificables y reversibles; las mejoras parciales pueden aceptarse sin declarar completo un proyecto. Codex y otros agentes aceleran tareas, pero no sustituyen pruebas reales ni autorización.
+
+**Fuente normativa:** [Lineamiento general de ingeniería y entregas verificables](Documentation/Architecture/Engineering-Delivery-Standard.md). **Instrucciones para agentes:** [AGENTS.md](AGENTS.md).
+
+No autoriza instalar ni modificar sistemas por sí mismo, ni altera prioridades, diseños congelados, gates o criterios específicos de certificación.
+
 ## Principios del proyecto
 
 SineOS sigue cinco principios fundamentales:
