@@ -453,6 +453,10 @@ Es una **norma transversal**, no solo para SDE u Office: aplica a seguridad, des
 
 No autoriza instalar ni modificar sistemas por sí mismo, ni altera prioridades, diseños congelados, gates o criterios específicos de certificación.
 
+## Skills de IA y trabajo con Codex
+
+SineOS conserva una [biblioteca especializada de Agent Skills](Documentation/AI/Agent-Skills/README.md) para investigar habilidades públicas compatibles con Codex y estandarizar flujos de auditoría, depuración, verificación y revisión de skills de terceros. Las habilidades internas están en [`.agents/skills/`](.agents/skills/) y se rigen por [AGENTS.md](AGENTS.md). **No se han instalado skills externas ni modificado Debian por esta investigación.**
+
 ## Principios del proyecto
 
 SineOS sigue cinco principios fundamentales:
