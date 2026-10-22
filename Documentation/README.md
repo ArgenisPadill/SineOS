@@ -46,6 +46,13 @@ También enlaza los programas propios, scripts, stacks y documentos profundos qu
 - [Estándar general de ingeniería y entregas verificables](Architecture/Engineering-Delivery-Standard.md) — fuente de verdad del método de trabajo.
 - [Instrucciones generales para agentes](../AGENTS.md) — aplicación operativa del estándar al repositorio.
 
+## Habilidades de agentes de IA (Codex)
+
+- [Biblioteca de skills de SineOS](AI/Agent-Skills/README.md): punto de entrada para Codex y otros agentes.
+- [Catálogo de proyectos externos evaluables (22-10-2026)](AI/Agent-Skills/External-Catalog-2026-10-22.md): skills GitHub, Trail of Bits, obra/superpowers, Vercel y otras fuentes; **candidatos no instalados**.
+- [Protocolo para evaluar, aislar y aprobar skills de terceros](AI/Agent-Skills/Skill-Adoption-Protocol.md): seguridad, licencias, dependencias y validación.
+- [Skills propias de SineOS](../.agents/skills/): cuatro flujos `SKILL.md` publicables para uso en el repositorio tras sincronización local y verificación de Codex.
+
 ## Arquitectura
 
 ### AI-Architecture.md
