@@ -12,6 +12,10 @@ Esta norma define **el método**, no un nuevo proyecto, fase, permiso de interve
 
 ## Regla de precedencia aprobada
 
+## Herramientas transversales pendientes — Codex multiagente (22-10-2026)
+
+[Plan de orquestación multiagente](../AI/Multiagent-Codex-Planning.md) · [issue #11](https://github.com/ArgenisPadill/SineOS/issues/11): propuesto **1 coordinador + hasta 3 subagentes** para tareas independientes de Seguridad, Arquitectura y QA, comenzando por un piloto de análisis en solo lectura con sandbox técnico y aceptación explícita. **NO IMPLEMENTADO / NO PROBADO / NO AUTORIZA EJECUCIÓN.** Es un método transversal futuro, no una nueva fase de proyecto ni un cambio de la precedencia A → B → C → D → E → F; no descongela Office ni sustituye controles previos.
+
 1. **Seguridad:** terminar hardening pendiente y obtener evidencia real de los controles críticos.
 2. **SineOS Desktop Experience (SDE):** ejecutar el diseño ya consolidado, certificarlo y recuperar si falla.
 3. **Oracle Cloud + automatizaciones:** plan híbrido n8n local/externo y Minecraft opcional, sujeto a capacidad, costo cero, seguridad y recuperación; implementación **después de certificar SDE**.
