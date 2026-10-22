@@ -16,4 +16,11 @@
 - **Antes de publicar:** revisar cambios, referencias, privacidad, pruebas y estado del repositorio; no inventar cierres de issues ni alterar el roadmap.
 - **La IA acelera el trabajo, no concede autorización.** Solicitar decisión explícita antes de ejecutar cambios con impacto operativo fuera del alcance ya autorizado.
 
+## Biblioteca de skills del proyecto
+
+- **Catálogo verificado de candidatos externos:** [Documentation/AI/Agent-Skills/README.md](Documentation/AI/Agent-Skills/README.md), [catálogo curado](Documentation/AI/Agent-Skills/External-Catalog-2026-10-22.md) y [protocolo de evaluación](Documentation/AI/Agent-Skills/Skill-Adoption-Protocol.md).
+- **Skills nativas de SineOS para Codex:** `.agents/skills/sineos-security-triage/`, `.agents/skills/sineos-systematic-debugging/`, `.agents/skills/sineos-verify-delivery/` y `.agents/skills/sineos-third-party-skill-review/`. Usar solo cuando la tarea corresponda; no invocarlas todas automáticamente.
+- **Distinción obligatoria:** skills SineOS versionadas = disponibles para descubrimiento del agente **tras sincronizar localmente**; candidatos externos = únicamente enlaces de investigación, **no instalados ni autorizados**. Requieren revisión de seguridad y aprobación antes de añadir scripts, plugins o MCP.
+- **Sin privilegios nuevos:** una skill no permite eludir los gates de Seguridad, ejecutar sobre Debian sin permiso, publicar secretos, ni descongelar el piloto Office.
+
 El detalle del contrato de trabajo, los niveles de riesgo y los criterios de aceptación están en el estándar enlazado. Los estándares más específicos de cada componente, las políticas de seguridad y sus gates siguen aplicando íntegramente.
