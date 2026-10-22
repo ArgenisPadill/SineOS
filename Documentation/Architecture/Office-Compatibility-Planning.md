@@ -1,5 +1,8 @@
 # SineOS — Compatibilidad de documentos Microsoft Office (plan de evaluación)
 
+> **AVISO DE ESTADO VIGENTE (21-10-2026):** Este plan documenta una evaluación inicial y los resultados históricos del 17-10-2026. La decisión posterior está en **[SineOS Office: PILOTO LOCAL OPERATIVO CONGELADO / NO CERTIFICADO](../Operations/SineOS-Office-Pilot-Frozen-2026-10-21.md)**. El escritorio RDP único es la vía principal, RemoteApp continúa experimental y ya existen respaldos de VM con arranque aislado probado. No implica integración completa ni certificación de SDE/SLDE.
+
+
 **Registro:** 2026-10-16  
 **Estado al 17-10-2026:** PILOTO LOCAL FUNCIONAL / NO CERTIFICADO; el resto de este plan conserva su carácter de evaluación y sus requisitos pendientes.  
 **Seguimiento:** [Issue #7 — Compatibilidad Word/Excel](https://github.com/ArgenisPadill/SineOS/issues/7)  
