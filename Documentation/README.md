@@ -39,6 +39,13 @@ Contiene capítulos numerados desde la preparación de la imagen de Debian hasta
 
 También enlaza los programas propios, scripts, stacks y documentos profundos que sostienen cada etapa.
 
+## Lineamiento de ingeniería de SineOS
+
+**Regla de oro institucional:** cada cambio debe **aportar valor, demostrarse con pruebas y permitir recuperación/reversión proporcional al riesgo antes de avanzar**. Obligatoria para todos los componentes y trabajos asistidos por Codex. El estado experimental o funcional de una entrega no certifica la iniciativa completa.
+
+- [Estándar general de ingeniería y entregas verificables](Architecture/Engineering-Delivery-Standard.md) — fuente de verdad del método de trabajo.
+- [Instrucciones generales para agentes](../AGENTS.md) — aplicación operativa del estándar al repositorio.
+
 ## Arquitectura
 
 ### AI-Architecture.md
