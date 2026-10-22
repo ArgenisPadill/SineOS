@@ -6,6 +6,10 @@
 
 ## Propósito
 
+## Orquestación multiagente — desarrollo futuro
+
+Codex puede distribuir tareas entre subagentes, mientras las **skills** contienen instrucciones especializadas. No son la misma función. La [propuesta multiagente de SineOS](../Multiagent-Codex-Planning.md) define roles, seguridad, fases futuras, prueba inicial de lectura, mediciones y la relación con las skills nativas; [issue #11](https://github.com/ArgenisPadill/SineOS/issues/11). **Estado: PLANIFICADO / NO CONFIGURADO NI PROBADO.** No se autoriza ningún lanzamiento de agentes por esta referencia.
+
 Mantener en GitHub un lugar estable y rastreable para **descubrir, evaluar y aprovechar habilidades de IA** sin saturar de instrucciones al agente ni comprometer Debian. No supone adopción técnica de proyectos externos ni modifica el roadmap.
 
 ### Punto de entrada para Codex
