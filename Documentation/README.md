@@ -24,7 +24,7 @@ No se crean directorios vacíos solo para representar una arquitectura futura.
 - [Issue #2 — Seguridad](https://github.com/ArgenisPadill/SineOS/issues/2).
 - [Issue #1 — SDE](https://github.com/ArgenisPadill/SineOS/issues/1).
 - [Issue #5 — Oracle/n8n/Minecraft](https://github.com/ArgenisPadill/SineOS/issues/5).
-- [Issue #7 — Piloto SineOS Office y estabilización](https://github.com/ArgenisPadill/SineOS/issues/7): probado localmente, con pendientes de seguridad, recuperación y certificación; candidato opcional al módulo 11 de SLDE.
+- [Issue #7 — SineOS Office](https://github.com/ArgenisPadill/SineOS/issues/7): **PILOTO LOCAL OPERATIVO CONGELADO / NO CERTIFICADO**, con escritorio RDP único; no constituye integración completa de SineOS ni del módulo 11 de SLDE. [Decisión vigente](Operations/SineOS-Office-Pilot-Frozen-2026-10-21.md).
 - [Issue #8 — Sesiones RAIL y avisos Office](https://github.com/ArgenisPadill/SineOS/issues/8): diagnóstico y estabilización de RemoteApp.
 - [Issue #9 — Backup y seguridad Office](https://github.com/ArgenisPadill/SineOS/issues/9): recuperación verificable y permisos mínimos del intercambio.
 - [Issue #3 — SLDE](https://github.com/ArgenisPadill/SineOS/issues/3).
@@ -111,12 +111,15 @@ Especificación congelada de propiedad de archivos y resolución de conflictos: 
 Planeación inicial (no implementada) de SineOS Laboratory & Development Environment: 16 módulos opcionales, modos de ejecución, aislamiento, requisitos de hardware y catálogo. Su turno de implementación sigue después de Oracle y reproducibilidad.
 
 ### Office-Compatibility-Planning.md
-Estudio original del 16-10-2026 y **actualización de estado del 17-10-2026**: existe un piloto local funcional de Office/RemoteApp, no certificado ni integrado al repositorio como instalador. Riesgos y pruebas en [registro operativo](Operations/SineOS-Office-Pilot-2026-10-17.md). [Seguimiento #7](https://github.com/ArgenisPadill/SineOS/issues/7); sin cambio de prioridades de SLDE.
+Estudio original del 16-10-2026 y antecedentes del 17-10-2026. El **estado vigente congelado** es un [piloto local operativo mediante escritorio RDP único, no certificado](Operations/SineOS-Office-Pilot-Frozen-2026-10-21.md). RemoteApp sigue experimental y sin cambio de prioridades de SLDE. [Seguimiento #7](https://github.com/ArgenisPadill/SineOS/issues/7).
 
 ### Oracle-Cloud-n8n-Minecraft-Planning.md
 Planeación pendiente de dos instancias de automatización (n8n local y n8n externo 24/7 deseado), Oracle Always Free, Minecraft Java opcional, inventario OCI, aislamiento, licencia, costo cero, seguridad, recuperación, pruebas y gates post-SDE. [Seguimiento #5](https://github.com/ArgenisPadill/SineOS/issues/5).
 
 ## Operaciones
+
+### SineOS-Office-Pilot-Frozen-2026-10-21.md
+[Decisión vigente de congelamiento](Operations/SineOS-Office-Pilot-Frozen-2026-10-21.md): **piloto local operativo, no certificado ni integrado completamente**; escritorio RDP único principal, RemoteApp experimental, evidencia, límites, respaldos y pendientes #7–#9.
 
 ### SineOS-Office-Pilot-2026-10-17.md
 Corte operativo verificable del piloto Office: arquitectura y versiones observadas, integración WinApps/FreeRDP/Podman, lanzadores, asociaciones Thunar, evidencia de pruebas, límites, riesgos, runbook de diagnóstico y orden de reanudación. **Piloto local, no certificado; sin secretos ni datos académicos.**
