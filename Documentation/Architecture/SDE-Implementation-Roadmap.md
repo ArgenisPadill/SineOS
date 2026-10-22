@@ -6,6 +6,8 @@
 
 ## Regla aprobada — entregas incrementales con Codex (22-10-2026)
 
+**Jerarquía normativa:** esta regla particular implementa en SDE el [Lineamiento general de ingeniería y entregas verificables de SineOS](Engineering-Delivery-Standard.md), obligatorio para todos los componentes. Los gates de SDE son adicionales y no se reducen.
+
 **Decisión de método de ejecución, no una modificación de la arquitectura congelada.** La implementación de SDE 1.0 se organizará en **entregas pequeñas, funcionales, verificables y reversibles**, asistidas por Codex. No es necesario terminar las trece fases para comenzar a utilizar partes del nuevo escritorio que ya hayan sido aceptadas, siempre que no comprometan el XFCE funcional existente.
 
 - **Gate previo inalterado:** no ejecutar cambios físicos de SDE en la laptop hasta completar el gate de Seguridad #2 (o documentar y autorizar explícitamente los riesgos aceptados conforme al roadmap). La asistencia de Codex **no** salta ese requisito.
