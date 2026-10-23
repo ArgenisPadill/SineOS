@@ -144,16 +144,14 @@ costo
 
 ## 6. Servicio systemd
 
-Ollama se ejecuta mediante un servicio systemd de usuario.
-
-Esto permite integrar el runtime con la sesión del usuario y mantener su operación separada de los servicios privilegiados del sistema.
+Ollama se ejecuta mediante `ollama.service`, un servicio systemd del sistema con cuenta `ollama:ollama`, según la evidencia del 2026-10-22. No es una unidad `systemd --user`.
 
 Conceptualmente:
 
 ```text
-usuario
+systemd del sistema
    ↓
-systemd --user
+ollama.service (ollama:ollama)
    ↓
 ollama
    ↓
@@ -161,6 +159,39 @@ API local
 ```
 
 El servicio fue validado funcionalmente.
+
+### Incremento NNP — evidencia del 2026-10-22
+
+Aplicación y comprobaciones ejecutadas manualmente por el usuario; los agentes revisaron la evidencia sin repetir consultas operativas.
+
+Drop-in aplicado: `/etc/systemd/system/ollama.service.d/90-sineos-nnp.conf`, propietario `root:root`, permisos `0644`:
+
+```ini
+[Service]
+NoNewPrivileges=yes
+```
+
+| Criterio | Estado | Evidencia y alcance |
+|---|---|---|
+| Validación de unidad | PASS | `systemd-analyze verify ollama.service`: RC=0 |
+| Recarga y reinicio | PASS | RC=0 en ambas operaciones |
+| Servicio posterior | PASS | `active/running`, `Result=success` |
+| Configuración efectiva | PASS | `systemctl show`: `NoNewPrivileges=yes` |
+| Proceso principal observado | PASS | PID 49947, `NoNewPrivs=1` |
+| Auxiliar observado | PASS | `llama-server`, PID 50133, `NoNewPrivs=1` |
+| Inferencia de referencia | PASS | Modelo `qwen2.5-coder:3b-instruct`; HTTP 200, respuesta `4`, `done=true`, antes y después |
+| Reversión ensayada | PENDING | Sin ejecución acreditada |
+| Regresiones ampliadas | PENDING | Otras cargas, ciclos y procesos futuros no acreditados |
+| Perfil AppArmor de Ollama | PENDING | Ollama continúa sin confinamiento AppArmor |
+| Controles compensatorios de contenedores | PENDING | Sin validación acreditada |
+
+Duraciones observadas: **9.92 s antes y 4.48 s después**. No permiten atribuir mejoras de rendimiento a NNP.
+
+NNP está aplicado y verificado en los dos procesos observados y la carga probada; no constituye hardening integral ni certifica todos los procesos futuros. Seccomp de Ollama no está activo según la evidencia previa. Podman 5.4.2 rootless informa `apparmorEnabled=false`; se conserva rootless.
+
+**Reversión propuesta, no ensayada:** retirar exclusivamente el drop-in añadido, conservar la unidad y los demás drop-ins, recargar systemd y reiniciar solo Ollama con autorización administrativa y de interrupción. Comprobar configuración, proceso y funcionamiento previos. NNP no puede desactivarse en el proceso existente: requiere reemplazarlo. No utilizar una reversión global de systemd.
+
+**TD-010 y el gate de Seguridad #2 permanecen abiertos.** SineOS Office continúa congelado y fuera del alcance.
 
 ---
 
@@ -774,7 +805,7 @@ El objetivo no es obtener el número más alto posible, sino identificar qué co
 Comprobar:
 
 ```text
-servicio systemd user
+servicio systemd del sistema
 proceso
 puerto 11434
 logs
@@ -843,7 +874,11 @@ El hardening de red sigue pendiente.
 | Componente | Estado |
 |---|---|
 | Ollama 0.34.0 | Operativo |
-| systemd user service | Operativo |
+| Servicio systemd del sistema (`ollama:ollama`) | Operativo |
+| NoNewPrivileges | Aplicado y verificado en los procesos observados el 2026-10-22 |
+| AppArmor de Ollama | Sin confinamiento; perfil PENDING |
+| Seccomp de Ollama | No activo según evidencia previa |
+| Reversión ensayada y regresiones ampliadas de NNP | PENDING |
 | API 11434 | Operativa |
 | `OLLAMA_HOST=0.0.0.0:11434` | Configurado |
 | qwen3.5:2b | Validado |
@@ -912,7 +947,7 @@ La implementación actual puede representarse como:
 ```text
 Debian 13
    ↓
-systemd user
+systemd del sistema (ollama.service)
    ↓
 Ollama 0.34.0
    ↓

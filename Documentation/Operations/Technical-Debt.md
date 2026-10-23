@@ -1,6 +1,6 @@
 # SineOS — Deuda técnica
 
-Última revisión: 07-10-2026
+Última revisión: 22-10-2026
 
 Este documento registra únicamente deuda vigente. **Los planes SDE/SLDE, el catálogo de 16 módulos y los huecos de reproducibilidad aún no convertidos en TD no son deuda adicional de este registro.** Sus prioridades y fases se siguen en [Project-Roadmap](Project-Roadmap.md), sin cerrar ni renumerar las 15 TD abiertas.
 
@@ -85,7 +85,13 @@ El secret persistente ya quedó validado y TD-005 está cerrado. Permanecen como
 Validar 11434 desde otro equipo y comprobar que recargar nftables no interfiera con netavark.
 
 ### AppArmor
-Está activo, pero falta auditoría formal con herramientas adecuadas.
+**TD-010 abierto — auditoría operativa parcial (evidencia del 22-10-2026).** AppArmor del host tiene módulo y servicio activos y 123 perfiles cargados; falta completar la cobertura efectiva de aplicaciones relevantes.
+
+Ollama funciona como servicio systemd del sistema con cuenta `ollama:ollama`. Primer incremento aplicado manualmente: `NoNewPrivileges=yes` mediante `/etc/systemd/system/ollama.service.d/90-sineos-nnp.conf`. NNP fue verificado en el proceso principal observado (PID 49947) y en su auxiliar `llama-server` (PID 50133). La inferencia de referencia funcionó antes y después. Es un avance parcial, no hardening integral ni confinamiento AppArmor.
+
+**PENDING:** reversión ensayada, regresiones ampliadas, perfil AppArmor de Ollama y controles compensatorios específicos de contenedores. Ollama continúa sin confinamiento AppArmor y sin seccomp activo según la evidencia previa. Podman 5.4.2 rootless informa `apparmorEnabled=false`; se mantiene rootless, sin migración a rootful.
+
+Detalle de evidencia y límites: [registro operativo de Ollama](Ollama.md#incremento-nnp--evidencia-del-2026-10-22). TD-010 y el gate de Seguridad #2 permanecen abiertos.
 
 ### Tor
 Escucha solo en `127.0.0.1:9050`. Antes de retirarlo debe comprobarse si alguna aplicación consume ese SOCKS local.

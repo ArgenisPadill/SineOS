@@ -407,10 +407,16 @@ Estado:
 ```text
 FUNCIONAL
 +
-HARDENING PENDIENTE
+NNP APLICADO Y VERIFICADO EN LOS PROCESOS OBSERVADOS
++
+RESTO DEL HARDENING PENDIENTE
 ```
 
 ---
+
+Ollama se ejecuta como servicio systemd del sistema con cuenta `ollama:ollama`. Evidencia del **2026-10-22**, aportada por el usuario: drop-in `/etc/systemd/system/ollama.service.d/90-sineos-nnp.conf` con `NoNewPrivileges=yes`, propietario `root:root` y permisos `0644`; validación de unidad, recarga y reinicio con RC=0; servicio activo. NNP efectivo en el proceso principal PID 49947 y en `llama-server` PID 50133 (`NoNewPrivs=1`). Inferencia de referencia satisfactoria antes y después; no acredita todas las cargas ni procesos futuros.
+
+Ollama continúa sin confinamiento AppArmor y sin seccomp activo según la evidencia previa. **PENDING:** reversión ensayada, regresiones ampliadas y perfil AppArmor. NNP no acredita estos controles ni hardening integral. Véase el [registro operativo](../Operations/Ollama.md#incremento-nnp--evidencia-del-2026-10-22).
 
 ## 20. Riesgo de Ollama
 
@@ -669,17 +675,21 @@ Esto evita que una herramienta de diagnóstico realice cambios inesperados.
 
 AppArmor forma parte de la arquitectura de seguridad prevista para SineOS.
 
-Sin embargo, antes de declarar esta capa como validada debe comprobarse:
+**Auditoría operativa parcial — evidencia del 2026-10-22 aportada por el usuario.**
 
-- estado del servicio;
-- perfiles activos;
-- modo enforce/complain;
-- cobertura real de aplicaciones relevantes.
+- Módulo y servicio activos: `loaded`, `active`, `exited`, `Result=success`.
+- 123 perfiles cargados: 19 enforce, 25 complain y 79 unconfined.
+- 33 procesos contabilizados: 4 enforce, 1 complain y 28 unconfined. Inventario histórico de los procesos observados el 2026-10-22: `cups-browsed`, `cupsd`, `pasta` y `tor` (perfil `system_tor`) en enforce; Xorg en complain. Esta observación no certifica la cobertura de todas las aplicaciones de SineOS.
+- Ollama permanece sin confinamiento AppArmor. Su incremento NNP es independiente de esta capa.
+- Podman 5.4.2 rootless informa `apparmorEnabled=false` y `seccompEnabled=true`. PostgreSQL, Open WebUI y Stirling PDF estaban detenidos, con `AppArmorProfile` vacío; no se acredita confinamiento durante ejecución ni filtros seccomp por proceso.
+- Cero eventos `apparmor="DENIED"` entre 1,158 mensajes consultados del kernel: ausencia de coincidencias en esa consulta, no prueba de cobertura o seguridad suficiente.
+
+Se mantiene Podman rootless, sin migración a rootful. La limitación de integración AppArmor persiste. **PENDING:** cobertura por aplicación, perfil AppArmor de Ollama, controles compensatorios de contenedores, regresiones ampliadas y reversión ensayada.
 
 Estado:
 
 ```text
-REQUIERE AUDITORÍA FORMAL
+AUDITORÍA OPERATIVA PARCIAL — TD-010 Y SEGURIDAD #2 ABIERTOS
 ```
 
 ---

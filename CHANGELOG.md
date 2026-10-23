@@ -18,6 +18,15 @@ Todos los cambios relevantes de SineOS se documentan en este archivo.
 
 ## [Unreleased]
 
+### Seguridad #2 / TD-010 — NNP de Ollama — 2026-10-22
+
+- Aplicado manualmente `NoNewPrivileges=yes` al servicio systemd del sistema `ollama.service`, cuenta `ollama:ollama`, mediante `90-sineos-nnp.conf` (`root:root`, `0644`).
+- Validación de unidad, recarga y reinicio con RC=0; servicio activo y NNP verificado en el proceso principal PID 49947 y el auxiliar `llama-server` PID 50133.
+- Inferencia con `qwen2.5-coder:3b-instruct` satisfactoria antes y después: HTTP 200, respuesta `4`, `done=true`; duraciones 9.92 s y 4.48 s sin atribuir mejora a NNP.
+- Actualizada la documentación a auditoría operativa parcial de AppArmor. Ollama sigue sin confinamiento AppArmor y sin seccomp activo según evidencia previa; persiste `apparmorEnabled=false` en Podman 5.4.2 rootless.
+- Reversión ensayada, regresiones ampliadas, perfil AppArmor de Ollama y controles compensatorios de contenedores: **PENDING**. TD-010 y Seguridad #2 abiertos; Office permanece congelado.
+- Registro basado en evidencia operativa del usuario; esta actualización local es documental y no ejecuta cambios del sistema.
+
 ### Piloto local SineOS Office: corte y pendientes — 2026-10-17
 
 - Documentado el piloto funcional sobre Debian 13 XFCE/X11: Windows 11 Pro en Dockur/QEMU-KVM + Podman rootless; Microsoft Office LTSC Professional Plus 2024; FreeRDP actualizado de 3.15.0 a 3.32.1 desde Trixie Backports.
