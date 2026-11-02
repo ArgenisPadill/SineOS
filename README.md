@@ -6,6 +6,21 @@ El proyecto busca mantener un entorno reproducible, documentado, modular y recup
 
 > La mejor IA no es el modelo más pesado, sino la que soporta el equipo de cómputo.
 
+## Inicio rápido — cómo reconstruir SineOS
+
+**Objetivo:** recuperar SineOS en un Debian GNU/Linux 13 limpio sin depender de los datos del disco anterior. Este resumen **no reemplaza** el procedimiento probado de [Disaster Recovery](Documentation/Recovery/Disaster-Recovery.md).
+
+1. **Preparar Debian 13 amd64 y Git.** Comprobar conectividad, capacidad de disco y que hay un respaldo externo verificable. La versión inicial del [bootstrap propuesto en PR #12](https://github.com/ArgenisPadill/SineOS/pull/12) aún no está integrada a `main`; no asumir que ya es un instalador certificado.
+2. **Clonar el repositorio.** Configurar `SINEOS_REPO` con la ubicación local elegida y registrar la revisión mediante `git rev-parse HEAD`. La estructura pública contiene scripts y Compose, **no** los datos privados ni credenciales.
+3. **Recuperar las credenciales Restic por canal independiente.** Verificar la identidad del disco de respaldo, los snapshots y el repositorio antes de restaurar. Ejecutar primero una **restauración temporal**, no sobrescribir datos vivos.
+4. **Restaurar estado privado.** Recuperar `SINEOS_VAULT`, `~/.config/sineos/`, archivos `.env` y volúmenes permitidos. PostgreSQL se reconstruye desde **dump lógico** y no desde copia en caliente de su directorio de datos.
+5. **Reconstruir servicios en orden:** red Podman → PostgreSQL → Uptime Kuma → Stirling PDF → Open WebUI → XFCE/LightDM. Respetar la política de arranque manual y las imágenes compatibles con el backup.
+6. **Verificar antes de conmutar:** completar las [checklists por componente](Documentation/Recovery/Verification-Guide.md), integridad de PostgreSQL/Vault, permisos, persistencia y acceso local. Un HTTP 200 aislado no certifica una migración.
+
+**Rutas parametrizadas:** `SINEOS_REPO` apunta al checkout Git y `SINEOS_VAULT` al Vault privado de Obsidian. Como **ejemplos de estructura, no valores comprobados de la laptop**, el repositorio suele organizarse bajo `$HOME/Workspace/SineOS`; el motor de backup actualmente toma el Vault de `$HOME/Obsidian/SineOS`. Antes de ejecutar una copia, comprobar en el host que estas rutas coinciden con las variables configuradas y corregir cualquier divergencia. No publicar valores privados en issues.
+
+**Fuente de verdad:** [Disaster-Recovery.md](Documentation/Recovery/Disaster-Recovery.md) · [Política de respaldos](Documentation/Recovery/Backup-Policy.md) · [Verificación de servicios](Documentation/Recovery/Verification-Guide.md). El [inventario central y checklist ampliada](https://github.com/ArgenisPadill/SineOS/pull/12) siguen pendientes de merge.
+
 ## Objetivos
 
 SineOS busca integrar en una misma arquitectura:
@@ -38,22 +53,9 @@ Contenedores       : Podman rootless
 Control de versiones: Git + GitHub
 ```
 
-### Hardware principal
+### Recursos de referencia
 
-SineOS se desarrolla actualmente sobre una laptop Gateway GWTN141-10.
-
-```text
-CPU       : Intel Core i5-1135G7
-Núcleos   : 4
-Hilos     : 8
-GPU       : Intel Iris Xe integrada
-RAM       : 16 GB LPDDR4
-SSD       : 512 GB SATA
-Firmware  : UEFI
-Secure Boot: habilitado
-```
-
-La arquitectura se diseña considerando los recursos reales del equipo y evitando desplegar servicios o modelos cuyo costo computacional no aporte un beneficio práctico.
+SineOS se diseña para un equipo de escritorio portátil de recursos moderados: arquitectura x86_64, CPU de cuatro núcleos, aproximadamente 16 GB de RAM y SSD. La selección de modelos locales, contenedores y herramientas se ajusta a los recursos realmente disponibles. Se omiten de esta portada identificadores específicos del hardware, firmware y otros datos que no se requieren para reconstruirlo.
 
 ## Arquitectura del repositorio
 
@@ -197,7 +199,7 @@ http://host.containers.internal:11434
 
 El servicio utiliza persistencia dentro de la estructura de volúmenes de SineOS.
 
-La imagen actualmente utiliza una etiqueta móvil y queda pendiente fijar una versión o digest antes de considerarla una configuración endurecida y reproducible.
+La imagen de Open WebUI todavía usa una etiqueta móvil. **También PostgreSQL (`postgres:18`) y Uptime Kuma (`uptime-kuma:2`) emplean etiquetas de versión mayor móviles; Stirling PDF (`2.14.3-fat`) está etiquetada con una versión concreta, pero ninguna de las cuatro queda inmovilizada por un digest verificado.** El procedimiento de fijación y captura de imágenes efectivas está documentado como propuesta en [PR #12](https://github.com/ArgenisPadill/SineOS/pull/12). No se cambiarán imágenes productivas sin pruebas de persistencia y reversión.
 
 ### Gemini
 
@@ -405,7 +407,7 @@ Componentes validados o funcionales:
 | Open WebUI | Podman rootless | `127.0.0.1:3000` |
 | Stirling PDF | Podman rootless, manual | `127.0.0.1:8080` |
 | Uptime Kuma | Podman rootless, manual | `127.0.0.1:3001` |
-| Ollama 0.34.0 | host | `*:11434`, protegido por nftables |
+| Ollama 0.34.0 | host | puerto `11434`; revisar política de nftables antes de exponer |
 | DNSCrypt | host | `127.0.2.1:53` |
 | Tor | host, en revisión | `127.0.0.1:9050` |
 
@@ -427,7 +429,7 @@ Los proyectos planeados no sustituyen [deuda técnica](Documentation/Operations/
 
 ## Trabajo pendiente
 
-- fijar versión/digest de Open WebUI y retirar `restart: unless-stopped` mediante recreación controlada;
+- fijar digests verificados para PostgreSQL, Open WebUI, Stirling PDF y Uptime Kuma; retirar `restart: unless-stopped` de Open WebUI únicamente mediante recreación controlada;
 - determinar si Tor tiene consumidores reales;
 - validar Ollama desde otro dispositivo de la LAN;
 - revisar `flush ruleset` de nftables frente a Podman/netavark;
@@ -458,6 +460,10 @@ No autoriza instalar ni modificar sistemas por sí mismo, ni altera prioridades,
 **Colaboración multiagente (planeación futura):** [plan de orquestación de Codex para SineOS](Documentation/AI/Multiagent-Codex-Planning.md) y [seguimiento #11](https://github.com/ArgenisPadill/SineOS/issues/11). Se propone un coordinador con hasta tres especialistas para análisis y revisión independientes. **Pendiente de configurar y probar en Codex CLI local**; no autoriza cambios a Debian ni salta la prioridad de Seguridad.
 
 SineOS conserva una [biblioteca especializada de Agent Skills](Documentation/AI/Agent-Skills/README.md) para investigar habilidades públicas compatibles con Codex y estandarizar flujos de auditoría, depuración, verificación y revisión de skills de terceros. Las habilidades internas están en [`.agents/skills/`](.agents/skills/) y se rigen por [AGENTS.md](AGENTS.md). **No se han instalado skills externas ni modificado Debian por esta investigación.**
+
+## Seguridad del repositorio y contribuciones
+
+Consulta [SECURITY.md](SECURITY.md) para comunicar vulnerabilidades de forma responsable y [la revisión de exposición pública](Documentation/Security/Public-Exposure-Review.md) para los límites de la auditoría. No se publican secretos, archivos del Vault, respaldos, datos personales ni informes crudos. La elección de una licencia abierta está **pendiente de decisión del propietario**; que el repositorio sea público no implica una licencia de reutilización.
 
 ## Principios del proyecto
 
