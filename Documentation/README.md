@@ -4,6 +4,16 @@ Este directorio es el punto de entrada a la documentación técnica de SineOS.
 
 El objetivo no es únicamente describir componentes aislados, sino permitir entender, operar, reconstruir, mantener y recuperar el sistema de forma reproducible.
 
+## Reconstrucción y verificación (documentación en revisión)
+
+- [Inicio rápido de reconstrucción](../README.md): orden esencial para nuevos equipos.
+- [Recuperación ante desastres](Recovery/Disaster-Recovery.md): referencia histórica validada en Debian 13 limpio.
+- [Verificación por componente](Recovery/Verification-Guide.md): cuatro checklists de servicios y criterios PASS/FAIL/PENDING.
+- [Revisión de exposición pública](Security/Public-Exposure-Review.md): alcance de búsquedas y controles pendientes.
+- [Gobierno del repositorio y trazabilidad](Operations/Repository-Governance-Review.md): issues, PR, gates, licencia pendiente y About de GitHub.
+- [Política de reporte de vulnerabilidades](../SECURITY.md).
+- [PR #12 — inventario externo, bootstrap y migración](https://github.com/ArgenisPadill/SineOS/pull/12): **todavía no forma parte de main**.
+
 ## Cómo está organizada
 
 ```text
