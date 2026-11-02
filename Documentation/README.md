@@ -183,6 +183,13 @@ Instalación, aplicación, respaldo, restauración y mantenimiento del escritori
 ### Repository-Audit-2026-10-07.md
 Auditoría integral estática y documental del repositorio: inconsistencias corregidas, bug de código detectado, estados sincronizados y deuda real restante.
 
+## Preparación de reconstrucción y migración (propuesta, PENDING)
+
+- [Inventario de estado fuera de Git](Recovery/External-State-Inventory.md): rutas, datos críticos, exclusiones y respaldo.
+- [Checklist de migración](Recovery/Migration-Checklist.md): orden obligatorio, gate de éxito por paso y rollback.
+- [Fijación de imágenes](Recovery/Image-Pinning.md): identificación de tags móviles, captura de digest y validación previa; pinning real PENDING.
+- [`bootstrap.sh`](../Scripts/Bootstrap/bootstrap.sh): instalador de paquetes Debian 13; probar primero con `--dry-run`.
+
 ## Recuperación
 
 ### Backup-Policy.md

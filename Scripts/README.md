@@ -8,6 +8,7 @@ La política completa se encuentra en `Documentation/Architecture/Script-Standar
 
 | Componente | Archivo | Clasificación | Estado | Uso |
 |---|---|---|---|---|
+| Bootstrap Debian 13 | `Bootstrap/bootstrap.sh` | Pilar / instalación | Propuesto; PENDING en host limpio | Prepara paquetes base, Git, Podman, XFCE y Ollama opcionalmente; `--dry-run` predeterminado y `--apply` explícito. Ver `Documentation/Recovery/Migration-Checklist.md`. |
 | Auditoría | `Audit/sineos-audit.sh` | Operativo recurrente | Activo | Diagnóstico de solo lectura de la plataforma SineOS |
 | Salud trimestral | `Audit/sineos-health-audit.sh` | Operativo recurrente | Validado | Auditoría profunda de sistema, seguridad, actualizaciones, Git y contenedores |
 | Escritorio XFCE | `Desktop/sineos-xfce-macos.sh` | Pilar / instalación | Activo | Instala, aplica, valida y restaura la configuración visual reproducible de XFCE |
