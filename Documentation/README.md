@@ -6,7 +6,7 @@ El objetivo no es únicamente describir componentes aislados, sino permitir ente
 
 ## Reconstrucción y verificación (documentación en revisión)
 
-- [Inicio rápido de reconstrucción](../README.md#inicio-rápido--cómo-reconstruir-sineos): orden esencial para nuevos equipos.
+- [Inicio rápido de reconstrucción](../README.md): orden esencial para nuevos equipos.
 - [Recuperación ante desastres](Recovery/Disaster-Recovery.md): referencia histórica validada en Debian 13 limpio.
 - [Verificación por componente](Recovery/Verification-Guide.md): cuatro checklists de servicios y criterios PASS/FAIL/PENDING.
 - [Revisión de exposición pública](Security/Public-Exposure-Review.md): alcance de búsquedas y controles pendientes.
