@@ -20,6 +20,27 @@ class BackupError(RuntimeError):
     pass
 
 
+def configured_vault_root():
+    """Exige una ruta absoluta, existente y válida para el Knowledge Vault."""
+    value = os.environ.get("SINEOS_VAULT", "").strip()
+    if not value:
+        raise BackupError(
+            "SINEOS_VAULT no está configurado. "
+            "Definirlo en el entorno real del proceso antes de respaldar."
+        )
+
+    candidate = Path(value).expanduser()
+    if not candidate.is_absolute():
+        raise BackupError("SINEOS_VAULT debe ser una ruta absoluta.")
+
+    root = candidate.resolve()
+    if not root.is_dir() or not (root / ".obsidian").is_dir():
+        raise BackupError(
+            "SINEOS_VAULT no apunta a un Vault existente con .obsidian."
+        )
+    return root
+
+
 def run(command, timeout=30, cwd=None, env=None):
     try:
         return subprocess.run(command, capture_output=True, text=True, timeout=timeout, check=False, cwd=str(cwd) if cwd else None, env=env)
@@ -437,7 +458,7 @@ def backup_sources(postgres_staging):
 
     sources = [
         REPO_ROOT,
-        home / "Obsidian" / "SineOS",
+        configured_vault_root(),
         home / ".config" / "sineos",
         home / ".local" / "state" / "sineos" / "health",
         home / ".local" / "state" / "sineos" / "security",
@@ -464,7 +485,7 @@ def backup_excludes():
         REPO_ROOT / "Containers" / "volumes" / "stirling-pdf" / "configs" / "cache",
         REPO_ROOT / "Containers" / "volumes" / "stirling-pdf" / "logs",
         REPO_ROOT / "Containers" / "volumes" / "stirling-pdf" / "tessdata",
-        home / "Obsidian" / "SineOS" / ".opencode" / "node_modules",
+        configured_vault_root() / ".opencode" / "node_modules",
     ]
 
 
@@ -964,13 +985,16 @@ def restore_snapshot(
 
 
 def validate_restored_layout(restore_target, postgres_staging=None):
-    target = Path(restore_target).expanduser()
+    target = Path(restore_target).expanduser().resolve()
     live_home = Path.home().resolve()
-    restored_home = target / "home" / live_home.name
+    restored_home = target / live_home.relative_to(live_home.anchor)
+    repo_root = REPO_ROOT.resolve()
+    vault_root = configured_vault_root()
 
+    # Restic restaura rutas absolutas bajo el directorio --target.
     required = [
-        restored_home / "Workspace" / "SineOS",
-        restored_home / "Obsidian" / "SineOS",
+        target / repo_root.relative_to(repo_root.anchor),
+        target / vault_root.relative_to(vault_root.anchor),
         restored_home / ".config" / "sineos",
         restored_home / ".local" / "state" / "sineos-maintenance",
     ]
@@ -983,8 +1007,7 @@ def validate_restored_layout(restore_target, postgres_staging=None):
 
     forbidden = [
         restored_home / ".config" / "sineos" / "restic-password",
-        restored_home / "Workspace" / "SineOS"
-        / "Containers" / "volumes" / "postgres" / "data",
+        required[0] / "Containers" / "volumes" / "postgres" / "data",
     ]
 
     present = [str(item) for item in forbidden if item.exists()]
@@ -2416,6 +2439,8 @@ def create_and_certify_backup(
     expected_serial=None,
     expected_repository_id=None,
 ):
+    # Fallar antes del staging y del respaldo si el Vault no está definido.
+    configured_vault_root()
     validate_git_state(REPO_ROOT)
     validate_stateful_containers_stopped()
 
@@ -2468,7 +2493,7 @@ def create_and_certify_backup(
         tag,
     )
 
-    vault_root = Path.home() / "Obsidian" / "SineOS"
+    vault_root = configured_vault_root()
     vault_manifest = build_vault_manifest(vault_root)
 
     snapshot = create_restic_snapshot(
