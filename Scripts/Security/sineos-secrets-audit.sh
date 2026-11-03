@@ -144,7 +144,7 @@ section "6. GITLEAKS — HISTORIAL"
 if has gitleaks; then
   rm -f "$HISTORY_JSON"
   scan_rc=0
-  gitleaks detect --source "$ROOT" --redact --report-format json --report-path "$HISTORY_JSON" --exit-code 2 >/dev/null 2>&1 || scan_rc=$?
+  gitleaks detect --source "$ROOT" --log-opts="--all --full-history" --redact --report-format json --report-path "$HISTORY_JSON" --exit-code 2 >/dev/null 2>&1 || scan_rc=$?
   [[ -f "$HISTORY_JSON" ]] && chmod 600 "$HISTORY_JSON" 2>/dev/null || true
   n="$(count_json "$HISTORY_JSON")"
   if [[ "$scan_rc" -eq 0 && "$n" -eq 0 ]]; then
