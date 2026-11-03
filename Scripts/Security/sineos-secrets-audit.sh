@@ -13,7 +13,7 @@ set -u
 set -o pipefail
 
 NAME="sineos-secrets-audit"
-VERSION="1.1.0"
+VERSION="1.2.0"
 TS="$(date '+%Y-%m-%d_%H-%M-%S')"
 OK=0
 WARN=0
@@ -99,7 +99,7 @@ else
 fi
 
 count_json(){
-  python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' "$1" 2>/dev/null || echo -1
+  python3 -c 'import json,sys; data=json.load(open(sys.argv[1])); assert isinstance(data,list); print(len(data))' "$1" 2>/dev/null || echo -1
 }
 
 section "5. GITLEAKS — SNAPSHOT VERSIONABLE"
@@ -111,6 +111,10 @@ if has gitleaks; then
 
   COPIED=0
   while IFS= read -r -d '' rel; do
+    if [[ -L "$ROOT/$rel" ]]; then
+      err "Enlace simbólico no escaneado; revisión manual obligatoria."
+      continue
+    fi
     [[ -f "$ROOT/$rel" ]] || continue
     mkdir -p "$SNAPSHOT_DIR/$(dirname "$rel")"
     cp -- "$ROOT/$rel" "$SNAPSHOT_DIR/$rel"
@@ -120,22 +124,36 @@ if has gitleaks; then
   echo "Archivos versionados/versionables analizados: $COPIED"
   echo "Los archivos ignorados por Git no se incluyen en este snapshot."
 
-  gitleaks detect --source "$SNAPSHOT_DIR" --no-git --redact --report-format json --report-path "$WORK_JSON" --exit-code 0 >/dev/null 2>&1
-  chmod 600 "$WORK_JSON" 2>/dev/null || true
+  scan_rc=0
+  gitleaks detect --source "$SNAPSHOT_DIR" --no-git --redact --report-format json --report-path "$WORK_JSON" --exit-code 2 >/dev/null 2>&1 || scan_rc=$?
+  [[ -f "$WORK_JSON" ]] && chmod 600 "$WORK_JSON" 2>/dev/null || true
 
-  rm -rf "$SNAPSHOT_DIR"
+  rm -rf -- "$SNAPSHOT_DIR"
 
   n="$(count_json "$WORK_JSON")"
-  [[ "$n" == 0 ]] && ok "Snapshot versionable: 0 hallazgos." || err "Snapshot versionable: $n hallazgo(s). Revisa el JSON privado."
+  if [[ "$scan_rc" -eq 0 && "$n" -eq 0 ]]; then
+    ok "Snapshot versionable: 0 hallazgos; ejecución correcta."
+  elif [[ "$scan_rc" -eq 2 && "$n" =~ ^[1-9][0-9]*$ ]]; then
+    err "Snapshot versionable: $n hallazgo(s). Revisa el JSON privado."
+  else
+    err "Snapshot: ejecución o reporte Gitleaks inválido (código $scan_rc; conteo $n)."
+  fi
 fi
 
 section "6. GITLEAKS — HISTORIAL"
 if has gitleaks; then
   rm -f "$HISTORY_JSON"
-  gitleaks detect --source "$ROOT" --redact --report-format json --report-path "$HISTORY_JSON" --exit-code 0 >/dev/null 2>&1
-  chmod 600 "$HISTORY_JSON" 2>/dev/null || true
+  scan_rc=0
+  gitleaks detect --source "$ROOT" --redact --report-format json --report-path "$HISTORY_JSON" --exit-code 2 >/dev/null 2>&1 || scan_rc=$?
+  [[ -f "$HISTORY_JSON" ]] && chmod 600 "$HISTORY_JSON" 2>/dev/null || true
   n="$(count_json "$HISTORY_JSON")"
-  [[ "$n" == 0 ]] && ok "Historial Git: 0 hallazgos." || err "Historial Git: $n hallazgo(s). Revisa el JSON privado."
+  if [[ "$scan_rc" -eq 0 && "$n" -eq 0 ]]; then
+    ok "Historial Git: 0 hallazgos; ejecución correcta."
+  elif [[ "$scan_rc" -eq 2 && "$n" =~ ^[1-9][0-9]*$ ]]; then
+    err "Historial Git: $n hallazgo(s). Revisa el JSON privado."
+  else
+    err "Historial: ejecución o reporte Gitleaks inválido (código $scan_rc; conteo $n)."
+  fi
 fi
 
 section "7. GIT"
